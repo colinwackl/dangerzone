@@ -7,6 +7,18 @@ require "Tools"
 function love.load()
 	 -- assert(love.graphics.isSupported('pixeleffect'), 'Pixel effects are not supported on your hardware. Sorry about that.')
 
+	math.randomseed(os.time())
+	cameraX = love.graphics.getWidth() / 2
+	cameraY = love.graphics.getHeight() / 2
+	cameraZoom = 1
+	cam = camera(cameraX, cameraY, cameraZoom, 0)
+
+	gameRight = love.graphics.getWidth() * 3 / 2
+	gameLeft = love.graphics.getWidth() / 2
+	gameTop = love.graphics.getHeight() / 2
+	gameBottom = love.graphics.getHeight() / 2
+	
+
 	Tools:loadFonts()
 
 	love.graphics.setBackgroundColor(255, 255, 255)
