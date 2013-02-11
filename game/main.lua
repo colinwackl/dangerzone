@@ -1,8 +1,11 @@
 vector = require "hump.vector"
 camera = require "hump.camera"
 require "LayeredSprite"
+require "World"
 require "Tools"
 
+testLayeredSprite = {}
+zoom = 1
 
 function love.load()
 	 -- assert(love.graphics.isSupported('pixeleffect'), 'Pixel effects are not supported on your hardware. Sorry about that.')
@@ -18,6 +21,10 @@ function love.load()
 	gameTop = love.graphics.getHeight() / 2
 	gameBottom = love.graphics.getHeight() / 2
 	
+	world = World:new()
+	world:init()
+
+	world:create()
 
 	Tools:loadFonts()
 
@@ -31,16 +38,39 @@ function love.load()
 		love.audio.play(music)
 
 	end
+
+	--testLayeredSprite = LayeredSprite:new()
+	--testLayeredSprite:load("dude", "dude")
+	--testLayeredSprite.speed = 100
 end
 
 function love.draw()
 	cam:attach()
 
+	world:draw()
+
 	cam:detach()
 end
 
 function love.update(dt)
+	world:update(dt)
 
+	-- if love.keyboard.isDown("right") then
+	-- 	testLayeredSprite.position.x = testLayeredSprite.position.x + (testLayeredSprite.speed * dt)
+	-- 	--ninja.flipH = false
+	-- 	--testLayeredSprite:setAnimation("runRight", true)
+	-- elseif love.keyboard.isDown("left") then
+	-- 	testLayeredSprite.position.x = testLayeredSprite.position.x - (testLayeredSprite.speed * dt)
+	-- 	--ninja.flipH = true
+	-- 	--testLayeredSprite:setAnimation("runLeft", true)
+	-- end
+
+	-- if love.keyboard.isDown("down") then
+	-- 	testLayeredSprite.position.y = testLayeredSprite.position.y + (testLayeredSprite.speed * dt)
+	-- elseif love.keyboard.isDown("up") then
+	-- 	testLayeredSprite.position.y = testLayeredSprite.position.y - (testLayeredSprite.speed * dt)
+	-- end	
+	--testLayeredSprite:update(dt)
 end
 
 function love.mousereleased(x, y, button)
