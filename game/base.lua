@@ -1,11 +1,17 @@
 vector = require "hump.vector"
 require "tools"
+Class = require "hump.class"
 
-
-Base = {
+--[[Base = {
 	pos = vector(0,0),
-}
+	size = nil
+}]]
 
+Base = Class({function(self)
+	-- nothing
+end,
+name = "Base"})
+Base.pos = vector(0, 0)
 
 function Base:new (o)
 	o = o or {}
@@ -51,8 +57,6 @@ function Base:inBounds(point)
 	end
 end
 
-
-
 function Base:update(dt)
 	if self.physics then
 		local x = self.physics.body:getX()
@@ -63,7 +67,6 @@ function Base:update(dt)
 end
 
 function Base:draw()
-
 	if DEBUG and self.bounds ~= nil then
 		love.graphics.push()
 		--love.graphics.translate(self.pos.x, self.pos.y)
@@ -72,5 +75,4 @@ function Base:draw()
 		love.graphics.rectangle("line", self.pos.x + self.bounds.left, self.pos.y + self.bounds.top, self.bounds.right - self.bounds.left, self.bounds.bottom - self.bounds.top)
 		love.graphics.pop()
 	end
-	
 end

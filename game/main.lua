@@ -2,11 +2,11 @@ vector = require "hump.vector"
 camera = require "hump.camera"
 require "LayeredSprite"
 require "Tools"
-
+require "Locomotive"
 
 function love.load()
-	 -- assert(love.graphics.isSupported('pixeleffect'), 'Pixel effects are not supported on your hardware. Sorry about that.')
-
+	-- assert(love.graphics.isSupported('pixeleffect'), 'Pixel effects are not supported on your hardware. Sorry about that.')
+	
 	math.randomseed(os.time())
 	cameraX = love.graphics.getWidth() / 2
 	cameraY = love.graphics.getHeight() / 2
@@ -18,12 +18,12 @@ function love.load()
 	gameTop = love.graphics.getHeight() / 2
 	gameBottom = love.graphics.getHeight() / 2
 	
-
 	Tools:loadFonts()
+	
+	test = Locomotive()
+	test:load("Locomotive")
 
 	love.graphics.setBackgroundColor(255, 255, 255)
-
-	titlefont = Tools.fontMainLarge
 
 	if love.filesystem.exists("some.mp3") then
 		music = love.audio.newSource("some.mp3", "stream")
@@ -33,14 +33,16 @@ function love.load()
 	end
 end
 
-function love.draw()
-	cam:attach()
-
-	cam:detach()
+function love.update(dt)
+	test:update(dt)
 end
 
-function love.update(dt)
+function love.draw()
+	--cam:attach()
+		
+		test:draw()
 
+	--cam:detach()
 end
 
 function love.mousereleased(x, y, button)
