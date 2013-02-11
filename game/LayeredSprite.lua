@@ -1,7 +1,6 @@
 require "Base"
 require "hump.vector"
 require "spritemanager"
-require "PaletteEffect"
 
 LayeredSprite = Base:new()
 LayeredSprite.position = vector(0, 0)
@@ -21,9 +20,6 @@ function LayeredSprite:load(strData, strAnimation)
 	self.topLayer.animation = strAnimation.."_cel"
 	self.topLayer:setData(self.topLayer.strData, self.topLayer.animation, true)
 	self.topLayer.sprData.image:setFilter("linear", "linear")
-
-	--self.effect = PaletteEffect:new()
-	--self.effect:load("res/sprites/"..strData.."_palette.png")
 end
 
 function LayeredSprite:setPosition(pos)
