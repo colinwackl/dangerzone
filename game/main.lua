@@ -7,6 +7,10 @@ require "Tools"
 testLayeredSprite = {}
 zoom = 1
 
+DEBUG = true
+DRAWPHYSICS = true
+DRAWGROUND = false
+
 function love.load()
 	 -- assert(love.graphics.isSupported('pixeleffect'), 'Pixel effects are not supported on your hardware. Sorry about that.')
 
@@ -16,7 +20,7 @@ function love.load()
 	cameraZoom = 1
 	cam = camera(cameraX, cameraY, cameraZoom, 0)
 
-	gameRight = love.graphics.getWidth() * 3 / 2
+	gameRight = love.graphics.getWidth() / 2
 	gameLeft = love.graphics.getWidth() / 2
 	gameTop = love.graphics.getHeight() / 2
 	gameBottom = love.graphics.getHeight() / 2

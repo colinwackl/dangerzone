@@ -1,4 +1,5 @@
 vector = require("hump.vector")
+require ("Tractor")
 
 World = Base:new()
 World.pctsky = 0.6
@@ -42,22 +43,23 @@ function World:draw()
 	-- love.graphics.rectangle("fill", 0, (self.pctsky + self.pcthorizon) * love.graphics.getHeight(), 
 	-- 						love.graphics.getWidth(), (1.0 - self.pctsky - self.pcthorizon) * love.graphics.getHeight())
 
-	if DRAWGROUND then
-		self:debugDrawGround()
-	end
-
 	for i,v in ipairs(self.objects) do
 		v:draw()
 	end
 
 	if DRAWPHYSICS then
-		love.graphics.setColor(72, 160, 14) -- set the drawing color to green for the ground
-		love.graphics.polygon("fill", physobjs.ground.body:getWorldPoints(physobjs.ground.shape:getPoints())) -- draw a "filled in" polygon using the ground's coordinates
-
 		for i,v in ipairs(physobjs) do
 			if v.body:isActive() then
-				love.graphics.setColor(255, 0, 0) --set the drawing color to red for the ball
-				love.graphics.circle("fill", v.body:getX(), v.body:getY(), v.shape:getRadius())
+				if v.shape:type() == "CircleShape" then
+					love.graphics.setColor(255, 0, 0) --set the drawing color to red for the ball
+					love.graphics.circle("fill", v.body:getX(), v.body:getY(), v.shape:getRadius())
+				elseif v.shape:type() == "PolygonShape" then
+					love.graphics.setColor(255, 0, 0) --set the drawing color to red for the ball
+					love.graphics.push()
+					love.graphics.translate(v.body:getX(), v.body:getY())
+					love.graphics.polygon("fill", v.shape:getPoints())
+					love.graphics.pop()
+				end
 			end
 		end
 	end
@@ -97,18 +99,17 @@ end
 
 function World:removeObject(obj)
     for i, v in ipairs(self.objects) do
-    if v == obj then
-    	v.world = nil
-        table.remove(self.objects,i)
+	    if v == obj then
+	    	v.world = nil
+	        table.remove(self.objects,i)
 
-        if v.physics then
-        	v.physics.body:setActive(false)
-        end
+	        if v.physics then
+	        	v.physics.body:setActive(false)
+	        end
 
-        return
-    end
-end
-
+	        return
+	    end
+	end
 end
 
 
@@ -160,14 +161,14 @@ end
 
 function World:init()
 	love.physics.setMeter(128)
-	local world = love.physics.newWorld(0, 9.81 * 128, true)
+	local world = love.physics.newWorld(0, 0, true)
 
 	self.physworld = world
 
-	physobjs.ground = {}
-	physobjs.ground.body = love.physics.newBody(world, 0, self:getGroundHeight() + self.thickness / 2)
-	physobjs.ground.shape = love.physics.newRectangleShape( self.maxx - self.minx, self.thickness)
-	physobjs.ground.fixture = love.physics.newFixture(physobjs.ground.body, physobjs.ground.shape)
+	-- physobjs.ground = {}
+	-- physobjs.ground.body = love.physics.newBody(world, 0, self:getGroundHeight() + self.thickness / 2)
+	-- physobjs.ground.shape = love.physics.newRectangleShape( self.maxx - self.minx, self.thickness)
+	-- physobjs.ground.fixture = love.physics.newFixture(physobjs.ground.body, physobjs.ground.shape)
 
 	World.image = love.graphics.newImage("res/bg.png")
 	World.image:setFilter("linear", "linear")
@@ -192,7 +193,33 @@ function World:addCirclePhysics(obj)
 	--circle.body:applyForce(0,1)
 end
 
+function World:addSquarePhysics(obj)
+	local square = {}
+	
+	square.body = love.physics.newBody(self.physworld, obj.pos.x, obj.pos.y, "dynamic") --place the body in the center of the world and make it dynamic, so it can move around
+	square.body:setMass(15) --give it a mass of 15
+	square.body:setAngularDamping(12)
+	square.shape = love.physics.newRectangleShape( obj.size.x, obj.size.y) --the ball's shape has a radius of 20
+	square.fixture = love.physics.newFixture(square.body, square.shape, 1) --attach shape to body and give it a friction of 1
+	square.fixture:setRestitution(0.2) --let the ball bounce
+
+	obj.physics = square
+
+	table.insert( physobjs, square )
+
+	--square.body:applyForce(-100,-100)
+end
+
 function World:create()
+	--add initial seed somewhere:
+	local tractor = Tractor:new()
+	tractor:init()
+
+	tractor.pos = self:randomSpot() + vector(0, -100)
+
+	self:addObject(tractor)
+	self:addSquarePhysics(tractor)
+
 end
 
 function World:getClickedObject(x, y)
