@@ -97,11 +97,12 @@ end
 
 function love.keyreleased( key, unicode )
 
-	-- elseif key == "f1" then
-	-- 	if DEBUG then
-	-- 		DEBUG = false
-	-- 	else
-	-- 		DEBUG = true
-	-- 	end
+	if key == "f1" then
+		if DEBUG then
+			DEBUG = false
+		else
+			DEBUG = true
+		end
+	end
 
 end
