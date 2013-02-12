@@ -28,25 +28,11 @@ local function __NULL__() end
 
 -- default gamestate produces error on every callback
 local function __ERROR__() error("Gamestate not initialized. Use Gamestate.switch()") end
-local current = setmetatable({leave = __NULL__}, {__index = __ERROR__})
+local current = {leave = __NULL__}
 
 local GS = {}
 function GS.new()
-	return {
-		init             = __NULL__,
-		enter            = __NULL__,
-		leave            = __NULL__,
-		update           = __NULL__,
-		draw             = __NULL__,
-		focus            = __NULL__,
-		keyreleased      = __NULL__,
-		keypressed       = __NULL__,
-		mousepressed     = __NULL__,
-		mousereleased    = __NULL__,
-		joystickpressed  = __NULL__,
-		joystickreleased = __NULL__,
-		quit             = __NULL__,
-	}
+	return setmetatable({}, {__index = function() return __NULL__ end})
 end
 
 function GS.switch(to, ...)
@@ -54,7 +40,7 @@ function GS.switch(to, ...)
 	current:leave()
 	local pre = current
 	to:init()
-	to.init = __NULL__
+	to.init = nil
 	current = to
 	return current:enter(pre, ...)
 end
@@ -73,7 +59,7 @@ function GS.registerEvents(callbacks)
 	callbacks = callbacks or all_callbacks
 	for _, f in ipairs(callbacks) do
 		registry[f] = love[f]
-		love[f] = function(...) GS[f](...) end
+		love[f] = function(...) return GS[f](...) end
 	end
 end
 
@@ -81,7 +67,7 @@ end
 setmetatable(GS, {__index = function(_, func)
 	return function(...)
 		registry[func](...)
-		current[func](current, ...)
+		return (current[func] or __NULL__)(current, ...)
 	end
 end})
 

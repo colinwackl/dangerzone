@@ -1,1 +1,1 @@
-return { size = {50, 50} , colour = {0, 0, 0, 255}}
+return { pos= {500, 500}, size = {50, 50} , colour = {255, 255, 255, 255}}

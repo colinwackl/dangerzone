@@ -24,71 +24,71 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]]--
 
-local functions = {}
-local function update(dt)
+local Timer = {}
+Timer.__index = Timer
+
+local function _nothing_() end
+
+local function new()
+	return setmetatable({functions = {}}, Timer)
+end
+
+function Timer:update(dt)
 	local to_remove = {}
-	for func, delay in pairs(functions) do
+	for handle, delay in pairs(self.functions) do
 		delay = delay - dt
 		if delay <= 0 then
-			to_remove[#to_remove+1] = func
+			to_remove[#to_remove+1] = handle
 		end
-		functions[func] = delay
+		self.functions[handle] = delay
+		handle.func(dt, delay)
 	end
-	for _,func in ipairs(to_remove) do
-		functions[func] = nil
-		func(func)
+	for _,handle in ipairs(to_remove) do
+		self.functions[handle] = nil
+		handle.after(handle.after)
 	end
 end
 
-local function add(delay, func)
-	assert(not functions[func], "Function already scheduled to run.")
-	functions[func] = delay
-	return func
+function Timer:do_for(delay, func, after)
+	local handle = {func = func, after = after}
+	self.functions[handle] = delay
+	return handle
 end
 
-local function addPeriodic(delay, func, count)
+function Timer:add(delay, func)
+	return self:do_for(delay, _nothing_, func)
+end
+
+function Timer:addPeriodic(delay, func, count)
 	local count = count or math.huge -- exploit below: math.huge - 1 = math.huge
 
-	return add(delay, function(f)
+	return self:add(delay, function(f)
 		if func(func) == false then return end
 		count = count - 1
 		if count > 0 then
-			add(delay, f)
+			self:add(delay, f)
 		end
 	end)
 end
 
-local function cancel(func)
-	functions[func] = nil
+function Timer:cancel(handle)
+	self.functions[handle] = nil
 end
 
-local function clear()
-	functions = {}
+function Timer:clear()
+	self.functions = {}
 end
 
-local function Interpolator(length, func)
-	local t = 0
-	return function(dt, ...)
-		t = t + dt
-		return t <= length and func((t-dt)/length, ...) or nil
-	end
-end
-
-local function Oscillator(length, func)
-	local t = 0
-	return function(dt, ...)
-		t = (t + dt) % length
-		return func(t/length, ...)
-	end
-end
+-- default timer
+local default = new()
 
 -- the module
-return {
-	update       = update,
-	add          = add,
-	addPeriodic  = addPeriodic,
-	cancel       = cancel,
-	clear        = clear,
-	Interpolator = Interpolator,
-	Oscillator   = Oscillator
-}
+return setmetatable({
+	new          = new,
+	update       = function(...) return default:update(...) end,
+	do_for       = function(...) return default:do_for(...) end,
+	add          = function(...) return default:add(...) end,
+	addPeriodic  = function(...) return default:addPeriodic(...) end,
+	cancel       = function(...) return default:cancel(...) end,
+	clear        = function(...) return default:clear(...) end,
+}, {__call = new})

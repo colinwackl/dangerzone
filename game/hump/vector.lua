@@ -31,14 +31,7 @@ local vector = {}
 vector.__index = vector
 
 local function new(x,y)
-    local v
-    if type(x) == "table" then
-		v = {x = x[1] or 0, y = x[2] or 0}    
-    else
-	    v = {x = x or 0, y = y or 0}
-	end
-	setmetatable(v, vector)
-	return v
+	return setmetatable({x = x or 0, y = y or 0}, vector)
 end
 
 local function isvector(v)
@@ -121,12 +114,14 @@ end
 
 function vector:normalize_inplace()
 	local l = self:len()
-	self.x, self.y = self.x / l, self.y / l
+	if l > 0 then
+		self.x, self.y = self.x / l, self.y / l
+	end
 	return self
 end
 
 function vector:normalized()
-	return self / self:len()
+	return self:clone():normalize_inplace()
 end
 
 function vector:rotate_inplace(phi)

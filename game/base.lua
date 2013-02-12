@@ -7,10 +7,7 @@ Class = require "hump.class"
 	size = nil
 }]]
 
-Base = Class({function(self)
-	-- nothing
-end,
-name = "Base"})
+Base = Class({name = "Base"})
 Base.pos = vector(0, 0)
 
 function Base:new (o)
@@ -46,7 +43,14 @@ function Base:setBounds(size, offset)
 		self.bounds.bottom = self.bounds.bottom + offset.y
 		self.bounds.right = self.bounds.right + offset.x
 		self.bounds.left = self.bounds.left + offset.x
-
+	end
+	
+	function self.bounds:width()
+		return self.right - self.left
+	end
+	
+	function self.bounds:height()
+		return self.bottom - self.top
 	end
 
 end

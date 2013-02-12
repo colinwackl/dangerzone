@@ -1,14 +1,18 @@
 vector = require "hump.vector"
 camera = require "hump.camera"
+signal = require "hump.signal"
+timer = require "hump.timer"
 require "LayeredSprite"
 require "World"
 require "Tools"
+require "Locomotive"
+require "Enemy"
 
 testLayeredSprite = {}
 zoom = 1
 
-DEBUG = true
-DRAWPHYSICS = true
+DEBUG = false
+DRAWPHYSICS = false
 DRAWGROUND = false
 
 function love.load()
@@ -29,6 +33,13 @@ function love.load()
 	world:init()
 
 	world:create()
+	
+	player = Locomotive("Locomotive")
+	enemy = Enemy("enemy", player)
+	enemy.vel.x, enemy.vel.y = 20, 20
+	
+	world:addObject(player)
+	world:addObject(enemy)
 
 	Tools:loadFonts()
 
@@ -57,6 +68,8 @@ function love.draw()
 end
 
 function love.update(dt)
+	timer.update(dt)
+	
 	world:update(dt)
 
 	-- if love.keyboard.isDown("right") then
@@ -95,8 +108,11 @@ function love.mousepressed(x, y, button)
 	if button == "l" then
 	elseif  button == "r" then
 	end
+end
 
 
+function love.keypressed( key, unicode )
+	signal.emit("keyPressed", key, unicode)
 end
 
 function love.keyreleased( key, unicode )
@@ -109,4 +125,5 @@ function love.keyreleased( key, unicode )
 		end
 	end
 
+	signal.emit("keyReleased", key, unicode)
 end
