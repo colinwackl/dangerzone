@@ -191,8 +191,8 @@ function World:init()
 	physobjs.right.shape = love.physics.newRectangleShape(1, self.maxy - self.miny)
 	physobjs.right.fixture = love.physics.newFixture(physobjs.right.body, physobjs.right.shape)]]
 	
-	--self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
 	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
+	--self.boundaries = {left = Boundary()}
 	self:updateBoundaries()
 
 	World.image = love.graphics.newImage("res/bg.png")

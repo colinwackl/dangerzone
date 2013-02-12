@@ -26,16 +26,16 @@ function Boundary:updateBoundary(side, camera)
 	local pos = self.pos
 	if side == "left" then
 		bounds.x, bounds.y = 5, height
-		pos = Vector(left, top)
+		pos = Vector(left, cameraPosY)
 	elseif side == "right" then
 		bounds.x, bounds.y = 5, height
-		pos = Vector(right, top)
+		pos = Vector(right, cameraPosY)
 	elseif side == "top" then
 		bounds.x, bounds.y = width, 5
-		pos = Vector(left, top)
+		pos = Vector(cameraPosX, top)
 	elseif side == "bottom" then
 		bounds.x, bounds.y = width, 5
-		pos = Vector(left, bottom)
+		pos = Vector(cameraPosX, bottom)
 	end
 	
 	self:setBounds(bounds)
@@ -45,5 +45,9 @@ end
 
 function Boundary:draw()
 	Entity.draw(self)
-	--love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.bounds:width(), self.bounds:height())
+	
+	--[[local pos = self.pos:clone()
+	pos.x = pos.x - self.bounds:width() / 2
+	pos.y = pos.y - self.bounds:height() / 2
+	love.graphics.rectangle("fill", pos.x, pos.y, self.bounds:width(), self.bounds:height())]]
 end

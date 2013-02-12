@@ -131,9 +131,9 @@ end
 function love.keypressed( key, unicode )
 	local function done() world:updateBoundaries() end
 	if key == '-' then
-		cam:setScaleOverTime(cam.scale - 0.5, 2, done)
+		cam:setScaleOverTime(cam.scale * 0.5, 2, done)
 	elseif key == '=' then
-		cam:setScaleOverTime(cam.scale + 0.5, 2, done)
+		cam:setScaleOverTime(cam.scale * 2, 2, done)
 	end
 		
 	signal.emit("keyPressed", key, unicode)
