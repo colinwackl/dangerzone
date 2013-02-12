@@ -7,7 +7,9 @@ World.pcthorizon = 0.34
 World.objects = {}
 
 World.minx = 0
-World.maxx = 1280*3
+World.maxx = 1280 * 3
+World.miny = 0
+World.maxy = 960 * 3
 World.thickness = 100
 
 World.radiationdensity = 0.1
@@ -19,6 +21,8 @@ World.groundresolution = 40
 World.ground = {}
 World.quad = {}
 World.image = {}
+
+World.tractor = {}
 
 local physobjs = {}
 
@@ -48,6 +52,9 @@ function World:draw()
 	end
 
 	if DRAWPHYSICS then
+		--love.graphics.setColor(72, 160, 14) -- set the drawing color to green for the ground
+		--love.graphics.polygon("fill", physobjs.ground.body:getWorldPoints(physobjs.ground.shape:getPoints())) -- draw a "filled in" polygon using the ground's coordinates
+
 		for i,v in ipairs(physobjs) do
 			if v.body:isActive() then
 				if v.shape:type() == "CircleShape" then
@@ -165,10 +172,25 @@ function World:init()
 
 	self.physworld = world
 
-	-- physobjs.ground = {}
-	-- physobjs.ground.body = love.physics.newBody(world, 0, self:getGroundHeight() + self.thickness / 2)
-	-- physobjs.ground.shape = love.physics.newRectangleShape( self.maxx - self.minx, self.thickness)
-	-- physobjs.ground.fixture = love.physics.newFixture(physobjs.ground.body, physobjs.ground.shape)
+	physobjs.bottom = {}
+	physobjs.bottom.body = love.physics.newBody(world, 0, love.graphics.getHeight() + 2)
+	physobjs.bottom.shape = love.physics.newRectangleShape( self.maxx - self.minx, 1)
+	physobjs.bottom.fixture = love.physics.newFixture(physobjs.bottom.body, physobjs.bottom.shape)
+
+	physobjs.top = {}
+	physobjs.top.body = love.physics.newBody(world, 0, 0 - 2)
+	physobjs.top.shape = love.physics.newRectangleShape( self.maxx - self.minx, 1)
+	physobjs.top.fixture = love.physics.newFixture(physobjs.top.body, physobjs.top.shape)
+
+	physobjs.left = {}
+	physobjs.left.body = love.physics.newBody(world, 0, 0 - 2)
+	physobjs.left.shape = love.physics.newRectangleShape(1, self.maxy - self.miny)
+	physobjs.left.fixture = love.physics.newFixture(physobjs.left.body, physobjs.left.shape)
+
+	physobjs.right = {}
+	physobjs.right.body = love.physics.newBody(world, love.graphics.getWidth() + 2, 0)
+	physobjs.right.shape = love.physics.newRectangleShape(1, self.maxy - self.miny)
+	physobjs.right.fixture = love.physics.newFixture(physobjs.right.body, physobjs.right.shape)
 
 	World.image = love.graphics.newImage("res/bg.png")
 	World.image:setFilter("linear", "linear")
@@ -184,13 +206,13 @@ function World:addCirclePhysics(obj)
 	circle.body:setAngularDamping(12)
 	circle.shape = love.physics.newCircleShape( obj.size.x / 2 ) --the ball's shape has a radius of 20
 	circle.fixture = love.physics.newFixture(circle.body, circle.shape, 1) --attach shape to body and give it a friction of 1
-	circle.fixture:setRestitution(0.2) --let the ball bounce
+	circle.fixture:setRestitution(0.4) --let the ball bounce
 
 	obj.physics = circle
 
-	table.insert( physobjs, circle )
+	 
 
-	--circle.body:applyForce(0,1)
+	--circle.body:applyForce(100, 100)
 end
 
 function World:addSquarePhysics(obj)
@@ -201,25 +223,29 @@ function World:addSquarePhysics(obj)
 	square.body:setAngularDamping(12)
 	square.shape = love.physics.newRectangleShape( obj.size.x, obj.size.y) --the ball's shape has a radius of 20
 	square.fixture = love.physics.newFixture(square.body, square.shape, 1) --attach shape to body and give it a friction of 1
-	square.fixture:setRestitution(0.2) --let the ball bounce
+	square.fixture:setRestitution(0.4) --let the ball bounce
 
 	obj.physics = square
 
 	table.insert( physobjs, square )
 
-	--square.body:applyForce(-100,-100)
+	--square.body:applyForce(-2100, -2500)
 end
 
 function World:create()
 	--add initial seed somewhere:
-	local tractor = Tractor:new()
-	tractor:init()
+	self.tractor = Tractor:new()
+	self.tractor:init()
 
-	tractor.pos = self:randomSpot() + vector(0, -100)
+	self.tractor.pos = self:randomSpot() + vector(0, -100)
 
-	self:addObject(tractor)
-	self:addSquarePhysics(tractor)
+	self:addObject(self.tractor)
+	self:addSquarePhysics(self.tractor)
 
+end
+
+function World:getTractor()
+	return self.tractor
 end
 
 function World:getClickedObject(x, y)
