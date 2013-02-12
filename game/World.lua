@@ -1,5 +1,4 @@
 vector = require("hump.vector")
-require ("Tractor")
 
 World = Base:new()
 World.pctsky = 0.6
@@ -21,8 +20,6 @@ World.groundresolution = 40
 World.ground = {}
 World.quad = {}
 World.image = {}
-
-World.tractor = {}
 
 local physobjs = {}
 
@@ -234,18 +231,7 @@ end
 
 function World:create()
 	--add initial seed somewhere:
-	self.tractor = Tractor:new()
-	self.tractor:init()
 
-	self.tractor.pos = self:randomSpot() + vector(0, -100)
-
-	self:addObject(self.tractor)
-	self:addSquarePhysics(self.tractor)
-
-end
-
-function World:getTractor()
-	return self.tractor
 end
 
 function World:getClickedObject(x, y)

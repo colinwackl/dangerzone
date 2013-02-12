@@ -6,11 +6,16 @@ Tractor = Base:new()
 
 local uniqueid = 1
 
-function Tractor:init(plant)
+function Tractor:init(cam, world)
 	self.size = vector(30, 30)
 	self.offset = vector(0,0)
 
 	Base.init(self)
+
+	self.cam = cam
+	self.world = world
+
+	--self.cam:worldCoords(love.mouse.getX(), love.mouse.getY())
 
 	--Tractor.image = love.graphics.newImage("res/sprites/seed.png")--.."/palette.png")
 	--Tractor.image:setFilter("linear", "linear")
@@ -42,5 +47,17 @@ function Tractor:draw(notranslation)
 end
 
 function Tractor:update(dt)
+	if love.mouse.isDown("l") then
+		local x,y = self.cam:worldCoords(love.mouse.getX(), love.mouse.getY())
+		local hit = self.world:getClickedObject(x, y)
+		if clickedInBox then				
+			local tractor = self.world:getTractor()
+			if tractor then
+				local force_x, force_y = math.clamp((x - tractor.physics.body:getX())/100, -10000 , 10000), math.clamp((y - tractor.physics.body:getY())/100, -10000 , 10000)
+				tractor.physics.body:setPosition(tractor.physics.body:getX() + force_x, tractor.physics.body:getY() + force_y)
+			end
+		end
+	end	
+
 	Base.update(self, dt)
 end
