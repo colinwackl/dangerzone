@@ -84,7 +84,6 @@ end
 function Entity:getBody()
 	if self.physics == nil then self.physics = {} end
 	if self.physics.body == nil then
-		print("self.pos.x, self.pos.y", self.pos.x, self.pos.y)
 		self.physics.body = love.physics.newBody(_G.world.physworld, self.pos.x, self.pos.y, self.physicsBodyType or "dynamic")
 	end
 	
@@ -110,6 +109,14 @@ function Entity:setPosition(position)
 		local body = self:getBody()
 		body:setPosition(position.x, position.y)
 	end
+end
+
+function Entity:drawBounds(bounds, type)
+	bounds = bounds or self.bounds
+	type = type or "fill"
+	
+	local width, height = bounds:width(), bounds:height()
+	love.graphics.rectangle(type, self.pos.x - width / 2, self.pos.y - height / 2, width, height)
 end
 
 function Entity:shoot(bullet, at)

@@ -10,6 +10,7 @@ FingerPath = Class({function(self, dataPath)
 	self.maxLength = self.data.maxLength or 300
 	self.lineWidth = self.data.lineWidth or 3
 	self.lineColour = self.data.colour or {255, 255, 255, 255}
+	self.maxDistanceBetweenLines = self.data.maxDistanceBetweenLines or 5
 	
 	world:addObject(self)
 end,
@@ -47,7 +48,16 @@ function FingerPath:update(dt)
 		
 		if #self.points > 1 then
 			local lastVector = self.points[#self.points - 1]
-			self.currentLength = self.currentLength + (lastVector - v):len()
+			local diff = v - lastVector
+			local diffLength = diff:len()
+			self.currentLength = self.currentLength + diffLength
+			
+			local diffNormal = diff:normalized()
+			while diffLength > self.maxDistanceBetweenLines do
+				lastVector = self.points[#self.points - 1]
+				table.insert(self.points, #self.points, lastVector + diffNormal * self.maxDistanceBetweenLines)
+				diffLength = diffLength - self.maxDistanceBetweenLines
+			end
 		end
 	end	
 end

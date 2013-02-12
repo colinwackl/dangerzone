@@ -7,7 +7,6 @@ require "World"
 require "Tools"
 require "Locomotive"
 require "Enemy"
-require "FingerPath"
 require "Crate"
 
 testLayeredSprite = {}
@@ -65,11 +64,8 @@ function love.load()
 	crate4.physics.body:applyForce(-1000, 1000)
 	crate4.physics.body:applyTorque(100)
 	
-	path = FingerPath("FingerPath")
-	
 	world:addObject(player)
 	world:addObject(enemy)
-	world:addObject(path)
 	world:addObject(crate)
 	world:addObject(crate2)
 	world:addObject(crate3)
@@ -140,7 +136,6 @@ end
 
 function love.mousereleased(x, y, button)
 	x,y = cam:worldCoords(x, y)
-	path:stop()
 end
 
 xPressed = 0
@@ -154,7 +149,9 @@ function love.mousepressed(x, y, button)
 
 	mouseMoved = false
 	
-	path:start()
+	if player:inBounds(vector(x, y)) then
+		player:startPath()
+	end
 	
 	if button == "l" then
 	elseif  button == "r" then
@@ -162,7 +159,7 @@ function love.mousepressed(x, y, button)
 end
 
 function love.mousereleased(x, y, button)
-	path:stop()
+	player:stopPath()
 end
 
 function love.keypressed( key, unicode )
