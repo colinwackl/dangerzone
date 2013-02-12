@@ -1,7 +1,7 @@
 require "Entity"
 require "tools"
 require "Bullet"
-require "Sprite"
+require "LayeredSprite"
 Vector = require "hump.vector"
 Class = require "hump.class"
 timer = require "hump.timer"
@@ -27,7 +27,7 @@ function Crate:initPhysics(physworld)
 end
 
 function Crate:initSprite(strData, strAnimation)
-	self.sprite = Sprite:new()
+	self.sprite = LayeredSprite:new()
 	self.sprite:init(strData, strAnimation)
 end
 
