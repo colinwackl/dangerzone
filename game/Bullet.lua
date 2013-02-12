@@ -1,6 +1,8 @@
 require "Entity"
 require "tools"
 require "Boundary"
+require "Locomotive"
+require "Crate"
 Vector = require "hump.vector"
 Class = require "hump.class"
 
@@ -12,7 +14,7 @@ end,
 name = "Bullet", inherits = Entity})
 
 function Bullet:beginContact(collideWidth)
-	if collideWidth:is_a(Boundary) then
+	if collideWidth:is_a(Boundary) or collideWidth:is_a(Locomotive) or collideWidth:is_a(Crate) then
 		self:destroy()
 	end
 end

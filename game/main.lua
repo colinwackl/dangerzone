@@ -43,27 +43,12 @@ function love.load()
 
 	crate = Crate("Crate")
 	crate:initSprite("cell.sprite", "body")
-	crate:initPhysics(world.physworld)
-	crate.physics.body:applyForce(1000, 1000)
-	crate.physics.body:applyTorque(100)
-
 	crate2 = Crate("Crate")
 	crate2:initSprite("cell.sprite", "heart")
-	crate2:initPhysics(world.physworld)
-	crate2.physics.body:applyForce(1000, -1000)
-	crate2.physics.body:applyTorque(100)
-
 	crate3 = Crate("Crate")
 	crate3:initSprite("cell.sprite", "body_grey")
-	crate3:initPhysics(world.physworld)
-	crate3.physics.body:applyForce(-1000, -1000)
-	crate3.physics.body:applyTorque(100)
-
 	crate4 = Crate("Crate")
 	crate4:initSprite("cell.sprite", "body_grey")
-	crate4:initPhysics(world.physworld)
-	crate4.physics.body:applyForce(-1000, 1000)
-	crate4.physics.body:applyTorque(100)
 
 	Tools:loadFonts()
 
