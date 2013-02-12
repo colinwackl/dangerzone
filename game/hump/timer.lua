@@ -41,16 +41,16 @@ function Timer:update(dt)
 			to_remove[#to_remove+1] = handle
 		end
 		self.functions[handle] = delay
-		handle.func(dt, delay)
+		handle.func(dt, delay, handle.args)
 	end
 	for _,handle in ipairs(to_remove) do
 		self.functions[handle] = nil
-		handle.after(handle.after)
+		handle.after(handle.after, handle.args)
 	end
 end
 
-function Timer:do_for(delay, func, after)
-	local handle = {func = func, after = after}
+function Timer:do_for(delay, func, after, args)
+	local handle = {func = func, after = after, args = args}
 	self.functions[handle] = delay
 	return handle
 end

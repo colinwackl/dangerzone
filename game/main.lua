@@ -1,7 +1,7 @@
 vector = require "hump.vector"
-camera = require "hump.camera"
 signal = require "hump.signal"
 timer = require "hump.timer"
+require "Camera"
 require "LayeredSprite"
 require "World"
 require "Tools"
@@ -11,18 +11,18 @@ require "Enemy"
 testLayeredSprite = {}
 zoom = 1
 
-DEBUG = false
-DRAWPHYSICS = false
+DEBUG = true
+DRAWPHYSICS = true
 DRAWGROUND = false
 
 function love.load()
 	 -- assert(love.graphics.isSupported('pixeleffect'), 'Pixel effects are not supported on your hardware. Sorry about that.')
 
 	math.randomseed(os.time())
-	cameraX = love.graphics.getWidth() / 2
-	cameraY = love.graphics.getHeight() / 2
-	cameraZoom = 1
-	cam = camera(cameraX, cameraY, cameraZoom, 0)
+	local cameraX = love.graphics.getWidth() / 2
+	local cameraY = love.graphics.getHeight() / 2
+	local cameraZoom = 1
+	cam = Camera(cameraX, cameraY, cameraZoom, 0)
 
 	gameRight = love.graphics.getWidth() / 2
 	gameLeft = love.graphics.getWidth() / 2
