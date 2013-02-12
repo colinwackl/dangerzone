@@ -38,6 +38,7 @@ function love.load()
 	
 	player = Locomotive("Locomotive")
 	enemy = Enemy("enemy", player)
+	enemy:setPosition(vector(10, 10))
 	enemy.vel.x, enemy.vel.y = 20, 20
 
 	crate = Crate("Crate")

@@ -28,6 +28,7 @@ function Entity:load(path)
 	self.data = love.filesystem.load(path)()
 	
 	self.pos = self:asVector(self.data.pos)
+	self:setPosition(self.pos)
 	self.maxvel = self.data.maxVelocity or self.maxvel
 	self.friction = self.data.friction or self.friction
 	
@@ -52,9 +53,14 @@ end
 function Entity:update(dt)
 	self.vel.x = math.min(self.vel.x + self.accel.x, self.maxvel)
 	self.vel.y = math.min(self.vel.y + self.accel.y, self.maxvel)
-	self.pos = self.pos + self.vel * dt
 	if self.physics and self.physics.body then
-		self.physics.body:setPosition(self.pos.x, self.pos.y)
+		local body = self:getBody()
+		body:setLinearVelocity(self.vel.x, self.vel.y)
+		--body:setPosition(self.pos.x, self.pos.y)
+		self.pos.x, self.pos.y = body:getPosition()
+		
+	else
+		self.pos = self.pos + self.vel * dt
 	end
 	
 	if self.vel.x ~= 0 or self.vel.y ~= 0 then
@@ -78,6 +84,7 @@ end
 function Entity:getBody()
 	if self.physics == nil then self.physics = {} end
 	if self.physics.body == nil then
+		print("self.pos.x, self.pos.y", self.pos.x, self.pos.y)
 		self.physics.body = love.physics.newBody(_G.world.physworld, self.pos.x, self.pos.y, self.physicsBodyType or "dynamic")
 	end
 	
@@ -98,8 +105,15 @@ function Entity:createFixture(shape, density)
 	return fixture
 end
 
+function Entity:setPosition(position)
+	if self.physics and self.physics.body then
+		local body = self:getBody()
+		body:setPosition(position.x, position.y)
+	end
+end
+
 function Entity:shoot(bullet, at)
-	bullet.pos.x, bullet.pos.y = self.pos.x, self.pos.y
+	bullet:setPosition(self.pos)
 	bullet.vel = at.pos - self.pos
 	bullet.vel:normalize_inplace()
 	bullet.vel = bullet.vel * bullet.maxvel
