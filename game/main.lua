@@ -8,6 +8,7 @@ require "Tools"
 require "Locomotive"
 require "Enemy"
 require "FingerPath"
+require "Crate"
 
 testLayeredSprite = {}
 zoom = 1
@@ -38,12 +39,19 @@ function love.load()
 	player = Locomotive("Locomotive")
 	enemy = Enemy("enemy", player)
 	enemy.vel.x, enemy.vel.y = 20, 20
+
+	crate = Crate("Crate")
+	crate:initSprite("cell.sprite", "body")
+	crate:initPhysics(world.physworld)
+	crate.physics.body:applyForce(1000, 1000)
+	crate.physics.body:applyTorque(100)
 	
 	path = FingerPath("FingerPath")
 	
 	world:addObject(player)
 	world:addObject(enemy)
 	world:addObject(path)
+	world:addObject(crate)
 
 	Tools:loadFonts()
 
@@ -67,6 +75,7 @@ function love.draw()
 	cam:attach()
 
 	world:draw()
+	crate:draw()
 
 	cam:detach()
 end
@@ -75,6 +84,9 @@ function love.update(dt)
 	timer.update(dt)
 	
 	world:update(dt)
+
+	crate:update(dt)
+	crate:updateSprite(dt)
 
 	-- if love.keyboard.isDown("right") then
 	-- 	testLayeredSprite.position.x = testLayeredSprite.position.x + (testLayeredSprite.speed * dt)
