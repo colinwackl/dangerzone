@@ -44,27 +44,12 @@ function love.load()
 
 	crate = Crate("Crate")
 	crate:initSprite("cell.sprite", "body")
-	crate:initPhysics(world.physworld)
-	--crate.physics.body:applyForce(1000, 1000)
-	--crate.physics.body:applyTorque(100)
-
 	crate2 = Crate("Crate")
 	crate2:initSprite("cell.sprite", "heart")
-	crate2:initPhysics(world.physworld)
-	--crate2.physics.body:applyForce(1000, -1000)
-	--crate2.physics.body:applyTorque(100)
-
 	crate3 = Crate("Crate")
 	crate3:initSprite("cell.sprite", "body_grey")
-	crate3:initPhysics(world.physworld)
-	--crate3.physics.body:applyForce(-1000, -1000)
-	--crate3.physics.body:applyTorque(100)
-
 	crate4 = Crate("Crate")
 	crate4:initSprite("cell.sprite", "body_grey")
-	crate4:initPhysics(world.physworld)
-	--crate4.physics.body:applyForce(-1000, 1000)
-	--crate4.physics.body:applyTorque(100)
 
 	beam = Beam("Beam")
 	beam:initPhysics(world.physworld, player.physics.body, crate.physics.body, 200)
@@ -113,15 +98,6 @@ function love.update(dt)
 	timer.update(dt)
 	
 	world:update(dt)
-
-	crate:update(dt)
-	crate:updateSprite(dt)
-	crate2:update(dt)
-	crate2:updateSprite(dt)
-	crate3:update(dt)
-	crate3:updateSprite(dt)
-	crate4:update(dt)
-	crate4:updateSprite(dt)
 
 	--j:setTarget(love.mouse.getPosition())
 

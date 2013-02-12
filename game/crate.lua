@@ -12,7 +12,7 @@ Crate = Class({function(self, dataPath)
 	fixture:setRestitution(0.4)
 	
 	local body = self:getBody()
-	body:setMass(15)
+	body:setMass(1)
 	body:setAngularDamping(0)
 	body:setAngle(math.rad(45))
 end,
