@@ -7,6 +7,7 @@ require "World"
 require "Tools"
 require "Locomotive"
 require "Enemy"
+require "FingerPath"
 
 testLayeredSprite = {}
 zoom = 1
@@ -38,8 +39,11 @@ function love.load()
 	enemy = Enemy("enemy", player)
 	enemy.vel.x, enemy.vel.y = 20, 20
 	
+	path = FingerPath("FingerPath")
+	
 	world:addObject(player)
 	world:addObject(enemy)
+	world:addObject(path)
 
 	Tools:loadFonts()
 
@@ -92,6 +96,7 @@ end
 
 function love.mousereleased(x, y, button)
 	x,y = cam:worldCoords(x, y)
+	path:stop()
 end
 
 xPressed = 0
@@ -104,12 +109,17 @@ function love.mousepressed(x, y, button)
 	yPressed = y
 
 	mouseMoved = false
-
+	
+	path:start()
+	
 	if button == "l" then
 	elseif  button == "r" then
 	end
 end
 
+function love.mousereleased(x, y, button)
+	path:stop()
+end
 
 function love.keypressed( key, unicode )
 	signal.emit("keyPressed", key, unicode)

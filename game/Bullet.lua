@@ -5,6 +5,7 @@ Class = require "hump.class"
 
 Bullet = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
+	self:createFixture()
 	world:addObject(self)
 end,
 name = "Bullet", inherits = Entity})

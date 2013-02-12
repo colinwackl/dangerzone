@@ -8,13 +8,15 @@ timer = require "hump.timer"
 Enemy = Class({function(self, dataPath, player)
 	Entity.construct(self, dataPath)
 	
+	self:createFixture()
+	
 	local function shoot()
 		self:shoot(Bullet("Bullet"), player)
 	end
 	shoot()
 	
 	local interval = self.data.shootInterval or 2
-	timer.addPeriodic(interval, shoot)
+	--timer.addPeriodic(interval, shoot)
 	
 end,
 name = "Enemy", inherits = Entity})

@@ -7,6 +7,8 @@ signal = require "hump.signal"
 Locomotive = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
 	
+	self:createFixture()
+	
 	self.friction = 5
 	
 	signal.register('keyPressed', function(...) self:keyPressed(...) end)
@@ -33,6 +35,10 @@ function Locomotive:keyReleased(key)
 	elseif key == "left" or key == "right"then
 		self.accel.x = 0
 	end
+end
+
+function Locomotive:update(dt)
+	Entity.update(self, dt)
 end
 
 function Locomotive:draw()
