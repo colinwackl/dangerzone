@@ -8,6 +8,7 @@ require "Tools"
 require "Locomotive"
 require "Enemy"
 require "Crate"
+require "Beam"
 
 testLayeredSprite = {}
 zoom = 1
@@ -43,26 +44,29 @@ function love.load()
 	crate = Crate("Crate")
 	crate:initSprite("cell.sprite", "body")
 	crate:initPhysics(world.physworld)
-	crate.physics.body:applyForce(1000, 1000)
-	crate.physics.body:applyTorque(100)
+	--crate.physics.body:applyForce(1000, 1000)
+	--crate.physics.body:applyTorque(100)
 
 	crate2 = Crate("Crate")
 	crate2:initSprite("cell.sprite", "heart")
 	crate2:initPhysics(world.physworld)
-	crate2.physics.body:applyForce(1000, -1000)
-	crate2.physics.body:applyTorque(100)
+	--crate2.physics.body:applyForce(1000, -1000)
+	--crate2.physics.body:applyTorque(100)
 
 	crate3 = Crate("Crate")
 	crate3:initSprite("cell.sprite", "body_grey")
 	crate3:initPhysics(world.physworld)
-	crate3.physics.body:applyForce(-1000, -1000)
-	crate3.physics.body:applyTorque(100)
+	--crate3.physics.body:applyForce(-1000, -1000)
+	--crate3.physics.body:applyTorque(100)
 
 	crate4 = Crate("Crate")
 	crate4:initSprite("cell.sprite", "body_grey")
 	crate4:initPhysics(world.physworld)
-	crate4.physics.body:applyForce(-1000, 1000)
-	crate4.physics.body:applyTorque(100)
+	--crate4.physics.body:applyForce(-1000, 1000)
+	--crate4.physics.body:applyTorque(100)
+
+	beam = Beam("Beam")
+	beam:initPhysics(world.physworld, player.physics.body, crate.physics.body, 200)
 	
 	world:addObject(player)
 	world:addObject(enemy)
@@ -70,6 +74,7 @@ function love.load()
 	world:addObject(crate2)
 	world:addObject(crate3)
 	world:addObject(crate4)
+	world:addObject(beam)
 
 	Tools:loadFonts()
 
@@ -98,6 +103,8 @@ function love.draw()
 	crate3:draw()
 	crate4:draw()
 
+	--beam:draw(beam)
+
 	cam:detach()
 end
 
@@ -114,6 +121,8 @@ function love.update(dt)
 	crate3:updateSprite(dt)
 	crate4:update(dt)
 	crate4:updateSprite(dt)
+
+	--j:setTarget(love.mouse.getPosition())
 
 
 	-- if love.keyboard.isDown("right") then
@@ -151,6 +160,18 @@ function love.mousepressed(x, y, button)
 	
 	if player:inBounds(vector(x, y)) then
 		player:startPath()
+	elseif crate:inBounds(vector(x, y)) then
+			beam = Beam("Beam")
+			beam:initPhysics(world.physworld, crate.physics.body, crate2.physics.body, 200)
+			world:addObject(beam)
+	elseif crate2:inBounds(vector(x, y)) then
+			beam = Beam("Beam")
+			beam:initPhysics(world.physworld, crate2.physics.body, crate3.physics.body, 200)
+			world:addObject(beam)
+	elseif crate3:inBounds(vector(x, y)) then
+			beam = Beam("Beam")
+			beam:initPhysics(world.physworld, crate3.physics.body, crate4.physics.body, 200)
+			world:addObject(beam)
 	end
 	
 	if button == "l" then
