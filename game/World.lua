@@ -168,6 +168,7 @@ function World:init()
 	local world = love.physics.newWorld(0, 0, true)
 
 	self.physworld = world
+	world:setCallbacks( self.beginContact, self.endContact, self.preSolve, self.postSolve )
 
 	physobjs.bottom = {}
 	physobjs.bottom.body = love.physics.newBody(world, 0, love.graphics.getHeight() + 2)
@@ -242,7 +243,33 @@ function World:getClickedObject(x, y)
 	end
 end
 
+function World:findEntityFromFixture(fixture)
+	return fixture:getUserData()
+end
 
+function World.beginContact(a, b, c)
+	World.signal(a, b, c, "beginContact")
+end
+
+function World.endContact(a, b, c)
+	World.signal(a, b, c, "endContact")
+end
+
+function World.preSolve(a, b, c)
+	World.signal(a, b, c, "preSolve")
+end
+
+function World.postSolve(a, b, c)
+	World.signal(a, b, c, "postSolve")
+end
+
+function World.signal(a, b, c, name)
+	local aEntity, bEntity = a:getUserData(), b:getUserData()
+	if aEntity and aEntity:is_a(Entity) and bEntity and bEntity:is_a(Entity) then
+		aEntity.signals:emit(name, bEntity, c)
+		bEntity.signals:emit(name, aEntity, c)
+	end
+end
 
 function World:update(dt)
 

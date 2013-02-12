@@ -1,1 +1,1 @@
-return { size = {500, 500} , colour = {0, 120, 0, 255 }, shootInterval=1}
+return { size = {50, 50} , colour = {0, 120, 0, 255 }, shootInterval=1}

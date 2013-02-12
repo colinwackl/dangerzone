@@ -8,6 +8,8 @@ timer = require "hump.timer"
 Enemy = Class({function(self, dataPath, player)
 	Entity.construct(self, dataPath)
 	
+	self:createFixture()
+	
 	local function shoot()
 		self:shoot(Bullet("Bullet"), player)
 	end
@@ -21,5 +23,5 @@ name = "Enemy", inherits = Entity})
 
 function Enemy:draw()
 	love.graphics.setColor(self.data.colour[1], self.data.colour[2], self.data.colour[3], self.data.colour[4] or 255)
-	love.graphics.rectangle("fill", self.pos.x, self.pos.y, 100, 100)
+	self:drawBounds()
 end

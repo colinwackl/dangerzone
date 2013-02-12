@@ -1,7 +1,7 @@
 vector = require "hump.vector"
-camera = require "hump.camera"
 signal = require "hump.signal"
 timer = require "hump.timer"
+require "Camera"
 require "LayeredSprite"
 require "World"
 require "Tools"
@@ -12,18 +12,18 @@ require "Crate"
 testLayeredSprite = {}
 zoom = 1
 
-DEBUG = false
-DRAWPHYSICS = false
+DEBUG = true
+DRAWPHYSICS = true
 DRAWGROUND = false
 
 function love.load()
 	 -- assert(love.graphics.isSupported('pixeleffect'), 'Pixel effects are not supported on your hardware. Sorry about that.')
 
 	math.randomseed(os.time())
-	cameraX = love.graphics.getWidth() / 2
-	cameraY = love.graphics.getHeight() / 2
-	cameraZoom = 1
-	cam = camera(cameraX, cameraY, cameraZoom, 0)
+	local cameraX = love.graphics.getWidth() / 2
+	local cameraY = love.graphics.getHeight() / 2
+	local cameraZoom = 1
+	cam = Camera(cameraX, cameraY, cameraZoom, 0)
 
 	gameRight = love.graphics.getWidth() / 2
 	gameLeft = love.graphics.getWidth() / 2
@@ -37,6 +37,7 @@ function love.load()
 	
 	player = Locomotive("Locomotive")
 	enemy = Enemy("enemy", player)
+	enemy:setPosition(vector(10, 10))
 	enemy.vel.x, enemy.vel.y = 20, 20
 
 	crate = Crate("Crate")
@@ -147,12 +148,19 @@ function love.mousepressed(x, y, button)
 	yPressed = y
 
 	mouseMoved = false
-
+	
+	if player:inBounds(vector(x, y)) then
+		player:startPath()
+	end
+	
 	if button == "l" then
 	elseif  button == "r" then
 	end
 end
 
+function love.mousereleased(x, y, button)
+	player:stopPath()
+end
 
 function love.keypressed( key, unicode )
 	signal.emit("keyPressed", key, unicode)
