@@ -31,6 +31,7 @@ function love.load()
 	gameBottom = love.graphics.getHeight() / 2
 	
 	world = World:new()
+	world.camera = cam
 	world:init()
 
 	world:create()
@@ -63,13 +64,6 @@ function love.load()
 	crate4:initPhysics(world.physworld)
 	crate4.physics.body:applyForce(-1000, 1000)
 	crate4.physics.body:applyTorque(100)
-	
-	world:addObject(player)
-	world:addObject(enemy)
-	world:addObject(crate)
-	world:addObject(crate2)
-	world:addObject(crate3)
-	world:addObject(crate4)
 
 	Tools:loadFonts()
 
@@ -93,10 +87,6 @@ function love.draw()
 	cam:attach()
 
 	world:draw()
-	crate:draw()
-	crate2:draw()
-	crate3:draw()
-	crate4:draw()
 
 	cam:detach()
 end
@@ -105,15 +95,6 @@ function love.update(dt)
 	timer.update(dt)
 	
 	world:update(dt)
-
-	crate:update(dt)
-	crate:updateSprite(dt)
-	crate2:update(dt)
-	crate2:updateSprite(dt)
-	crate3:update(dt)
-	crate3:updateSprite(dt)
-	crate4:update(dt)
-	crate4:updateSprite(dt)
 
 
 	-- if love.keyboard.isDown("right") then
@@ -163,6 +144,13 @@ function love.mousereleased(x, y, button)
 end
 
 function love.keypressed( key, unicode )
+	local function done() world:updateBoundaries() end
+	if key == '-' then
+		cam:setScaleOverTime(cam.scale - 0.5, 2, done)
+	elseif key == '=' then
+		cam:setScaleOverTime(cam.scale + 0.5, 2, done)
+	end
+		
 	signal.emit("keyPressed", key, unicode)
 end
 

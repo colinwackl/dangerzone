@@ -3,6 +3,7 @@ require "tools"
 Vector = require "hump.vector"
 Class = require "hump.class"
 Signal = require "hump.signal"
+timer = require "hump.timer"
 
 Entity = Class({function(self, dataPath)
 	Base.construct(self, dataPath)
@@ -19,6 +20,9 @@ Entity = Class({function(self, dataPath)
 	if dataPath then
 		self:load(dataPath)
 	end
+	
+	self.world = _G.world
+	self.world:addObject(self)
 	
 end, inherits = Base})
 
@@ -50,6 +54,20 @@ function Entity:asVector(a, default)
 	else
 		return Vector(default.x or 0, default.y or 0)
 	end
+end
+
+function Entity:destroy()
+	-- NOTE: self.world seems to be nil'd in call(), figure that out!
+	local function call(f, args)
+		local self = args.self
+		local world = args.world
+		world:removeObject(self)
+		--[[if self.physics and self.physics.body then
+			self.physics.body:destroy()
+		end]]
+	end
+
+	timer.add(0, call, {self = self, world = self.world})
 end
 
 function Entity:update(dt)

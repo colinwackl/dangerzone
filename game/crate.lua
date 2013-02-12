@@ -34,7 +34,9 @@ function Crate:setAnimation(strAnimation)
 	self.sprite:setAnimation(strAnimation)
 end
 
-function Crate:updateSprite(dt)
+function Crate:update(dt)
+	Entity.update(self, dt)
+	
 	self.sprite:setPosition(self.pos)
 	self.sprite:setRotation(self.physics.body:getAngle())
 	self.sprite:update(dt)
