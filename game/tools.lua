@@ -206,3 +206,22 @@ function Tools:intersectLineCircle(p1, p2, center, r)
    end
 
 end
+
+function Tools:inherit(super)
+	local class = { }
+	local mt = {}
+	mt.__index = function(t, key)
+		local selfValue = rawget(t, key) 
+		if selfValue then
+			return selfValue
+		else
+			return super[key]
+		end
+	end
+	
+	class.new = function(o)
+		return setmetatable(o or { super = super }, mt)
+	end
+	
+	return class
+end
