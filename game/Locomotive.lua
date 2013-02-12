@@ -8,6 +8,7 @@ signal = require "hump.signal"
 Locomotive = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
 	
+	self:createSprites()
 	self:createFixture()
 	self.path = FingerPath("FingerPath")
 	
@@ -65,6 +66,7 @@ function Locomotive:update(dt)
 		
 		diff:normalize_inplace()
 		self.vel = diff * self.maxvel
+		self:setAngle(math.atan2(diff.y, diff.x) + math.pi / 2)
 	else
 		self.accel.x, self.accel.y = 0, 0
 	end
@@ -72,6 +74,5 @@ function Locomotive:update(dt)
 end
 
 function Locomotive:draw()
-	love.graphics.setColor(self.data.colour[1], self.data.colour[2], self.data.colour[3], self.data.colour[4] or 255)
-	self:drawBounds()
+	Entity.draw(self)
 end

@@ -32,6 +32,7 @@ function love.load()
 	gameBottom = love.graphics.getHeight() / 2
 	
 	world = World:new()
+	world.camera = cam
 	world:init()
 
 	world:create()
@@ -184,6 +185,13 @@ function love.mousereleased(x, y, button)
 end
 
 function love.keypressed( key, unicode )
+	local function done() world:updateBoundaries() end
+	if key == '-' then
+		cam:setScaleOverTime(cam.scale * 0.5, 2, done)
+	elseif key == '=' then
+		cam:setScaleOverTime(cam.scale * 2, 2, done)
+	end
+		
 	signal.emit("keyPressed", key, unicode)
 end
 

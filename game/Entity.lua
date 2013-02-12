@@ -3,6 +3,7 @@ require "tools"
 Vector = require "hump.vector"
 Class = require "hump.class"
 Signal = require "hump.signal"
+timer = require "hump.timer"
 
 Entity = Class({function(self, dataPath)
 	Base.construct(self, dataPath)
@@ -10,13 +11,18 @@ Entity = Class({function(self, dataPath)
 	self.pos = vector(0, 0)
 	self.vel = vector(0, 0)
 	self.accel = vector(0, 0)
+	self.angle = 0
 	self.maxvel = math.huge
 	self.friction = 0
 	self.signals = Signal:new()
+	self.sprites = {}
 	
 	if dataPath then
 		self:load(dataPath)
 	end
+	
+	self.world = _G.world
+	self.world:addObject(self)
 	
 end, inherits = Base})
 
@@ -50,6 +56,20 @@ function Entity:asVector(a, default)
 	end
 end
 
+function Entity:destroy()
+	-- NOTE: self.world seems to be nil'd in call(), figure that out!
+	local function call(f, args)
+		local self = args.self
+		local world = args.world
+		world:removeObject(self)
+		--[[if self.physics and self.physics.body then
+			self.physics.body:destroy()
+		end]]
+	end
+
+	timer.add(0, call, {self = self, world = self.world})
+end
+
 function Entity:update(dt)
 	self.vel.x = math.min(self.vel.x + self.accel.x, self.maxvel)
 	self.vel.y = math.min(self.vel.y + self.accel.y, self.maxvel)
@@ -58,7 +78,7 @@ function Entity:update(dt)
 		body:setLinearVelocity(self.vel.x, self.vel.y)
 		--body:setPosition(self.pos.x, self.pos.y)
 		self.pos.x, self.pos.y = body:getPosition()
-		
+		self.angle = body:getAngle()
 	else
 		self.pos = self.pos + self.vel * dt
 	end
@@ -74,11 +94,21 @@ function Entity:update(dt)
 	if self.lastVel then
 		self.vel = self.vel - (self.lastVel * self.friction * dt)
 	end
+	
+	for _, sprite in ipairs(self.sprites) do
+		sprite:setPosition(self.pos)
+		sprite:setRotation(self.angle)
+		sprite:update(dt)
+	end
+	
 	Base.update(self, dt)
 end
 
 function Entity:draw()
 	Base.draw(self)
+	for _, sprite in ipairs(self.sprites) do
+		sprite:draw()
+	end
 end
 
 function Entity:getBody()
@@ -104,10 +134,27 @@ function Entity:createFixture(shape, density)
 	return fixture
 end
 
+function Entity:createSprites()
+	local spriteData = self.data.sprite
+	if spriteData then
+		local sprite = LayeredSprite:new()
+		sprite:init(spriteData[1], spriteData[2])
+		table.insert(self.sprites, sprite)
+	end
+end
+
 function Entity:setPosition(position)
 	if self.physics and self.physics.body then
 		local body = self:getBody()
 		body:setPosition(position.x, position.y)
+		body:setAngularVelocity(0)
+	end
+end
+
+function Entity:setAngle(angle)
+	if self.physics and self.physics.body then
+		local body = self:getBody()
+		body:setAngle(angle)
 	end
 end
 

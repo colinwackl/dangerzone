@@ -14,17 +14,20 @@ end} )
 
 local function updateZoom(dt, delay, args)
 	args.current = args.current + (args.range * dt)
-	print("args.current", args.current, args.range, dt, delay)
 	args.camera:zoomTo(args.current)
 end
 
 local function updateZoomAfter(_, args)
 	args.camera:zoomTo(args.final)
+	if args.after then
+		args.after()
+	end
 end
 
-function Camera:setScaleOverTime(destination, duration)
+function Camera:setScaleOverTime(destination, duration, after)
 	timer.cancel(updateZoom)
 	timer.do_for(duration, updateZoom, updateZoomAfter,
-		{camera = self, current = self.scale, range = (destination - self.scale) / duration, final = destination})
+		{camera = self, current = self.scale, range = (destination - self.scale) / duration, final = destination,
+		after = after})
 	
 end

@@ -1,4 +1,5 @@
 vector = require("hump.vector")
+require "Boundary"
 
 World = Base:new()
 World.pctsky = 0.6
@@ -170,7 +171,7 @@ function World:init()
 	self.physworld = world
 	world:setCallbacks( self.beginContact, self.endContact, self.preSolve, self.postSolve )
 
-	physobjs.bottom = {}
+	--[[physobjs.bottom = {}
 	physobjs.bottom.body = love.physics.newBody(world, 0, love.graphics.getHeight() + 2)
 	physobjs.bottom.shape = love.physics.newRectangleShape( self.maxx - self.minx, 1)
 	physobjs.bottom.fixture = love.physics.newFixture(physobjs.bottom.body, physobjs.bottom.shape)
@@ -188,12 +189,22 @@ function World:init()
 	physobjs.right = {}
 	physobjs.right.body = love.physics.newBody(world, love.graphics.getWidth() + 2, 0)
 	physobjs.right.shape = love.physics.newRectangleShape(1, self.maxy - self.miny)
-	physobjs.right.fixture = love.physics.newFixture(physobjs.right.body, physobjs.right.shape)
+	physobjs.right.fixture = love.physics.newFixture(physobjs.right.body, physobjs.right.shape)]]
+	
+	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
+	--self.boundaries = {left = Boundary()}
+	self:updateBoundaries()
 
 	World.image = love.graphics.newImage("res/bg.png")
 	World.image:setFilter("linear", "linear")
 	--World.quad = love.graphics.newQuad(0, 0, World.image:getWidth(), World.image:getHeight(), World.image:getWidth(), World.image:getHeight())
 	World.quad = love.graphics.newQuad(0, 0, love.graphics.getWidth() * 2, love.graphics.getHeight() * 2, love.graphics.getWidth() * 2, love.graphics.getHeight() * 2)
+end
+
+function World:updateBoundaries()
+	for name, boundary in pairs(self.boundaries) do
+		boundary:updateBoundary(name, self.camera)
+	end
 end
 
 function World:addCirclePhysics(obj)
@@ -266,8 +277,8 @@ end
 function World.signal(a, b, c, name)
 	local aEntity, bEntity = a:getUserData(), b:getUserData()
 	if aEntity and aEntity:is_a(Entity) and bEntity and bEntity:is_a(Entity) then
-		aEntity.signals:emit(name, bEntity, c)
-		bEntity.signals:emit(name, aEntity, c)
+		aEntity.signals:emit(name, aEntity, bEntity, c)
+		bEntity.signals:emit(name, bEntity, aEntity, c)
 	end
 end
 

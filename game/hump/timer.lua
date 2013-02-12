@@ -55,8 +55,8 @@ function Timer:do_for(delay, func, after, args)
 	return handle
 end
 
-function Timer:add(delay, func)
-	return self:do_for(delay, _nothing_, func)
+function Timer:add(delay, func, args)
+	return self:do_for(delay, _nothing_, func, args)
 end
 
 function Timer:addPeriodic(delay, func, count)
