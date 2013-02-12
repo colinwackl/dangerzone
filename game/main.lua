@@ -44,10 +44,31 @@ function love.load()
 	crate:initPhysics(world.physworld)
 	crate.physics.body:applyForce(1000, 1000)
 	crate.physics.body:applyTorque(100)
+
+	crate2 = Crate("Crate")
+	crate2:initSprite("cell.sprite", "heart")
+	crate2:initPhysics(world.physworld)
+	crate2.physics.body:applyForce(1000, -1000)
+	crate2.physics.body:applyTorque(100)
+
+	crate3 = Crate("Crate")
+	crate3:initSprite("cell.sprite", "body")
+	crate3:initPhysics(world.physworld)
+	crate3.physics.body:applyForce(-1000, -1000)
+	crate3.physics.body:applyTorque(100)
+
+	crate4 = Crate("Crate")
+	crate4:initSprite("cell.sprite", "body")
+	crate4:initPhysics(world.physworld)
+	crate4.physics.body:applyForce(-1000, 1000)
+	crate4.physics.body:applyTorque(100)
 	
 	world:addObject(player)
 	world:addObject(enemy)
 	world:addObject(crate)
+	world:addObject(crate2)
+	world:addObject(crate3)
+	world:addObject(crate4)
 
 	Tools:loadFonts()
 
@@ -72,6 +93,9 @@ function love.draw()
 
 	world:draw()
 	crate:draw()
+	crate2:draw()
+	crate3:draw()
+	crate4:draw()
 
 	cam:detach()
 end
@@ -83,6 +107,13 @@ function love.update(dt)
 
 	crate:update(dt)
 	crate:updateSprite(dt)
+	crate2:update(dt)
+	crate2:updateSprite(dt)
+	crate3:update(dt)
+	crate3:updateSprite(dt)
+	crate4:update(dt)
+	crate4:updateSprite(dt)
+
 
 	-- if love.keyboard.isDown("right") then
 	-- 	testLayeredSprite.position.x = testLayeredSprite.position.x + (testLayeredSprite.speed * dt)
