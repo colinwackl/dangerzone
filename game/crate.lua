@@ -42,7 +42,18 @@ function Crate:updateSprite(dt)
 end
 
 function Crate:draw()
-	-- love.graphics.setColor(self.data.colour[1], self.data.colour[2], self.data.colour[3], self.data.colour[4] or 255)
-	-- love.graphics.rectangle("fill", self.pos.x, self.pos.y, 100, 100)
+	--love.graphics.setColor(self.data.colour[1], self.data.colour[2], self.data.colour[3], self.data.colour[4] or 255)
+	--love.graphics.rectangle("fill", self.pos.x, self.pos.y, 100, 100)
 	self.sprite:draw()
+	
+	if DEBUG and self.bounds ~= nil then
+		love.graphics.push()
+		--love.graphics.translate(self.pos.x, self.pos.y)
+		love.graphics.setColor(255,0,0)
+		love.graphics.setLine(1)
+		love.graphics.translate(self.pos.x, self.pos.y)
+		love.graphics.rotate(self.physics.body:getAngle())
+		love.graphics.rectangle("line", self.bounds.left, self.bounds.top, self.bounds.right - self.bounds.left, self.bounds.bottom - self.bounds.top)
+		love.graphics.pop()
+	end
 end
