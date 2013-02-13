@@ -46,6 +46,7 @@ end
 function SpawnManager:update(dt)
 	Entity.update(self, dt)
 	self:updateLevel()
+
 end
 
 function SpawnManager:draw()
