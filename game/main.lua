@@ -8,6 +8,7 @@ require "Tools"
 require "Locomotive"
 require "Enemy"
 require "Crate"
+require "Beam"
 
 testLayeredSprite = {}
 zoom = 1
@@ -50,6 +51,17 @@ function love.load()
 	crate4 = Crate("Crate")
 	crate4:initSprite("cell.sprite", "body_grey")
 
+	beam = Beam("Beam")
+	beam:initPhysics(world.physworld, player.physics.body, crate.physics.body, 200)
+	
+	world:addObject(player)
+	world:addObject(enemy)
+	world:addObject(crate)
+	world:addObject(crate2)
+	world:addObject(crate3)
+	world:addObject(crate4)
+	world:addObject(beam)
+
 	Tools:loadFonts()
 
 	love.graphics.setBackgroundColor(255, 255, 255)
@@ -73,6 +85,12 @@ function love.draw()
 
 	love.graphics.setBackgroundColor(100, 103, 123, 255)
 	world:draw()
+	crate:draw()
+	crate2:draw()
+	crate3:draw()
+	crate4:draw()
+
+	--beam:draw(beam)
 
 	cam:detach()
 end
@@ -81,6 +99,8 @@ function love.update(dt)
 	timer.update(dt)
 	
 	world:update(dt)
+
+	--j:setTarget(love.mouse.getPosition())
 
 
 	-- if love.keyboard.isDown("right") then
@@ -118,6 +138,18 @@ function love.mousepressed(x, y, button)
 	
 	if player:inBounds(vector(x, y)) then
 		player:startPath()
+	elseif crate:inBounds(vector(x, y)) then
+			beam = Beam("Beam")
+			beam:initPhysics(world.physworld, crate.physics.body, crate2.physics.body, 200)
+			world:addObject(beam)
+	elseif crate2:inBounds(vector(x, y)) then
+			beam = Beam("Beam")
+			beam:initPhysics(world.physworld, crate2.physics.body, crate3.physics.body, 200)
+			world:addObject(beam)
+	elseif crate3:inBounds(vector(x, y)) then
+			beam = Beam("Beam")
+			beam:initPhysics(world.physworld, crate3.physics.body, crate4.physics.body, 200)
+			world:addObject(beam)
 	end
 	
 	if button == "l" then
