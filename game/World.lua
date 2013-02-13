@@ -68,6 +68,11 @@ function World:randomSpot(scale)
 	return vector( math.random(self:getLeft(), self:getRight()) * scale, math.random(self:getTop(), self:getBottom() * scale) ) 
 end
 
+function World:randomSpotOnScreen(scale)
+	scale = scale or 1
+	return vector( math.random(self:getLeft(), self:getRight()), math.random(self:getTop(), self:getBottom()) ) 
+end
+
 function World:debugDrawGround()
 
 	local y = self:getGroundHeight()

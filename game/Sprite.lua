@@ -1,6 +1,7 @@
 require "Base"
 require "hump.vector"
 require "spritemanager"
+require "AlphaEffect"
 
 Sprite = Base:new()
 Sprite.position = vector(0, 0)
@@ -14,10 +15,17 @@ function Sprite:init(strData, strAnimation)
 	self.baseLayer.animation = strAnimation
 	self.baseLayer:setData(self.baseLayer.strData, self.baseLayer.animation, true)
 	self.baseLayer.sprData.image:setFilter("linear", "linear")
+
+	self.effect = AlphaEffect:new()
+	self.effect:load()
 end
 
 function Sprite:setPosition(pos)
 	self.position = pos
+end
+
+function Sprite:setAlpha(alpha)
+	self.effect:setAlpha(alpha)
 end
 
 function Sprite:setRotation(rot)
@@ -29,7 +37,7 @@ function Sprite:setAnimation(animation)
 end
 
 function Sprite:update(dt)
-	--Sprite.effect:update(dt)
+	self.effect:update(dt)
 
 	self.baseLayer.x = self.position.x
 	self.baseLayer.y = self.position.y
@@ -40,7 +48,7 @@ function Sprite:update(dt)
 end
 
 function Sprite:draw()
-	--self.effect:setEffect()
+	self.effect:setEffect()
 	self.baseLayer:draw()
-	--self.effect:clearEffect()
+	self.effect:clearEffect()
 end

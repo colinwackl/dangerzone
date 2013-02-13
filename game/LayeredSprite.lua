@@ -1,6 +1,7 @@
 require "Base"
 require "hump.vector"
 require "spritemanager"
+require "AlphaEffect"
 
 LayeredSprite = Base:new()
 LayeredSprite.position = vector(0, 0)
@@ -21,10 +22,17 @@ function LayeredSprite:init(strData, strAnimation)
 	self.topLayer.animation = strAnimation
 	self.topLayer:setData(self.topLayer.strData, self.topLayer.animation, true)
 	self.topLayer.sprData.image:setFilter("linear", "linear")
+
+	self.effect = AlphaEffect:new()
+	self.effect:load()
 end
 
 function LayeredSprite:setPosition(pos)
 	self.position = pos
+end
+
+function LayeredSprite:setAlpha(alpha)
+	self.effect:setAlpha(alpha)
 end
 
 function LayeredSprite:setRotation(rot)
@@ -37,7 +45,7 @@ function LayeredSprite:setAnimation(animation)
 end
 
 function LayeredSprite:update(dt)
-	--LayeredSprite.effect:update(dt)
+	self.effect:update(dt)
 
 	self.baseLayer.x = self.position.x
 	self.baseLayer.y = self.position.y
@@ -54,8 +62,8 @@ function LayeredSprite:update(dt)
 end
 
 function LayeredSprite:draw()
-	--self.effect:setEffect()
+	self.effect:setEffect()
 	self.baseLayer:draw()
-	--self.effect:clearEffect()
 	self.topLayer:draw()
+	self.effect:clearEffect()
 end
