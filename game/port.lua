@@ -41,15 +41,21 @@ function Port:linkWith(port)
 	--[[local x1, y1 = self.parent.physics.body:getLocalVector(self.pos.x, self.pos.y)
 	local x2, y2 = port.parent.physics.body:getLocalVector(port.pos.x, port.pos.y)]]
 	
-	local x3, y3 = self.pos.x, self.pos.y
 	local x1, y1 = self.parent.physics.body:getWorldCenter()
 	local x2, y2 = port.parent.physics.body:getWorldCenter()
+	local x3, y3 = self.pos.x, self.pos.y
+	local diffx, diffy = x3 - x1, y3 - y1
 	print("x1, y1", x1, y1, "x3, y3", x3, y3)
 	
 	--[[local x1, y1 = 0, 0
 	local x2, y2 = 0, 0]]
 		
 	x1, y1, x2, y2, x3, y3 = x1 * meter, y1 * meter, x2 * meter, y2 * meter, x3 * meter, y3 * meter
+	--x1, y1, x2, y2 = x1 * meter, y1 * meter, x2 * meter, y2 * meter
+	x3 = x1 + diffx
+	y3 = y1 + diffy
+	print("x1, y1", x1, y1, "x3, y3", x3, y3)
+	
 
 	self.link.joint = love.physics.newRopeJoint(self.parent.physics.body, port.parent.physics.body,
 		x3, y3, x2, y2, distance)
