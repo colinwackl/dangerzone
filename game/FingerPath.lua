@@ -36,6 +36,10 @@ function FingerPath:getFront()
 end
 
 function FingerPath:popFront()
+	if #self.points > 1 then
+		local diff = self.points[1] - self.points[2]
+		self.currentLength = self.currentLength - diff:len()
+	end
 	table.remove(self.points, 1)
 end
 
