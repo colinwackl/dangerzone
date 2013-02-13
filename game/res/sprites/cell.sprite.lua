@@ -18,11 +18,11 @@ data.animations = {
 		scale=1
 	},
 	flesheater_glow={
-		[0]={u=0, v=1895, w=96, h=112, offsetX=33, offsetY=39, duration=0.0833333},
-		[1]={u=96, v=1895, w=96, h=112, offsetX=33, offsetY=39, duration=0.0833333},
-		[2]={u=192, v=1895, w=96, h=112, offsetX=33, offsetY=39, duration=0.0833333},
-		[3]={u=288, v=1895, w=96, h=112, offsetX=33, offsetY=39, duration=0.0833333},
-		[4]={u=384, v=1893, w=96, h=112, offsetX=33, offsetY=39, duration=0.0833333},
+		[0]={u=0, v=1895, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
+		[1]={u=96, v=1895, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
+		[2]={u=192, v=1895, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
+		[3]={u=288, v=1895, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
+		[4]={u=384, v=1893, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
 		scale=1
 	},
 	bullet={
