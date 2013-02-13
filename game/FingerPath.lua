@@ -43,7 +43,7 @@ function FingerPath:update(dt)
 	Entity.update(self, dt)
 	
 	if self.recording and self.currentLength < self.maxLength then
-		local v = Vector(love.mouse.getX(), love.mouse.getY())
+		local v = Vector(self.world.camera:mousepos())
 		table.insert(self.points, v)
 		
 		if #self.points > 1 then

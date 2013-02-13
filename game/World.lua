@@ -1,5 +1,6 @@
 vector = require("hump.vector")
 require "Boundary"
+require "BgParticleSystem"
 
 World = Base:new()
 World.pctsky = 0.6
@@ -19,60 +20,9 @@ World.radiationfalloff = 2.5
 
 World.groundresolution = 40
 World.ground = {}
-World.quad = {}
-World.image = {}
+World.particles = {}
 
 local physobjs = {}
-
-function World:draw()
-	love.graphics.setColorMode("replace")
-	love.graphics.drawq(World.image, World.quad, 0, 0, 0, 
-		0.5, 0.5, 
-		0, 0)
-
-	-- --draw sky
-	-- love.graphics.setColor(128,128,255,100)
-	-- love.graphics.rectangle("fill", 0,0, 
-	-- 						love.graphics.getWidth(), love.graphics.getHeight() * self.pctsky)
-
-	-- --draw horizon
-	-- love.graphics.setColor(0, 128, 0, 100)
-	-- love.graphics.rectangle("fill", 0, self.pctsky * love.graphics.getHeight(),
-	-- 						love.graphics.getWidth(), love.graphics.getHeight() * self.pcthorizon)
-
-	-- --draw ground
-	-- love.graphics.setColor(0,192, 0, 100)
-	-- love.graphics.rectangle("fill", 0, (self.pctsky + self.pcthorizon) * love.graphics.getHeight(), 
-	-- 						love.graphics.getWidth(), (1.0 - self.pctsky - self.pcthorizon) * love.graphics.getHeight())
-
-	for i,v in ipairs(self.objects) do
-		v:draw()
-	end
-
-	if DRAWPHYSICS then
-		--love.graphics.setColor(72, 160, 14) -- set the drawing color to green for the ground
-		--love.graphics.polygon("fill", physobjs.ground.body:getWorldPoints(physobjs.ground.shape:getPoints())) -- draw a "filled in" polygon using the ground's coordinates
-
-		for i,v in ipairs(physobjs) do
-			if v.body:isActive() then
-				if v.shape:type() == "CircleShape" then
-					love.graphics.setColor(255, 0, 0) --set the drawing color to red for the ball
-					love.graphics.circle("fill", v.body:getX(), v.body:getY(), v.shape:getRadius())
-				elseif v.shape:type() == "PolygonShape" then
-					love.graphics.setColor(255, 0, 0) --set the drawing color to red for the ball
-					love.graphics.push()
-					love.graphics.translate(v.body:getX(), v.body:getY())
-					love.graphics.polygon("fill", v.shape:getPoints())
-					love.graphics.pop()
-				end
-			end
-		end
-	end
-
-	--love.graphics.draw(World.image, 0, 0, 0, 
-	--	1, 1, 
-	--	0, 0)
-end
 
 -- t,l,b,r
 function World:getGroundBounds()
@@ -119,11 +69,7 @@ end
 
 
 function World:randomSpot()
-	local bounds = self:getGroundBounds()
-
-	return vector( bounds.left + (bounds.right - bounds.left) * math.random(),
-				    bounds.top + (bounds.bottom - bounds.top) * math.random() ) 
-
+	return vector( math.random(self:getLeft(), self:getRight()), math.random(self:getTop(), self:getBottom()) ) 
 end
 
 function World:debugDrawGround()
@@ -163,6 +109,44 @@ function World:getPatch(pos)
 	return self.ground[index]
 end
 
+function World:addStableParticle(r, g, b)
+	local image = love.graphics.newImage("res/circle.png")
+	local p = BgParticleSystem(image, 40)
+	table.insert(self.particles, p)
+	p:setColors(r, g, b, 0, r, g, b, 64, r, g, b, 0)
+	p:setEmissionRate(1)
+	p:setSizes(0.5, 1.5)
+	p:setDirection(1)
+	p:setParticleLife(8, 16)
+	
+	local function periodic(particles, dt)
+		local spot = self:randomSpot()
+		particles:setPosition(spot.x, spot.y)
+	end
+	p:setPeriodic(0.3, periodic, math.huge)
+	p:start()
+end
+
+function World:addFastSmallParticle(r, g, b)
+	local image = love.graphics.newImage("res/circle.png")
+	local p = BgParticleSystem(image, 40)
+	table.insert(self.particles, p)
+	p:setColors(r, g, b, 0, r, g, b, 255, r, g, b, 0)
+	p:setEmissionRate(1)
+	p:setSizes(0.01, 0.08)
+	p:setDirection(math.random() * math.pi * 2)
+	p:setSpeed(15, 100)
+	p:setParticleLife(3, 6)
+	
+	local function periodic(particles, dt)
+		local spot = self:randomSpot()
+		particles:setPosition(spot.x, spot.y)
+		p:setDirection(math.random() * math.pi * 2)
+	end
+	p:setPeriodic(0.3, periodic, math.huge)
+	p:start()
+
+end
 
 function World:init()
 	love.physics.setMeter(128)
@@ -170,35 +154,16 @@ function World:init()
 
 	self.physworld = world
 	world:setCallbacks( self.beginContact, self.endContact, self.preSolve, self.postSolve )
-
-	--[[physobjs.bottom = {}
-	physobjs.bottom.body = love.physics.newBody(world, 0, love.graphics.getHeight() + 2)
-	physobjs.bottom.shape = love.physics.newRectangleShape( self.maxx - self.minx, 1)
-	physobjs.bottom.fixture = love.physics.newFixture(physobjs.bottom.body, physobjs.bottom.shape)
-
-	physobjs.top = {}
-	physobjs.top.body = love.physics.newBody(world, 0, 0 - 2)
-	physobjs.top.shape = love.physics.newRectangleShape( self.maxx - self.minx, 1)
-	physobjs.top.fixture = love.physics.newFixture(physobjs.top.body, physobjs.top.shape)
-
-	physobjs.left = {}
-	physobjs.left.body = love.physics.newBody(world, 0, 0 - 2)
-	physobjs.left.shape = love.physics.newRectangleShape(1, self.maxy - self.miny)
-	physobjs.left.fixture = love.physics.newFixture(physobjs.left.body, physobjs.left.shape)
-
-	physobjs.right = {}
-	physobjs.right.body = love.physics.newBody(world, love.graphics.getWidth() + 2, 0)
-	physobjs.right.shape = love.physics.newRectangleShape(1, self.maxy - self.miny)
-	physobjs.right.fixture = love.physics.newFixture(physobjs.right.body, physobjs.right.shape)]]
 	
+	--self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
 	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
-	--self.boundaries = {left = Boundary()}
 	self:updateBoundaries()
-
-	World.image = love.graphics.newImage("res/bg.png")
-	World.image:setFilter("linear", "linear")
-	--World.quad = love.graphics.newQuad(0, 0, World.image:getWidth(), World.image:getHeight(), World.image:getWidth(), World.image:getHeight())
-	World.quad = love.graphics.newQuad(0, 0, love.graphics.getWidth() * 2, love.graphics.getHeight() * 2, love.graphics.getWidth() * 2, love.graphics.getHeight() * 2)
+	
+	self:addStableParticle(103, 242, 244)
+	self:addStableParticle(95, 142, 157)
+	
+	self:addFastSmallParticle(145, 216, 190)
+	
 end
 
 function World:updateBoundaries()
@@ -282,6 +247,38 @@ function World.signal(a, b, c, name)
 	end
 end
 
+--[[local cameraPosX, cameraPosY = camera:pos()
+local width, height = love.graphics.getWidth() * (1 / camera.scale), love.graphics.getHeight() * (1 / camera.scale)
+local left, right, top, bottom = cameraPosX - (width / 2), cameraPosX + (width / 2), cameraPosY - (height / 2), cameraPosY + (height / 2)]]
+
+function World:getWidth()
+	return love.graphics.getWidth() * (1 / self.camera.scale)
+end
+
+function World:getHeight()
+	return love.graphics.getHeight() * (1 / self.camera.scale)
+end
+
+function World:getLeft()
+	local x = self.camera:pos()
+	return x - (self:getWidth() / 2)
+end
+
+function World:getRight()
+	local x = self.camera:pos()
+	return x + (self:getWidth()  / 2)
+end
+
+function World:getTop()
+	local _, y = self.camera:pos()
+	return y - (self:getHeight() / 2)
+end
+
+function World:getBottom()
+	local _, y = self.camera:pos()
+	return y + (self:getHeight() / 2)
+end
+
 function World:update(dt)
 
 	local physdt = dt
@@ -296,6 +293,43 @@ function World:update(dt)
 			self:removeObject(v)
 		else
 			v:update(dt)
+		end
+	end
+	
+	for _, particle in ipairs(self.particles) do
+		particle:update(dt)
+	end
+end
+
+function World:draw()
+	love.graphics.setColorMode("replace")
+	
+	love.graphics.setColorMode("modulate")
+	for _, particle in ipairs(self.particles) do
+		particle:draw()
+	end
+
+	for i,v in ipairs(self.objects) do
+		v:draw()
+	end
+
+	if DRAWPHYSICS then
+		--love.graphics.setColor(72, 160, 14) -- set the drawing color to green for the ground
+		--love.graphics.polygon("fill", physobjs.ground.body:getWorldPoints(physobjs.ground.shape:getPoints())) -- draw a "filled in" polygon using the ground's coordinates
+
+		for i,v in ipairs(physobjs) do
+			if v.body:isActive() then
+				if v.shape:type() == "CircleShape" then
+					love.graphics.setColor(255, 0, 0) --set the drawing color to red for the ball
+					love.graphics.circle("fill", v.body:getX(), v.body:getY(), v.shape:getRadius())
+				elseif v.shape:type() == "PolygonShape" then
+					love.graphics.setColor(255, 0, 0) --set the drawing color to red for the ball
+					love.graphics.push()
+					love.graphics.translate(v.body:getX(), v.body:getY())
+					love.graphics.polygon("fill", v.shape:getPoints())
+					love.graphics.pop()
+				end
+			end
 		end
 	end
 end

@@ -18,9 +18,10 @@ function Boundary:updateBoundary(side, camera)
 		fixture:destroy()
 	end
 	
+	local world = self.world
 	local cameraPosX, cameraPosY = camera:pos()
-	local width, height = love.graphics.getWidth() * (1 / camera.scale), love.graphics.getHeight() * (1 / camera.scale)
-	local left, right, top, bottom = cameraPosX - (width / 2), cameraPosX + (width / 2), cameraPosY - (height / 2), cameraPosY + (height / 2)
+	local width, height = world:getWidth(), world:getHeight()
+	local left, right, top, bottom = world:getLeft(), world:getRight(), world:getTop(), world:getBottom()
 	
 	local bounds = {x = 0, y = 0}
 	local pos = self.pos
@@ -46,8 +47,8 @@ end
 function Boundary:draw()
 	Entity.draw(self)
 	
-	--[[local pos = self.pos:clone()
+	local pos = self.pos:clone()
 	pos.x = pos.x - self.bounds:width() / 2
 	pos.y = pos.y - self.bounds:height() / 2
-	love.graphics.rectangle("fill", pos.x, pos.y, self.bounds:width(), self.bounds:height())]]
+	love.graphics.rectangle("fill", pos.x, pos.y, self.bounds:width(), self.bounds:height())
 end
