@@ -6,6 +6,7 @@ require "LayeredSprite"
 require "World"
 require "Tools"
 require "Locomotive"
+require "SpawnManager"
 require "Enemy"
 require "Crate"
 require "Beam"
@@ -21,6 +22,10 @@ function love.load()
 	 -- assert(love.graphics.isSupported('pixeleffect'), 'Pixel effects are not supported on your hardware. Sorry about that.')
 
 	math.randomseed(os.time())
+	
+	world = World:new()
+	spawnManager = SpawnManager("SpawnManager")
+	
 	local cameraX = love.graphics.getWidth() / 2
 	local cameraY = love.graphics.getHeight() / 2
 	local cameraZoom = 0.5
@@ -31,7 +36,6 @@ function love.load()
 	gameTop = love.graphics.getHeight() / 2
 	gameBottom = love.graphics.getHeight() / 2
 	
-	world = World:new()
 	world.camera = cam
 	world:init()
 
@@ -41,6 +45,9 @@ function love.load()
 	enemy = Enemy("enemy", player)
 	enemy:setPosition(vector(10, 10))
 	enemy.vel.x, enemy.vel.y = 20, 20
+	spawnManager:addEnemy(enemy)
+	
+	world.player = player
 
 	crate = Crate("Crate")
 	crate:initSprite("cell.sprite", "body")
@@ -64,7 +71,7 @@ function love.load()
 
 	Tools:loadFonts()
 
-	love.graphics.setBackgroundColor(255, 255, 255)
+	love.graphics.setBackgroundColor(195, 211,211)
 
 	titlefont = Tools.fontMainLarge
 
@@ -83,7 +90,6 @@ end
 function love.draw()
 	cam:attach()
 
-	love.graphics.setBackgroundColor(151, 144, 130, 255)
 	world:draw()
 
 	--beam:draw(beam)

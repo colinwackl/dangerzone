@@ -19,8 +19,8 @@ Crate = Class({function(self, dataPath)
 
 	self.portBow = Port("Port")
 	self.portStern = Port("Port")
-	self.bowPos = {}
-	self.sternPos = {}
+	self.bowPos = Vector(0, 0)
+	self.sternPos = Vector(0, 0)
 end,
 name = "Crate", inherits = Entity})
 
@@ -47,12 +47,12 @@ function Crate:update(dt)
 	self.bowPos.x, self.bowPos.y = self.physics.body:getWorldPoint(self.bowPos.x, self.bowPos.y)
 	self.sternPos.x, self.sternPos.y = self.physics.body:getWorldPoint(self.sternPos.x, self.sternPos.y)
 
-	--if portBow ~= nil then
-		self.portBow:setPosition(bowPos)
-	--end
-	--if portStern ~= nil then
-		self.portStern:setPosition(sternPos)
-	--end
+	if portBow ~= nil then
+		self.portBow:setPosition(self.bowPos)
+	end
+	if portStern ~= nil then
+		self.portStern:setPosition(self.sternPos)
+	end
 
 	self.portBow:update(dt)
 	self.portStern:update(dt)

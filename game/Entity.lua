@@ -61,7 +61,10 @@ function Entity:destroy()
 	local function call(f, args)
 		local self = args.self
 		local world = args.world
+		self.signals:emit("destroyed", self)
+		if self.onDestroyed then self:onDestroyed() end
 		world:removeObject(self)
+		
 		--[[if self.physics and self.physics.body then
 			self.physics.body:destroy()
 		end]]
@@ -149,6 +152,7 @@ function Entity:setPosition(position)
 		body:setPosition(position.x, position.y)
 		body:setAngularVelocity(0)
 	end
+	self.pos = position
 end
 
 function Entity:setAngle(angle)

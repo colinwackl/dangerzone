@@ -49,24 +49,19 @@ function World:addObject(obj)
 		obj.physics.body:setActive(true)
 	end
 
-	table.insert(self.objects, obj)
+	self.objects[obj] = obj
 end
 
 function World:removeObject(obj)
-    for i, v in ipairs(self.objects) do
-	    if v == obj then
-	    	v.world = nil
-	        table.remove(self.objects,i)
+	if self.objects[obj] then
+		obj.world = nil
+		self.objects[obj] = nil
 
-	        if v.physics then
-	        	v.physics.body:setActive(false)
-	        end
-
-	        return
-	    end
+		if obj.physics then
+			obj.physics.body:setActive(false)
+		end
 	end
 end
-
 
 function World:randomSpot(scale)
 	scale = scale or 1
@@ -161,11 +156,9 @@ function World:init()
 	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
 	self:updateBoundaries()
 	
-	self:addStableParticle(248, 179, 126)
-	self:addStableParticle(250, 98, 107)
-	self:addStableParticle(245, 146, 125)
+	self:addStableParticle(188, 187, 183)
 	
-	self:addFastSmallParticle(148, 222, 178)
+	self:addFastSmallParticle(188, 187, 183)
 	
 end
 
@@ -215,7 +208,7 @@ function World:create()
 end
 
 function World:getClickedObject(x, y)
-	for i,obj in ipairs(self.objects) do
+	for i,obj in pairs(self.objects) do
 		if obj:inBounds(vector(x,y)) then
 			return obj
 		end
@@ -291,7 +284,7 @@ function World:update(dt)
 	end
 
 	self.physworld:update(physdt)
-	for i,v in ipairs(self.objects) do
+	for i,v in pairs(self.objects) do
 		if v.lifetime ~= nil and v.lifetime < 0 then
 			self:removeObject(v)
 		else
@@ -312,7 +305,7 @@ function World:draw()
 		particle:draw()
 	end
 
-	for i,v in ipairs(self.objects) do
+	for i,v in pairs(self.objects) do
 		v:draw()
 	end
 
