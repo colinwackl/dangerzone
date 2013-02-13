@@ -30,6 +30,10 @@ function Port:update(dt)
 	end
 end
 
+-- function Port:setPosition(pos)
+-- 	Entity.setPosition(self, pos)
+-- end
+
 function Port:draw()
 	if self.sprite ~= nil then
 		self.sprite:draw()
@@ -42,8 +46,7 @@ function Port:draw()
 		love.graphics.setLine(1)
 		love.graphics.translate(self.pos.x, self.pos.y)
 		--love.graphics.translate(-self.offset.x / 2, -self.offset.y)
-		love.graphics.setColor(173, 69, 0)
-		love.graphics.circle("fill", 0, 0, self.size.x / 2)
+		love.graphics.circle("line", 0, 0, 100)
 
 		love.graphics.pop()
 	end

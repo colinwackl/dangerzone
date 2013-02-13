@@ -137,15 +137,15 @@ function love.mousepressed(x, y, button)
 	elseif crate:inBounds(vector(x, y)) then
 			beam = Beam("Beam")
 			beam:initPhysics(world.physworld, crate.physics.body, crate2.physics.body, 200)
-			world:addObject(beam)
+			--world:addObject(beam)
 	elseif crate2:inBounds(vector(x, y)) then
 			beam = Beam("Beam")
 			beam:initPhysics(world.physworld, crate2.physics.body, crate3.physics.body, 200)
-			world:addObject(beam)
+			--world:addObject(beam)
 	elseif crate3:inBounds(vector(x, y)) then
 			beam = Beam("Beam")
 			beam:initPhysics(world.physworld, crate3.physics.body, crate4.physics.body, 200)
-			world:addObject(beam)
+			--world:addObject(beam)
 	end
 	
 	if button == "l" then
