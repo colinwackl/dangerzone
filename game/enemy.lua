@@ -1,6 +1,6 @@
 require "Entity"
 require "tools"
-require "Bullet"
+require "Boundary"
 Vector = require "hump.vector"
 Class = require "hump.class"
 timer = require "hump.timer"
@@ -11,16 +11,30 @@ Enemy = Class({function(self, dataPath, player)
 	self:createFixture()
 	self:createSprites()
 	
+	self:getBody():setFixedRotation(true)
+	
 	local function shoot()
 		self:shoot(Bullet("Bullet"), player)
 	end
 	shoot()
 	
 	local interval = self.data.shootInterval or 2
-	timer.addPeriodic(interval, shoot)
+	self.shootTimer = timer.addPeriodic(interval, shoot)
+	
+	self.signals:register("beginContact", self.beginContact)
 	
 end,
 name = "Enemy", inherits = Entity})
+
+function Enemy:beginContact(collidedWith)
+	if collidedWith:is_a(Boundary) then
+		self:destroy()
+	end
+end
+
+function Enemy:onDestroyed()
+	timer.cancel(self.shootTimer)
+end
 
 function Enemy:update(dt)
 	Entity.update(self, dt)
@@ -31,7 +45,5 @@ function Enemy:update(dt)
 end
 
 function Enemy:draw()
-	--love.graphics.setColor(self.data.colour[1], self.data.colour[2], self.data.colour[3], self.data.colour[4] or 255)
-	--self:drawBounds()
 	Entity.draw(self)
 end

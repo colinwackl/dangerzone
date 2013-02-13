@@ -48,6 +48,10 @@ function Locomotive:stopPath()
 	self.path:stop()
 end
 
+function Locomotive:getCrateCount()
+	return 0
+end
+
 function Locomotive:update(dt)
 	Entity.update(self, dt)
 	

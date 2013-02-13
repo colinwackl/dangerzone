@@ -72,6 +72,10 @@ function Timer:addPeriodic(delay, func, count, args)
 end
 
 function Timer:cancel(handle)
+	--[[print("handle", handle)
+	for h, _ in pairs(self.functions) do
+		print("h", h)
+	end]]
 	self.functions[handle] = nil
 end
 
