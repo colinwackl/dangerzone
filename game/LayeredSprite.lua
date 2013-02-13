@@ -11,14 +11,14 @@ LayeredSprite.effect = {}
 
 function LayeredSprite:init(strData, strAnimation)
 	self.baseLayer = spritemanager.createSprite()
-	self.baseLayer.strData = strData
-	self.baseLayer.animation = strAnimation
+	self.baseLayer.strData = strData--.."_glow"
+	self.baseLayer.animation = strAnimation.."_glow"
 	self.baseLayer:setData(self.baseLayer.strData, self.baseLayer.animation, true)
 	self.baseLayer.sprData.image:setFilter("linear", "linear")
 
 	self.topLayer = spritemanager.createSprite()
-	self.topLayer.strData = strData--.."_glow"
-	self.topLayer.animation = strAnimation.."_glow"
+	self.topLayer.strData = strData
+	self.topLayer.animation = strAnimation
 	self.topLayer:setData(self.topLayer.strData, self.topLayer.animation, true)
 	self.topLayer.sprData.image:setFilter("linear", "linear")
 end
