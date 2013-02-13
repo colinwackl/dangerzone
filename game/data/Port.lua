@@ -1,1 +1,1 @@
-return { pos= {0, 0}, size = {100, 155} , colour = {255, 255, 255, 255}}
+return { maxLinkDistance = 100 }

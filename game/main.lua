@@ -10,6 +10,7 @@ require "SpawnManager"
 require "Enemy"
 require "Crate"
 require "Beam"
+require "ChainLink"
 
 testLayeredSprite = {}
 zoom = 1
@@ -42,32 +43,32 @@ function love.load()
 	world:create()
 	
 	player = Locomotive("Locomotive")
-	enemy = Enemy("enemy", player)
+	--[[enemy = Enemy("enemy", player)
 	enemy:setPosition(vector(10, 10))
 	enemy.vel.x, enemy.vel.y = 20, 20
-	spawnManager:addEnemy(enemy)
+	spawnManager:addEnemy(enemy)]]
 	
 	world.player = player
 
 	crate = Crate("Crate")
 	crate:initSprite("cell.sprite", "body")
+	crate:setPosition(Vector(100, 100))
 	crate2 = Crate("Crate")
 	crate2:initSprite("cell.sprite", "heart")
+	crate2:setPosition(Vector(200, 200))
 	crate3 = Crate("Crate")
 	crate3:initSprite("cell.sprite", "body_grey")
+	crate3:setPosition(Vector(300, 300))
 	crate4 = Crate("Crate")
 	crate4:initSprite("cell.sprite", "body_grey")
-
-	beam = Beam("Beam")
-	beam:initPhysics(world.physworld, player.physics.body, crate.physics.body, 200)
+	crate4:setPosition(Vector(400, 400))
 	
 	world:addObject(player)
-	world:addObject(enemy)
+	--world:addObject(enemy)
 	world:addObject(crate)
 	world:addObject(crate2)
 	world:addObject(crate3)
 	world:addObject(crate4)
-	world:addObject(beam)
 
 	Tools:loadFonts()
 
@@ -81,10 +82,6 @@ function love.load()
 		love.audio.play(music)
 
 	end
-
-	--testLayeredSprite = LayeredSprite:new()
-	--testLayeredSprite:load("dude", "dude")
-	--testLayeredSprite.speed = 100
 end
 
 function love.draw()
@@ -101,26 +98,6 @@ function love.update(dt)
 	timer.update(dt)
 	
 	world:update(dt)
-
-	--j:setTarget(love.mouse.getPosition())
-
-
-	-- if love.keyboard.isDown("right") then
-	-- 	testLayeredSprite.position.x = testLayeredSprite.position.x + (testLayeredSprite.speed * dt)
-	-- 	--ninja.flipH = false
-	-- 	--testLayeredSprite:setAnimation("runRight", true)
-	-- elseif love.keyboard.isDown("left") then
-	-- 	testLayeredSprite.position.x = testLayeredSprite.position.x - (testLayeredSprite.speed * dt)
-	-- 	--ninja.flipH = true
-	-- 	--testLayeredSprite:setAnimation("runLeft", true)
-	-- end
-
-	-- if love.keyboard.isDown("down") then
-	-- 	testLayeredSprite.position.y = testLayeredSprite.position.y + (testLayeredSprite.speed * dt)
-	-- elseif love.keyboard.isDown("up") then
-	-- 	testLayeredSprite.position.y = testLayeredSprite.position.y - (testLayeredSprite.speed * dt)
-	-- end	
-	--testLayeredSprite:update(dt)
 end
 
 function love.mousereleased(x, y, button)
@@ -130,28 +107,24 @@ end
 xPressed = 0
 yPressed = 0
 mouseMoved = false
+local activePort = nil
 function love.mousepressed(x, y, button)
 	x,y = cam:worldCoords(x, y)
 
 	xPressed = x
 	yPressed = y
-
+	
 	mouseMoved = false
 	
 	if player:inBounds(vector(x, y)) then
 		player:startPath()
-	elseif crate:inBounds(vector(x, y)) then
-			beam = Beam("Beam")
-			beam:initPhysics(world.physworld, crate.physics.body, crate2.physics.body, 200)
-			--world:addObject(beam)
-	elseif crate2:inBounds(vector(x, y)) then
-			beam = Beam("Beam")
-			beam:initPhysics(world.physworld, crate2.physics.body, crate3.physics.body, 200)
-			--world:addObject(beam)
-	elseif crate3:inBounds(vector(x, y)) then
-			beam = Beam("Beam")
-			beam:initPhysics(world.physworld, crate3.physics.body, crate4.physics.body, 200)
-			--world:addObject(beam)
+		
+	else
+		local port, distance = world:getClosestAvailablePort(vector(x, y))
+		if distance < port.effectiveDistance then
+			port:startLink()
+			activePort = port
+		end
 	end
 	
 	if button == "l" then
@@ -161,6 +134,16 @@ end
 
 function love.mousereleased(x, y, button)
 	player:stopPath()
+	if activePort then		
+		local port, distance = world:getClosestAvailablePort(vector(x, y), activePort)
+		if distance < port.effectiveDistance then
+			activePort:linkWith(port)
+		else
+			activePort:endLink():destroy()
+			
+		end
+		activePort = nil
+	end
 end
 
 function love.keypressed( key, unicode )
@@ -170,7 +153,7 @@ function love.keypressed( key, unicode )
 	elseif key == '=' then
 		cam:setScaleOverTime(cam.scale * 2, 2, done)
 	end
-		
+	
 	signal.emit("keyPressed", key, unicode)
 end
 

@@ -150,9 +150,9 @@ function World:init()
 	local world = love.physics.newWorld(0, 0, true)
 
 	self.physworld = world
+	self.availablePorts = {}
 	world:setCallbacks( self.beginContact, self.endContact, self.preSolve, self.postSolve )
 	
-	--self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
 	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
 	self:updateBoundaries()
 	
@@ -273,6 +273,25 @@ end
 function World:getBottom()
 	local _, y = self.camera:pos()
 	return y + (self:getHeight() / 2)
+end
+
+function World:getClosestAvailablePort(pos, compatibleWith)
+	local bestPort, bestDistance = nil, math.huge
+	for i, port in pairs(self.availablePorts) do
+		if compatibleWith == nil or port:isCompatible(compatibleWith) then
+			local diff = port.pos - pos 
+			local currentDistance = diff:len2()
+			if currentDistance < bestDistance then
+				bestPort, bestDistance = port, currentDistance
+			end
+		end
+	end
+	
+	if bestPort then
+		bestDistance = (bestPort.pos - pos):len()
+	end
+	
+	return bestPort, bestDistance
 end
 
 function World:update(dt)

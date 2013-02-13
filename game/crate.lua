@@ -17,8 +17,8 @@ Crate = Class({function(self, dataPath)
 	body:setAngularDamping(0)
 	body:setAngle(math.rad(45))
 
-	self.portBow = Port("Port")
-	self.portStern = Port("Port")
+	self.portBow = Port("Port", self, "head")
+	self.portStern = Port("Port", self, "tail")
 	self.bowPos = Vector(0, 0)
 	self.sternPos = Vector(0, 0)
 end,
@@ -47,10 +47,10 @@ function Crate:update(dt)
 	self.bowPos.x, self.bowPos.y = self.physics.body:getWorldPoint(self.bowPos.x, self.bowPos.y)
 	self.sternPos.x, self.sternPos.y = self.physics.body:getWorldPoint(self.sternPos.x, self.sternPos.y)
 
-	if portBow ~= nil then
+	if self.portBow ~= nil then
 		self.portBow:setPosition(self.bowPos)
 	end
-	if portStern ~= nil then
+	if self.portStern ~= nil then
 		self.portStern:setPosition(self.sternPos)
 	end
 
@@ -59,30 +59,6 @@ function Crate:update(dt)
 end
 
 function Crate:draw()
+	Entity.draw(self)
 	self.sprite:draw()
-	
-	if DEBUG and self.bounds ~= nil then
-		love.graphics.push()
-		--love.graphics.translate(self.pos.x, self.pos.y)
-		love.graphics.setColor(255,0,0)
-		love.graphics.setLine(1)
-		love.graphics.translate(self.pos.x, self.pos.y)
-		love.graphics.rotate(self.physics.body:getAngle())
-		love.graphics.rectangle("line", self.bounds.left, self.bounds.top, self.bounds.right - self.bounds.left, self.bounds.bottom - self.bounds.top)
-		love.graphics.pop()
-
-		love.graphics.push()
-		love.graphics.setColor(0,0,255)
-		love.graphics.setLine(1)
-		love.graphics.translate(self.bowPos.x, self.bowPos.y)
-		love.graphics.circle("line", 0, 0, 100)
-		love.graphics.pop()
-
-		love.graphics.push()
-		love.graphics.setColor(0,0,255)
-		love.graphics.setLine(1)
-		love.graphics.translate(self.sternPos.x, self.sternPos.y)
-		love.graphics.circle("line", 0, 0, 100)
-		love.graphics.pop()
-	end
 end

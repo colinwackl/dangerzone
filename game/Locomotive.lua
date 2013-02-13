@@ -14,6 +14,8 @@ Locomotive = Class({function(self, dataPath)
 	
 	self.friction = 5
 	
+	self.port = Port("Port", self)
+	
 	signal.register('keyPressed', function(...) self:keyPressed(...) end)
 	signal.register('keyReleased', function(...) self:keyReleased(...) end)
 end,
@@ -54,6 +56,8 @@ end
 
 function Locomotive:update(dt)
 	Entity.update(self, dt)
+	
+	self.port:setPosition(Vector(self.physics.body:getWorldPoint(0, self.bounds.bottom)))
 	
 	local destination = self.path:getFront()
 	if destination then
