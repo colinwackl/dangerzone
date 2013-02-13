@@ -20,13 +20,13 @@ function AlphaEffect:load()
 		}
 	]]
 
-	AlphaEffect.effect = love.graphics.newPixelEffect(src)
-	AlphaEffect.effect:send('alpha', 1)
+	self.effect = love.graphics.newPixelEffect(src)
+	self.effect:send('alpha', 1)
 
 end
 
 function AlphaEffect:setEffect()
-	love.graphics.setPixelEffect(AlphaEffect.effect)
+	love.graphics.setPixelEffect(self.effect)
 end
 
 function AlphaEffect:clearEffect()
@@ -34,5 +34,5 @@ function AlphaEffect:clearEffect()
 end
 
 function AlphaEffect:setAlpha(alpha)
-	AlphaEffect.effect:send('alpha', alpha)
+	self.effect:send('alpha', alpha)
 end

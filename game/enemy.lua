@@ -22,6 +22,8 @@ Enemy = Class({function(self, dataPath, player)
 	self.shootTimer = timer.addPeriodic(interval, shoot)
 	
 	self.signals:register("beginContact", self.beginContact)
+
+	self.spawnTimer = 0
 	
 end,
 name = "Enemy", inherits = Entity})
@@ -38,6 +40,11 @@ end
 
 function Enemy:update(dt)
 	Entity.update(self, dt)
+
+	self.spawnTimer = self.spawnTimer + dt
+
+	Entity.setAlpha(self, self.spawnTimer/10)
+	--self.sprite:setAlpha(self.spawnTimer/10)
 	
 	local diff = _G.player.pos - self.pos
 	diff:normalize_inplace()
