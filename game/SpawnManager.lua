@@ -7,7 +7,7 @@ SpawnManager = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
 	self.shooters = {}
 	self.crates = {}
-	self.currentLevel = 0
+	self.currentLevel = 1
 	self.targetShooters = 0
 
 	self.spawnRadius = 800
