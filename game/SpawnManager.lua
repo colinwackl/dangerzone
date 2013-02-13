@@ -6,6 +6,7 @@ Class = require "hump.class"
 SpawnManager = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
 	self.shooters = {}
+	self.crates = {}
 	self.currentLevel = 1
 	self.targetShooters = 0
 
@@ -22,6 +23,15 @@ function SpawnManager:enemyDestroyed(enemy)
 	self.shooters[enemy] = nil
 end
 
+function SpawnManager:addCrate(crate)
+	self.crates[crate] = crate
+	crate.signals:register("destroyed", function(...) self:crateDestroyed(...) end)
+end
+
+function SpawnManager:crateDestroyed(crate)
+	self.crates[crate] = nil
+end
+
 function SpawnManager:getShooterCount()
 	local shooterCount = 0
 	for _, _ in pairs(self.shooters) do
@@ -30,6 +40,16 @@ function SpawnManager:getShooterCount()
 	
 	return shooterCount
 end
+
+function SpawnManager:getCrateCount()
+	local crateCount = 0
+	for _, _ in pairs(self.crates) do
+		crateCount = crateCount + 1
+	end
+	
+	return crateCount
+end
+
 
 function SpawnManager:updateLevel()
 	if self.currentLevel > #self.data.levels - 1 then return end
@@ -55,6 +75,15 @@ function SpawnManager:update(dt)
 		enemy.vel.x, enemy.vel.y = (math.random() * 20) - 10, (math.random() * 20) - 10
 		spawnManager:addEnemy(enemy)
 		self.world:addObject(enemy)
+	end
+
+	if self:getCrateCount() < self.data.levels[self.currentLevel + 1].cratesNeeded + 1 then
+		local crate = Crate("crate")
+		crate:initSprite("cell.sprite", "body")
+		crate:setPosition(self:getSpawnPosition())
+		crate.vel.x, crate.vel.y = (math.random() * 20) - 10, (math.random() * 20) - 10
+		spawnManager:addCrate(crate)
+		self.world:addObject(crate)
 	end
 end
 
