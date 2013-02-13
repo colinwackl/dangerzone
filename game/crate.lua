@@ -21,6 +21,8 @@ Crate = Class({function(self, dataPath)
 	self.portStern = Port("Port", self, "tail")
 	self.bowPos = Vector(0, 0)
 	self.sternPos = Vector(0, 0)
+
+	self.spawnTimer = 0
 end,
 name = "Crate", inherits = Entity})
 
@@ -39,6 +41,10 @@ end
 
 function Crate:update(dt)
 	Entity.update(self, dt)
+
+	self.spawnTimer = self.spawnTimer + dt
+
+	self.sprite:setAlpha(self.spawnTimer/10)
 	
 	self.sprite:setPosition(self.pos)
 	self.sprite:setRotation(self.physics.body:getAngle())
