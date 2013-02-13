@@ -68,8 +68,9 @@ function World:removeObject(obj)
 end
 
 
-function World:randomSpot()
-	return vector( math.random(self:getLeft(), self:getRight()), math.random(self:getTop(), self:getBottom()) ) 
+function World:randomSpot(scale)
+	scale = scale or 1
+	return vector( math.random(self:getLeft(), self:getRight()) * scale, math.random(self:getTop(), self:getBottom() * scale) ) 
 end
 
 function World:debugDrawGround()
@@ -113,27 +114,28 @@ function World:addStableParticle(r, g, b)
 	local image = love.graphics.newImage("res/circle.png")
 	local p = BgParticleSystem(image, 40)
 	table.insert(self.particles, p)
-	p:setColors(r, g, b, 0, r, g, b, 64, r, g, b, 0)
-	p:setEmissionRate(1)
-	p:setSizes(0.5, 1.5)
+	p:setColors(r, g, b, 0, r, g, b, 255, r, g, b, 0)
+	p:setEmissionRate(10)
+	p:setSizes(0.1, 2.5)
 	p:setDirection(1)
-	p:setParticleLife(8, 16)
+	p:setParticleLife(15, 30)
 	
 	local function periodic(particles, dt)
-		local spot = self:randomSpot()
+		local spot = self:randomSpot(3)
 		particles:setPosition(spot.x, spot.y)
 	end
-	p:setPeriodic(0.3, periodic, math.huge)
+	p:setPeriodic(0.1, periodic, math.huge)
 	p:start()
 end
 
 function World:addFastSmallParticle(r, g, b)
-	local image = love.graphics.newImage("res/circle.png")
+	local image = love.graphics.newImage("res/smallparticle.png")
 	local p = BgParticleSystem(image, 40)
 	table.insert(self.particles, p)
 	p:setColors(r, g, b, 0, r, g, b, 255, r, g, b, 0)
-	p:setEmissionRate(1)
-	p:setSizes(0.01, 0.08)
+	p:setEmissionRate(2)
+	p:setSizes(1, 1.5)
+	p:setRotation(0, math.pi * 2)
 	p:setDirection(math.random() * math.pi * 2)
 	p:setSpeed(15, 100)
 	p:setParticleLife(3, 6)
@@ -143,7 +145,7 @@ function World:addFastSmallParticle(r, g, b)
 		particles:setPosition(spot.x, spot.y)
 		p:setDirection(math.random() * math.pi * 2)
 	end
-	p:setPeriodic(0.3, periodic, math.huge)
+	p:setPeriodic(0.1, periodic, math.huge)
 	p:start()
 
 end
@@ -159,10 +161,11 @@ function World:init()
 	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
 	self:updateBoundaries()
 	
-	self:addStableParticle(103, 242, 244)
-	self:addStableParticle(95, 142, 157)
+	self:addStableParticle(248, 179, 126)
+	self:addStableParticle(250, 98, 107)
+	self:addStableParticle(245, 146, 125)
 	
-	self:addFastSmallParticle(145, 216, 190)
+	self:addFastSmallParticle(148, 222, 178)
 	
 end
 

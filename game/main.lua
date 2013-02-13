@@ -83,12 +83,8 @@ end
 function love.draw()
 	cam:attach()
 
-	love.graphics.setBackgroundColor(100, 103, 123, 255)
+	love.graphics.setBackgroundColor(151, 144, 130, 255)
 	world:draw()
-	crate:draw()
-	crate2:draw()
-	crate3:draw()
-	crate4:draw()
 
 	--beam:draw(beam)
 
