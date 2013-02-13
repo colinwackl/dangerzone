@@ -51,8 +51,8 @@ function Locomotive:stopPath()
 end
 
 function Locomotive:getCrateCount()
-	
-	return 0
+	local count = self.port:getSternLinks()
+	return count
 end
 
 function Locomotive:update(dt)

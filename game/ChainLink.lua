@@ -7,6 +7,9 @@ ChainLink = Class({function(self, dataPath)
 	self.renderLink = true
 	self.points = { Vector(0, 0), Vector(0, 0) }
 	self.sprites = {}
+	self.head = nil
+	self.tail = nil
+	
 	for i = 1, self.data.dotCount do
 		local sprite = LayeredSprite:new()
 		sprite:init("cell.sprite", "trail")
@@ -22,6 +25,14 @@ end
 
 function ChainLink:stop()
 	self.renderLink = false
+end
+
+function ChainLink:getOther(o)
+	if o == self.head then
+		return self.tail
+	else
+		return self.head
+	end
 end
 
 function ChainLink:update(dt)

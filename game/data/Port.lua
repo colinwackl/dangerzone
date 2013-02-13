@@ -1,1 +1,1 @@
-return { maxLinkDistance = 100 }
+return { maxLinkDistance = 60 }

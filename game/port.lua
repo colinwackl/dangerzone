@@ -10,11 +10,11 @@ Port = Class({function(self, dataPath, parent, type)
 	self.parent = parent
 	self.world.availablePorts[self] = self
 	
-	self.headLink = nil
-	self.tailLink = nil
+	self.attachedLink = nil
 	self.type = type
 	
 	self.effectiveDistance = self.data.effectiveDistance or 500
+	self.maxLinkDistance = self.data.maxLinkDistance or 100
 end,
 name = "Port", inherits = Entity})
 
@@ -35,42 +35,26 @@ function Port:linkWith(port)
 	local distance = diff:len()
 	
 	local meter = love.physics:getMeter()
-	--[[local x1, y1 = self.pos.x, self.pos.y
-	local x2, y2 = port.pos.x, port.pos.y]]
-	
-	--[[local x1, y1 = self.parent.physics.body:getLocalVector(self.pos.x, self.pos.y)
-	local x2, y2 = port.parent.physics.body:getLocalVector(port.pos.x, port.pos.y)]]
-	
-	local x1, y1 = self.parent.physics.body:getWorldCenter()
-	local x2, y2 = port.parent.physics.body:getWorldCenter()
-	local x3, y3 = self.pos.x, self.pos.y
-	local x4, y4 = port.pos.x, port.pos.y
-	local diffx, diffy = x3 - x1, y3 - y1
-	local diff2x, diff2y = x4 - x2, y4 - y2
-	print("x1, y1", x1, y1, "x3, y3", x3, y3)
-	
-	--[[local x1, y1 = 0, 0
-	local x2, y2 = 0, 0]]
-		
-	x1, y1, x2, y2, x3, y3 = x1 * meter, y1 * meter, x2 * meter, y2 * meter, x3 * meter, y3 * meter
-	--x1, y1, x2, y2 = x1 * meter, y1 * meter, x2 * meter, y2 * meter
-	x3 = x1 + diffx
-	y3 = y1 + diffy
-	x4 = x2 + diff2x
-	y4 = y2 + diff2y
-	print("x1, y1", x1, y1, "x3, y3", x3, y3)
-	
+	local x1, y1 = self.pos.x, self.pos.y
+	local x2, y2 = port.pos.x, port.pos.y
 
-	self.link.joint = love.physics.newRopeJoint(self.parent.physics.body, port.parent.physics.body,
-		x3, y3, x4, y4, distance)
+	self.link.joint = love.physics.newDistanceJoint(self.parent.physics.body, port.parent.physics.body, x1, y1, x2, y2)
 	
 	self.link.head = self
 	self.link.tail = port
-	self.headLink = self.link
-	port.tailLink = self.link
+	port.attachedLink = self.link
 	self.link = nil
 	
 	self.world.availablePorts[port] = nil
+end
+
+function Port:getSternLinks()
+	local link = self.attachedLink
+	if link then
+		return link:getOther(self).parent:getSternLinks() + 1
+	else
+		return 0
+	end
 end
 
 function Port:endLink()
@@ -84,6 +68,24 @@ function Port:isCompatible(other)
 	return self ~= other and self.parent ~= other.parent
 end
 
+function Port:setupRopeJointWith(port)
+	local meter = love.physics:getMeter()
+	local x1, y1 = self.parent.physics.body:getWorldCenter()
+	local x2, y2 = port.parent.physics.body:getWorldCenter()
+	local x3, y3 = self.pos.x, self.pos.y
+	local x4, y4 = port.pos.x, port.pos.y
+	local diffx, diffy = x3 - x1, y3 - y1
+	local diff2x, diff2y = x4 - x2, y4 - y2
+	
+	x1, y1, x2, y2, x3, y3 = x1 * meter, y1 * meter, x2 * meter, y2 * meter, x3 * meter, y3 * meter
+	x3 = x1 + diffx
+	y3 = y1 + diffy
+	x4 = x2 + diff2x
+	y4 = y2 + diff2y
+	
+	self.attachedLink.joint = love.physics.newRopeJoint(self.parent.physics.body, port.parent.physics.body, x3, y3, x4, y4, self.maxLinkDistance)
+end
+
 function Port:update(dt)
 	Entity.update(self, dt)
 	
@@ -92,20 +94,24 @@ function Port:update(dt)
 		self.link.points[2] = Vector(self.world.camera:mousepos())
 	end
 	
-	if self.headLink then
-		local x1, y1, x2, y2 = self.headLink.joint:getAnchors()
-		--print("x1, y1, x2, y2", x1, y1, x2, y2 )
-		self.headLink.points[1] = Vector(x1, y1)
-		self.headLink.points[2] = Vector(x2, y2)
+	if self.attachedLink then
+		local x1, y1, x2, y2 = self.attachedLink.joint:getAnchors()
+		self.attachedLink.points[1] = Vector(x1, y1)
+		self.attachedLink.points[2] = Vector(x2, y2)
+		
+		local joint = self.attachedLink.joint
+		if joint and joint:getType() == "distance" then
+			local length = joint:getLength()
+			
+			if length <= self.maxLinkDistance then
+				joint:destroy()
+				self:setupRopeJointWith(self.attachedLink:getOther(self))
+			else
+				joint:setLength(length - (length * dt))
+			end
+		end
 	end
 	
-	--[[if self.headLink then
-		self.headLink.points[1] = self.pos
-	end
-	
-	if self.tailLink then
-		self.tailLink.points[2] = self.pos
-	end]]
 end
 
 function Port:draw()
