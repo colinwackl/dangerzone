@@ -152,6 +152,7 @@ function Entity:setPosition(position)
 		body:setPosition(position.x, position.y)
 		body:setAngularVelocity(0)
 	end
+	self.pos = position
 end
 
 function Entity:setAngle(angle)

@@ -161,11 +161,9 @@ function World:init()
 	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
 	self:updateBoundaries()
 	
-	self:addStableParticle(248, 179, 126)
-	self:addStableParticle(250, 98, 107)
-	self:addStableParticle(245, 146, 125)
+	self:addStableParticle(188, 187, 183)
 	
-	self:addFastSmallParticle(148, 222, 178)
+	self:addFastSmallParticle(188, 187, 183)
 	
 end
 
