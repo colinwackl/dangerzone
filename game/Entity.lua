@@ -114,6 +114,12 @@ function Entity:draw()
 	end
 end
 
+function Entity:setAlpha(alpha)
+	for _, sprite in ipairs(self.sprites) do
+		sprite:setAlpha(alpha)
+	end
+end
+
 function Entity:getBody()
 	if self.physics == nil then self.physics = {} end
 	if self.physics.body == nil then
