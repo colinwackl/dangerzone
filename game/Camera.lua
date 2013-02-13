@@ -25,8 +25,8 @@ local function updateZoomAfter(_, args)
 end
 
 function Camera:setScaleOverTime(destination, duration, after)
-	timer.cancel(updateZoom)
-	timer.do_for(duration, updateZoom, updateZoomAfter,
+	timer.cancel(self.zoomTimerHandle)
+	self.zoomTimerHandle = timer.do_for(duration, updateZoom, updateZoomAfter,
 		{camera = self, current = self.scale, range = (destination - self.scale) / duration, final = destination, after = after})
 	
 end

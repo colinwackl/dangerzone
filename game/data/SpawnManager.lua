@@ -2,7 +2,7 @@ return {
 	levels = {
 		[1] = {
 			cratesNeeded = 0,
-			shooters = 2,
+			shooters = 0,
 			zoom = 0.5
 		},
 		[2] = {

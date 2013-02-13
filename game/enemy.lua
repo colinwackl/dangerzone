@@ -14,7 +14,10 @@ Enemy = Class({function(self, dataPath, player)
 	self:getBody():setFixedRotation(true)
 	
 	local function shoot()
-		self:shoot(Bullet("Bullet"), player)
+		if self.dontShoot ~= true then
+			self:shoot(Bullet("Bullet"), player)
+		end
+		return self.dontShoot ~= true
 	end
 	shoot()
 	
@@ -35,6 +38,7 @@ function Enemy:beginContact(collidedWith)
 end
 
 function Enemy:onDestroyed()
+	self.dontShoot = true
 	timer.cancel(self.shootTimer)
 end
 

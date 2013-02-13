@@ -56,7 +56,7 @@ function World:removeObject(obj)
 	if self.objects[obj] then
 		obj.world = nil
 		self.objects[obj] = nil
-
+		
 		if obj.physics then
 			obj.physics.body:setActive(false)
 		end
@@ -65,12 +65,7 @@ end
 
 function World:randomSpot(scale)
 	scale = scale or 1
-	return vector( math.random(self:getLeft(), self:getRight()) * scale, math.random(self:getTop(), self:getBottom() * scale) ) 
-end
-
-function World:randomSpotOnScreen(scale)
-	scale = scale or 1
-	return vector( math.random(self:getLeft(), self:getRight()), math.random(self:getTop(), self:getBottom()) ) 
+	return vector( math.random(self:getLeft(), self:getRight()) * scale, math.random(self:getTop(), self:getBottom()) * scale) 
 end
 
 function World:debugDrawGround()
@@ -283,7 +278,7 @@ end
 function World:getClosestAvailablePort(pos, compatibleWith)
 	local bestPort, bestDistance = nil, math.huge
 	for i, port in pairs(self.availablePorts) do
-		if compatibleWith == nil or port:isCompatible(compatibleWith) then
+		if compatibleWith == nil or port:isCompatible(compatibleWith) == true then
 			local diff = port.pos - pos 
 			local currentDistance = diff:len2()
 			if currentDistance < bestDistance then

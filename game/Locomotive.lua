@@ -17,7 +17,7 @@ Locomotive = Class({function(self, dataPath)
 	
 	self.friction = 5
 	
-	self.port = Port("Port", self)
+	self.port = Port("Port", self, "tail")
 	
 	signal.register('keyPressed', function(...) self:keyPressed(...) end)
 	signal.register('keyReleased', function(...) self:keyReleased(...) end)
@@ -55,6 +55,7 @@ end
 
 function Locomotive:getCrateCount()
 	local count = self.port:getSternLinks()
+	--print("count", count)
 	return count
 end
 

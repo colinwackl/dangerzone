@@ -72,11 +72,18 @@ function Timer:addPeriodic(delay, func, count, args)
 end
 
 function Timer:cancel(handle)
-	--[[print("handle", handle)
-	for h, _ in pairs(self.functions) do
-		print("h", h)
-	end]]
-	self.functions[handle] = nil
+	if handle then
+		if self.functions[handle] then
+			self.functions[handle] = nil
+		else
+			for _handle, delay in pairs(self.functions) do
+				if handle.func == _handle.func then
+					self.functions[_handle] = nil
+					return
+				end
+			end
+		end
+	end
 end
 
 function Timer:clear()

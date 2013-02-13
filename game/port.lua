@@ -65,7 +65,7 @@ function Port:endLink()
 end
 
 function Port:isCompatible(other)
-	return self ~= other and self.parent ~= other.parent
+	return self ~= other and self.parent ~= other.parent and (self.type ~= other.type)
 end
 
 function Port:setupRopeJointWith(port)
@@ -116,5 +116,11 @@ end
 
 function Port:draw()
 	Entity.draw(self)
+	
+	if self.type == "head" then
+		love.graphics.setColor(0, 0, 255, 255)
+	else
+		love.graphics.setColor(255, 0, 0, 255)
+	end
 	self:drawBounds()
 end

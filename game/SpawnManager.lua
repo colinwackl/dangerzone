@@ -71,14 +71,14 @@ end
 
 function SpawnManager:getSpawnPosition()
 
-	local position = self.world:randomSpotOnScreen()
+	local position = self.world:randomSpot()
 	local center = vector(self.world.camera:pos())
 
 	local distX = center.x - position.x
 	local distY = center.y - position.y
 	local squaredist = (distX * distX) + (distY * distY)
 	while squaredist < (self.spawnRadius * self.spawnRadius) do
-		position = self.world:randomSpotOnScreen()
+		position = self.world:randomSpot()
 		distX = center.x - position.x
 		distY = center.y - position.y
 		squaredist = (distX * distX) + (distY * distY)

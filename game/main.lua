@@ -45,7 +45,7 @@ function love.load()
 	player = Locomotive("Locomotive")
 	--[[enemy = Enemy("enemy", player)
 	enemy:setPosition(vector(10, 10))
-	enemy.vel.x, enemy.vel.y = 20, 20
+	enemy.vel.x, enemy.vel.y = -200, -200
 	spawnManager:addEnemy(enemy)]]
 	
 	world.player = player
@@ -62,13 +62,6 @@ function love.load()
 	crate4 = Crate("Crate")
 	crate4:initSprite("cell.sprite", "body_grey")
 	crate4:setPosition(Vector(400, 400))
-	
-	world:addObject(player)
-	--world:addObject(enemy)
-	world:addObject(crate)
-	world:addObject(crate2)
-	world:addObject(crate3)
-	world:addObject(crate4)
 
 	Tools:loadFonts()
 
