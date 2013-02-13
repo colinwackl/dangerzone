@@ -42,6 +42,7 @@ function Port:linkWith(port)
 	
 	self.link.head = self
 	self.link.tail = port
+	self.attachedLink = self.link
 	port.attachedLink = self.link
 	self.link = nil
 	
