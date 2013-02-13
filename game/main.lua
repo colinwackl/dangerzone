@@ -71,7 +71,7 @@ function love.load()
 
 	Tools:loadFonts()
 
-	love.graphics.setBackgroundColor(255, 255, 255)
+	love.graphics.setBackgroundColor(195, 211,211)
 
 	titlefont = Tools.fontMainLarge
 
@@ -90,7 +90,6 @@ end
 function love.draw()
 	cam:attach()
 
-	love.graphics.setBackgroundColor(151, 144, 130, 255)
 	world:draw()
 
 	--beam:draw(beam)
