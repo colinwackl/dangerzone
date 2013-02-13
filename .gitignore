@@ -1,3 +1,5 @@
 *.sublime-workspace
 *.deuser
 *.mp3
+game/res/sprites/Thumbs.db
+game/res/Thumbs.db
