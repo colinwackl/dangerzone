@@ -42,10 +42,10 @@ function love.load()
 	world:create()
 	
 	player = Locomotive("Locomotive")
-	enemy = Enemy("enemy", player)
-	enemy:setPosition(vector(10, 10))
-	enemy.vel.x, enemy.vel.y = 20, 20
-	spawnManager:addEnemy(enemy)
+	-- enemy = Enemy("enemy", player)
+	-- enemy:setPosition(vector(10, 10))
+	-- enemy.vel.x, enemy.vel.y = 20, 20
+	-- spawnManager:addEnemy(enemy)
 	
 	world.player = player
 
@@ -62,7 +62,7 @@ function love.load()
 	beam:initPhysics(world.physworld, player.physics.body, crate.physics.body, 200)
 	
 	world:addObject(player)
-	world:addObject(enemy)
+	--world:addObject(enemy)
 	world:addObject(crate)
 	world:addObject(crate2)
 	world:addObject(crate3)
