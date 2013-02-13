@@ -134,9 +134,9 @@ end
 
 function love.mousereleased(x, y, button)
 	player:stopPath()
-	if activePort then		
+	if activePort then
 		local port, distance = world:getClosestAvailablePort(vector(x, y), activePort)
-		if distance < port.effectiveDistance then
+		if port and distance < port.effectiveDistance then
 			activePort:linkWith(port)
 		else
 			activePort:endLink():destroy()
