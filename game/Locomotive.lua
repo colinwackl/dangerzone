@@ -12,6 +12,9 @@ Locomotive = Class({function(self, dataPath)
 	self:createFixture()
 	self.path = FingerPath("FingerPath")
 	
+	local body = self:getBody()
+	body:setMass(self.data.mass or 100)
+	
 	self.friction = 5
 	
 	self.port = Port("Port", self)
@@ -51,7 +54,8 @@ function Locomotive:stopPath()
 end
 
 function Locomotive:getCrateCount()
-	return 0
+	local count = self.port:getSternLinks()
+	return count
 end
 
 function Locomotive:update(dt)

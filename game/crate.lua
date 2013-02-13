@@ -33,6 +33,10 @@ function Crate:setAnimation(strAnimation)
 	self.sprite:setAnimation(strAnimation)
 end
 
+function Crate:getSternLinks()
+	return self.portStern:getSternLinks()
+end
+
 function Crate:update(dt)
 	Entity.update(self, dt)
 	
