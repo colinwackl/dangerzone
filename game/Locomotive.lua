@@ -13,7 +13,7 @@ Locomotive = Class({function(self, dataPath)
 	self.path = FingerPath("FingerPath")
 	
 	local body = self:getBody()
-	body:setMass(100)
+	body:setMass(self.data.mass or 100)
 	
 	self.friction = 5
 	
