@@ -55,7 +55,7 @@ end
 
 function Locomotive:getCrateCount()
 	local count = self.port:getSternLinks()
-	print("count", count)
+	--print("count", count)
 	return count
 end
 
