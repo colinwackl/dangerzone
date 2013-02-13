@@ -51,6 +51,7 @@ function Locomotive:stopPath()
 end
 
 function Locomotive:getCrateCount()
+	
 	return 0
 end
 

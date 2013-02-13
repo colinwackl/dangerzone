@@ -60,6 +60,8 @@ function Port:linkWith(port)
 	self.link.joint = love.physics.newRopeJoint(self.parent.physics.body, port.parent.physics.body,
 		x3, y3, x2, y2, distance)
 	
+	self.link.head = self
+	self.link.tail = port
 	self.headLink = self.link
 	port.tailLink = self.link
 	self.link = nil
