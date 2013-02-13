@@ -1,1 +1,1 @@
-return { size = {10, 10} , colour = {255, 0, 0, 255 }, maxVelocity=150}
+return { size = {10, 10} , colour = {255, 0, 0, 255 }, maxVelocity=150, sprite={"cell.sprite", "bullet"}}
