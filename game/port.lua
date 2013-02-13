@@ -107,7 +107,7 @@ function Port:update(dt)
 				joint:destroy()
 				self:setupRopeJointWith(self.attachedLink:getOther(self))
 			else
-				joint:setLength(length - (length * dt))
+				joint:setLength(length - (length * dt / 3))
 			end
 		end
 	end
