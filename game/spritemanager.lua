@@ -79,7 +79,7 @@ function createSprite(strData, strAnimation)
 			
 			self.currentFrame = self.currentFrame + 1
 			
-			if self.currentFrame > #animation then
+			if self.currentFrame > #animation + 1 then
 				self.currentFrame = 1
 			end
 			

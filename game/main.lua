@@ -23,7 +23,7 @@ function love.load()
 	math.randomseed(os.time())
 	local cameraX = love.graphics.getWidth() / 2
 	local cameraY = love.graphics.getHeight() / 2
-	local cameraZoom = 1
+	local cameraZoom = 0.5
 	cam = Camera(cameraX, cameraY, cameraZoom, 0)
 
 	gameRight = love.graphics.getWidth() / 2
@@ -83,11 +83,8 @@ end
 function love.draw()
 	cam:attach()
 
+	love.graphics.setBackgroundColor(151, 144, 130, 255)
 	world:draw()
-	crate:draw()
-	crate2:draw()
-	crate3:draw()
-	crate4:draw()
 
 	--beam:draw(beam)
 
