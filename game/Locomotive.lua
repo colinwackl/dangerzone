@@ -54,6 +54,10 @@ function Locomotive:stopPath()
 	self.path:stop()
 end
 
+function Locomotive:resetPath()
+	self.path:reset()
+end
+
 function Locomotive:getCrateCount()
 	local count = self.port:getSternLinks()
 	--print("count", count)
@@ -65,8 +69,16 @@ function Locomotive:update(dt)
 	
 	self.port:setPosition(Vector(self.physics.body:getWorldPoint(0, self.bounds.bottom)))
 	
+	local v = Vector(self.world.camera:mousepos())	
 	local destination = self.path:getFront()
-	if destination then
+
+	if self:inBounds(v) then
+		self.accel.x, self.accel.y = 0, 0
+		self.vel.x, self.vel.y = 0, 0
+		if destination then
+			self.path:popFront()
+		end
+	elseif destination then
 		local diff = destination - self.pos
 		while diff:len2() < 300 do
 			self.path:popFront()

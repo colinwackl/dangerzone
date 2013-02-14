@@ -4,7 +4,7 @@ require "LayeredSprite"
 require "Port"
 Vector = require "hump.vector"
 Class = require "hump.class"
-timer = require "hump.timer"
+--timer = require "hump.timer"
 
 Crate = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
@@ -14,7 +14,7 @@ Crate = Class({function(self, dataPath)
 	
 	local body = self:getBody()
 	body:setMass(0)
-	body:setAngularDamping(0)
+	body:setAngularDamping(12)
 	body:setAngle(math.rad(45))
 
 	self.portBow = Port("Port", self, "head")
@@ -25,6 +25,13 @@ Crate = Class({function(self, dataPath)
 	self.spawnTimer = 0
 end,
 name = "Crate", inherits = Entity})
+
+function Crate:destroy()
+	self.portBow:destroy()
+	self.portStern:destroy()
+
+	Entity.destroy(self)
+end
 
 function Crate:initSprite(strData, strAnimation)
 	self.sprite = LayeredSprite:new()

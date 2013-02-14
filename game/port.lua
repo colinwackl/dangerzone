@@ -3,7 +3,7 @@ require "tools"
 require "LayeredSprite"
 Vector = require "hump.vector"
 Class = require "hump.class"
-timer = require "hump.timer"
+--timer = require "hump.timer"
 
 Port = Class({function(self, dataPath, parent, type)
 	Entity.construct(self, dataPath)
@@ -22,6 +22,14 @@ Port = Class({function(self, dataPath, parent, type)
 	self.maxLinkDistance = self.data.maxLinkDistance or 100
 end,
 name = "Port", inherits = Entity})
+
+function Port:destroy()
+	if self.attachedLink ~= nil then
+		self.attachedLink:destroy()
+	end
+
+	Entity.destroy(self)
+end
 
 function Port:linkWith(port)
 	assert(self ~= port, "Can't link with myself!")
