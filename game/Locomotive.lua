@@ -14,6 +14,7 @@ Locomotive = Class({function(self, dataPath)
 	
 	local body = self:getBody()
 	body:setMass(self.data.mass or 200)
+	body:setFixedRotation(true)
 	
 	self.friction = 5
 	

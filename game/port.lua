@@ -8,7 +8,7 @@ timer = require "hump.timer"
 Port = Class({function(self, dataPath, parent, type)
 	Entity.construct(self, dataPath)
 	self:createSprites()
-	self.sprites[1]:setAlpha(0)
+	self:getLinkSprite():setAlpha(0)
 	
 	self.parent = parent
 	self.world.availablePorts[self] = self
@@ -22,6 +22,10 @@ Port = Class({function(self, dataPath, parent, type)
 	self.maxLinkDistance = self.data.maxLinkDistance or 100
 end,
 name = "Port", inherits = Entity})
+
+function Port:getLinkSprite()
+	return self.sprites[2]
+end
 
 function Port:linkWith(port)
 	assert(self ~= port, "Can't link with myself!")
@@ -57,7 +61,7 @@ function Port:getSternLinks()
 end
 
 function Port:setPortActive(b)
-	self.sprites[1]:setAlpha(0)
+	self:getLinkSprite():setAlpha(0)
 	self.portActive = b
 end
 
@@ -96,10 +100,10 @@ function Port:update(dt)
 		local port, distance = self.world:getClosestAvailablePort(vector(self.pos.x, self.pos.y), self)
 		if port and distance < port.effectiveDistance then
 			self.closePort = port
-			self.sprites[1]:setAlpha(1)
+			self:getLinkSprite():setAlpha(1)
 		else
 			self.closePort = nil
-			self.sprites[1]:setAlpha(0)
+			self:getLinkSprite():setAlpha(0)
 		end
 	end
 	

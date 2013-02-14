@@ -1,1 +1,1 @@
-return { maxLinkDistance = 60, sprite={"cell.sprite", "icon_link"} }
+return { maxLinkDistance = 60, sprites={ {"cell.sprite", "port"}, {"cell.sprite", "icon_link"} } }

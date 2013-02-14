@@ -11,11 +11,20 @@ Crate = Class({function(self, dataPath)
 	
 	local fixture = self:createFixture(nil, 1)
 	fixture:setRestitution(0.4)
+	fixture:setFriction(0)
+	fixture:setDensity(0.1)
 	
 	local body = self:getBody()
-	body:setMass(0)
+	body:setMass(1)
 	body:setAngularDamping(0)
 	body:setAngle(math.rad(45))
+	body:setLinearDamping(0)
+	
+	timer.add(2, function()
+		print(" Body:getMassData( )",  body:getMassData())
+		print("body:getLinearDamping()", body:getLinearDamping())
+		body:applyForce(100, 100)
+	end)
 
 	self.portBow = Port("Port", self, "head")
 	self.portStern = Port("Port", self, "tail")
