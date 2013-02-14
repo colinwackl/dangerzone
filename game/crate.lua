@@ -59,13 +59,13 @@ function Crate:update(dt)
 
 	if self.portBow ~= nil then
 		self.portBow:setPosition(self.bowPos)
+		self.portBow:update(dt)
 	end
 	if self.portStern ~= nil then
 		self.portStern:setPosition(self.sternPos)
+		self.portStern:update(dt)
 	end
-
-	self.portBow:update(dt)
-	self.portStern:update(dt)
+	
 end
 
 function Crate:draw()
