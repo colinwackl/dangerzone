@@ -196,6 +196,18 @@ data.animations = {
 		[8]={u=443, v=1615, w=277, h=275, offsetX=141, offsetY=133, duration=0.0833333},
 		scale=1
 	},
+	gun_bounce_idle={
+		[0]={u=1349, v=379, w=78, h=83, offsetX=41, offsetY=57, duration=0.0333333},
+		scale=1
+	},
+	gun_bounce_fire={
+		[0]={u=1349, v=379, w=78, h=83, offsetX=41, offsetY=55, duration=0.0333333},
+		scale=1
+	},
+	bullet_bounce={
+		[0]={u=196, v=2027, w=73, h=20, offsetX=37, offsetY=10, duration=0.0333333},
+		scale=1
+	},
 }
 data.quad = love.graphics.newQuad(0, 0, 1, 1, data.image:getWidth(), data.image:getHeight())
 
