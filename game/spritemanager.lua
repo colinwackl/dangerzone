@@ -30,6 +30,8 @@ function createSprite(strData, strAnimation)
 	
 	function sprite:setData(strData, strAnimation, keepTime)
 		if strData == nil then
+			self.sprData = nil
+			self.strData = nil
 			return
 		end
 
@@ -68,6 +70,9 @@ function createSprite(strData, strAnimation)
 	end
 	
 	function sprite:hasAnimation(strAnimation)
+		--print("strAnimation: ", strAnimation)
+		--print("self.sprData: ", self.sprData)
+		--print("self.sprData.animations[strAnimation]: ", self.sprData.animations[strAnimation])
 		return self.sprData and self.sprData.animations[strAnimation]
 	end
 	
