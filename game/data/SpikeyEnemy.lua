@@ -1,0 +1,1 @@
+return { size = {50, 50} , sprite={"cell.sprite", "spikey"}, kamikaze = true}

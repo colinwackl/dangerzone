@@ -47,8 +47,12 @@ function LayeredSprite:setRotation(rot)
 end
 
 function LayeredSprite:setAnimation(animation)
-	self.baseLayer:setAnimation(animation, true)
-	self.topLayer:setAnimation(animation.."_glow", true)
+	local glow = animation.."_glow"
+	if self.baseLayer:hasAnimation(glow) then
+		self.baseLayer:setAnimation(glow, true)
+	end
+	
+	self.topLayer:setAnimation(animation, true)
 end
 
 function LayeredSprite:update(dt)

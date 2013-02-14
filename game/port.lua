@@ -18,6 +18,9 @@ Port = Class({function(self, dataPath, parent, type)
 	
 	self.portActive = false
 	
+	self.gunIdle = self.data.gunIdle
+	self.gunShoot = self.data.gunShoot
+	
 	self.effectiveDistance = self.data.effectiveDistance or 300
 	self.maxLinkDistance = self.data.maxLinkDistance or 100
 	
@@ -26,6 +29,10 @@ Port = Class({function(self, dataPath, parent, type)
 	self.timeToNextShot = 0
 end,
 name = "Port", inherits = Entity})
+
+function Port:getGunSprite()
+	return self.sprites[1]
+end
 
 function Port:destroy()
 	if self.attachedLink ~= nil then
@@ -151,9 +158,15 @@ function Port:update(dt)
 			local bulletAngle = self.angle + math.pi / 2
 			local direction = Vector(math.cos(bulletAngle), math.sin(bulletAngle))
 			local bullet = Bullet(self.bulletData, true)
-			bullet:setPosition(self.pos + direction * 50)
+			bullet:setPosition(self.pos + direction * 150)
 			
 			bullet.vel = direction * bullet.maxvel
+			
+			local gun = self:getGunSprite()
+			gun:setAnimation(self.gunShoot)
+			timer.add(0.2, function()
+				gun:setAnimation(self.gunIdle)
+			end)
 			
 		end
 	end

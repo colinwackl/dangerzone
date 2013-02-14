@@ -32,6 +32,8 @@ name = "Crate", inherits = Entity})
 function Crate:destroy()
 	self.portBow:destroy()
 	self.portStern:destroy()
+	self.portSidePort:destroy()
+	self.starboardPort:destroy()
 
 	Entity.destroy(self)
 end
@@ -47,6 +49,10 @@ end
 
 function Crate:getSternLinks()
 	return self.portStern:getSternLinks()
+end
+
+function Crate:hit(hitter)
+	self:destroy()
 end
 
 function Crate:isAttachedToPlayer(checked)
