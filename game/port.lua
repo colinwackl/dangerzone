@@ -111,6 +111,25 @@ function Port:update(dt)
 				joint:setLength(length - (length * dt / 3))
 			end
 		end
+
+		-- local force = vector(self.attachedLink.joint:getReactionForce(dt))
+		-- local torque = self.attachedLink.joint:getReactionForce(dt)
+		-- force = force * 1000
+		-- torque = torque * 1000
+		-- if force ~= nil then
+		-- 	self.attachedLink:getOther(self).parent.physics.body:applyForce(force.x, force.y)
+		-- 	self.attachedLink:getOther(self).parent.physics.body:applyTorque(torque)
+		-- end
+
+		-- --local force2 = vector(self.attachedLink.joint:getReactionForce(dt))
+		-- --local torque2 = self.attachedLink.joint:getReactionForce(dt)
+		-- --force2 = force2 * 100
+		-- --torque2 = torque2 * 100
+		-- if force ~= nil then
+		-- 	self.parent.physics.body:applyForce(force.x, force.y)
+		-- 	self.parent.physics.body:applyTorque(torque)
+		-- end
+
 	end
 	
 end
