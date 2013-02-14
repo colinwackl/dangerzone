@@ -48,6 +48,11 @@ function FingerPath:update(dt)
 	
 	if self.recording and self.currentLength < self.maxLength then
 		local v = Vector(self.world.camera:mousepos())
+
+		-- if self.world.player:inBounds(v)  andthen
+		-- 	return
+		-- end
+
 		table.insert(self.points, v)
 		
 		if #self.points > 1 then

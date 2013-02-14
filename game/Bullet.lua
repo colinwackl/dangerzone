@@ -21,15 +21,6 @@ function Bullet:beginContact(collideWidth)
 	
 	else
 		if collideWidth:is_a(Crate) then 
-			if collideWidth.portBow ~= nil then
-				if collideWidth.portBow.parent.portStern then
-					collideWidth.portBow.parent.portStern = Port("Port", self, "tail")
-				end
-				collideWidth.portBow:destroy()
-			end
-			if collideWidth.portStern ~= nil then 
-				collideWidth.portStern:destroy()
-			end
 			collideWidth:destroy()
 		end
 		

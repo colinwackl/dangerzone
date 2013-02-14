@@ -29,6 +29,13 @@ Crate = Class({function(self, dataPath)
 end,
 name = "Crate", inherits = Entity})
 
+function Crate:destroy()
+	self.portBow:destroy()
+	self.portStern:destroy()
+
+	Entity.destroy(self)
+end
+
 function Crate:initSprite(strData, strAnimation)
 	self.sprite = LayeredSprite:new()
 	self.sprite:init(strData, strAnimation)
