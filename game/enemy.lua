@@ -15,7 +15,7 @@ Enemy = Class({function(self, dataPath, player)
 	
 	local function shoot()
 		if self.dontShoot ~= true then
-			self:shoot(Bullet("Bullet"), player)
+			self:shoot(Bullet("Bullet", false), player)
 		end
 		return self.dontShoot ~= true
 	end

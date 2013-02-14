@@ -3,12 +3,12 @@ require "tools"
 require "LayeredSprite"
 Vector = require "hump.vector"
 Class = require "hump.class"
---timer = require "hump.timer"
+timer = require "hump.timer"
 
 Port = Class({function(self, dataPath, parent, type)
 	Entity.construct(self, dataPath)
 	self:createSprites()
-	self.sprites[1]:setAlpha(0)
+	self:setLinkSpriteAlpha(0)
 	
 	self.parent = parent
 	self.world.availablePorts[self] = self
@@ -20,6 +20,10 @@ Port = Class({function(self, dataPath, parent, type)
 	
 	self.effectiveDistance = self.data.effectiveDistance or 300
 	self.maxLinkDistance = self.data.maxLinkDistance or 100
+	
+	self.shootInterval = self.data.shootInterval or 0
+	self.bulletData = self.data.bulletData or "Bullet"
+	self.timeToNextShot = 0
 end,
 name = "Port", inherits = Entity})
 
@@ -29,6 +33,15 @@ function Port:destroy()
 	end
 
 	Entity.destroy(self)
+end
+
+function Port:getLinkSprite()
+	return self.sprites[2]
+end
+
+function Port:setLinkSpriteAlpha(a)
+	local linkSprite = self:getLinkSprite()
+	if linkSprite then linkSprite:setAlpha(a) end
 end
 
 function Port:linkWith(port)
@@ -65,7 +78,7 @@ function Port:getSternLinks()
 end
 
 function Port:setPortActive(b)
-	self.sprites[1]:setAlpha(0)
+	self:setLinkSpriteAlpha(0)
 	self.portActive = b
 end
 
@@ -76,7 +89,7 @@ function Port:clicked()
 end
 
 function Port:isCompatible(other)
-	return self ~= other and self.parent ~= other.parent and (self.type ~= other.type)
+	return self ~= other and self.parent ~= other.parent and (self.type ~= other.type) and (self.type == "head" or other.type ~= "tail")
 end
 
 function Port:setupRopeJointWith(port)
@@ -97,6 +110,20 @@ function Port:setupRopeJointWith(port)
 	self.attachedLink.joint = love.physics.newRopeJoint(self.parent.physics.body, port.parent.physics.body, x3, y3, x4, y4, self.maxLinkDistance)
 end
 
+function Port:setRotation(r)	
+	if self.sprites == nil then return end
+	
+	for _, sprite in ipairs(self.sprites) do
+		sprite:setRotation(r)
+	end
+end
+
+function Port:isAttachedToPlayer(checked)
+	checked = checked or {}
+	checked[self] = self
+	return self.parent:isAttachedToPlayer(checked)
+end
+
 function Port:update(dt)
 	Entity.update(self, dt)
 	
@@ -104,16 +131,31 @@ function Port:update(dt)
 		local port, distance = self.world:getClosestAvailablePort(vector(self.pos.x, self.pos.y), self)
 		if port and distance < port.effectiveDistance then
 			self.closePort = port
-			self.sprites[1]:setAlpha(1)
+			self:setLinkSpriteAlpha(1)
 		else
 			self.closePort = nil
-			self.sprites[1]:setAlpha(0)
+			self:setLinkSpriteAlpha(0)
 		end
 	end
 	
 	if self.link then
 		self.link.points[1] = self.pos
 		self.link.points[2] = Vector(self.world.camera:mousepos())
+	end
+	
+	
+	if self.shootInterval > 0 and self:isAttachedToPlayer() then
+		self.timeToNextShot = self.timeToNextShot - dt
+		if self.timeToNextShot <= 0 then
+			self.timeToNextShot = self.shootInterval
+			local bulletAngle = self.angle + math.pi / 2
+			local direction = Vector(math.cos(bulletAngle), math.sin(bulletAngle))
+			local bullet = Bullet(self.bulletData, true)
+			bullet:setPosition(self.pos + direction * 50)
+			
+			bullet.vel = direction * bullet.maxvel
+			
+		end
 	end
 	
 	if self.attachedLink then
