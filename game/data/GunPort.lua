@@ -1,1 +1,1 @@
-return { sprites={ {"cell.sprite", "gun"} }, shootInterval=3, bulletData="GunBullet" }
+return { sprite={ "cell.sprite", "gun_idle" }, gunIdle="gun_idle", gunShoot="gun", shootInterval=3, bulletData="GunBullet" }
