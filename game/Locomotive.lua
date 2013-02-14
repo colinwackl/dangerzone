@@ -61,6 +61,10 @@ function Locomotive:getCrateCount()
 	return count
 end
 
+function Locomotive:isAttachedToPlayer()
+	return true
+end
+
 function Locomotive:update(dt)
 	Entity.update(self, dt)
 	
