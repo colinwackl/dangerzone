@@ -3,6 +3,7 @@ return {
 		[1] = {
 			cratesNeeded = 0,
 			shooters = 0,
+			spikey = 2,
 			crates = 2,
 			zoom = 0.5
 		},

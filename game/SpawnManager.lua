@@ -6,9 +6,11 @@ Class = require "hump.class"
 SpawnManager = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
 	self.shooters = {}
+	self.spikey = {}
 	self.crates = {}
 	self.currentLevel = 0
 	self.targetShooters = 0
+	self.targetSpikey = 0
 	self.targetCrates = 0
 
 	self.spawnRadius = 800
@@ -20,8 +22,14 @@ function SpawnManager:addEnemy(enemy)
 	enemy.signals:register("destroyed", function(...) self:enemyDestroyed(...) end)
 end
 
+function SpawnManager:addSpikey(enemy)
+	self.spikey[enemy] = enemy
+	enemy.signals:register("destroyed", function(...) self:enemyDestroyed(...) end)
+end
+
 function SpawnManager:enemyDestroyed(enemy)
 	self.shooters[enemy] = nil
+	self.spikey[enemy] = nil
 end
 
 function SpawnManager:addCrate(crate)
@@ -33,13 +41,13 @@ function SpawnManager:crateDestroyed(crate)
 	self.crates[crate] = nil
 end
 
-function SpawnManager:getShooterCount()
-	local shooterCount = 0
-	for _, _ in pairs(self.shooters) do
-		shooterCount = shooterCount + 1
+function SpawnManager:getEnemyCount(t)
+	local count = 0
+	for _, _ in pairs(t) do
+		count = count + 1
 	end
 	
-	return shooterCount
+	return count
 end
 
 function SpawnManager:getCrateCount()
@@ -61,8 +69,9 @@ function SpawnManager:updateLevel()
 		local function after() self.world:updateBoundaries() end
 		self.world.camera:setScaleOverTime(nextLevelData.zoom, 6, after)
 		
-		self.targetShooters = nextLevelData.shooters
-		self.targetCrates = nextLevelData.crates
+		self.targetShooters = nextLevelData.shooters or self.targetShooters
+		self.targetCrates = nextLevelData.crates or self.targetCrates
+		self.targetSpikey = nextLevelData.spikey or self.targetSpikey
 		self.currentLevel = self.currentLevel + 1
 		
 	end
@@ -72,12 +81,12 @@ function SpawnManager:update(dt)
 	Entity.update(self, dt)
 	self:updateLevel()
 
-	if self:getShooterCount() < self.targetShooters then
+	if self:getEnemyCount(self.shooters) < self.targetShooters then
 		local enemy = Enemy("enemy", player)
+		local speed = math.max(0.2, math.random())
 		enemy:setPosition(self:getSpawnPosition())
-		enemy.vel.x, enemy.vel.y = (math.random() * 20) - 10, (math.random() * 20) - 10
+		enemy.vel.x, enemy.vel.y = (speed * 20) - 10, (speed * 20) - 10
 		spawnManager:addEnemy(enemy)
-		self.world:addObject(enemy)
 	end
 	
 	if self:getCrateCount() < self.targetCrates then
@@ -86,8 +95,16 @@ function SpawnManager:update(dt)
 		crate:setPosition(self:getSpawnPosition())
 		crate.vel.x, crate.vel.y = (math.random() * 20) - 10, (math.random() * 20) - 10
 		spawnManager:addCrate(crate)
-		self.world:addObject(crate)
 	end
+	
+	if self:getEnemyCount(self.spikey) < self.targetSpikey then
+		local enemy = Enemy("SpikeyEnemy", player)
+		local speed = math.max(0.4, math.random())
+		enemy:setPosition(self:getSpawnPosition())
+		enemy.vel.x, enemy.vel.y = (speed * 400) - 200, (speed * 400) - 200
+		spawnManager:addSpikey(enemy)
+	end
+
 end
 
 function SpawnManager:draw()

@@ -16,29 +16,20 @@ Bullet = Class({function(self, dataPath, friendly)
 end,
 name = "Bullet", inherits = Entity})
 
-function Bullet:beginContact(collideWidth)
+function Bullet:beginContact(collideWith)
 	if self.friendly then
 	
 	else
-		if collideWidth:is_a(Crate) then 
-			if collideWidth.portBow ~= nil then
-				if collideWidth.portBow.parent.portStern then
-					collideWidth.portBow.parent.portStern = Port("Port", self, "tail")
-				end
-				collideWidth.portBow:destroy()
-			end
-			if collideWidth.portStern ~= nil then 
-				collideWidth.portStern:destroy()
-			end
-			collideWidth:destroy()
+		if collideWith:is_a(Crate) then 
+			collideWith:hit(self)
 		end
 		
-		if collideWidth:is_a(Locomotive) or collideWidth:is_a(Crate) then
+		if collideWith:is_a(Locomotive) or collideWith:is_a(Crate) then
 			self:destroy()
 		end
 	end	
 
-	if collideWidth:is_a(Boundary) then
+	if collideWith:is_a(Boundary) then
 		self:destroy()
 	end
 end

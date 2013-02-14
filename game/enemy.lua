@@ -8,21 +8,25 @@ timer = require "hump.timer"
 Enemy = Class({function(self, dataPath, player)
 	Entity.construct(self, dataPath)
 	
+	self.kamikaze = self.data.kamikaze or false
+	
 	self:createFixture()
 	self:createSprites()
 	
 	self:getBody():setFixedRotation(true)
 	
-	local function shoot()
-		if self.dontShoot ~= true then
-			self:shoot(Bullet("Bullet", false), player)
+	if self.data.shootInterval then
+		local function shoot()
+			if self.dontShoot ~= true then
+				self:shoot(Bullet("Bullet", false), player)
+			end
+			return self.dontShoot ~= true
 		end
-		return self.dontShoot ~= true
+		shoot()
+		
+		local interval = self.data.shootInterval or 2
+		self.shootTimer = timer.addPeriodic(interval, shoot)
 	end
-	shoot()
-	
-	local interval = self.data.shootInterval or 2
-	self.shootTimer = timer.addPeriodic(interval, shoot)
 	
 	self.signals:register("beginContact", self.beginContact)
 
@@ -32,6 +36,10 @@ end,
 name = "Enemy", inherits = Entity})
 
 function Enemy:beginContact(collidedWith)
+	if self.kamikaze and collidedWith:is_a(Crate) then
+		collidedWith:hit(self)
+	end
+	
 	if collidedWith:is_a(Boundary) then
 		self:destroy()
 	end

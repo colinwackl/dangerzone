@@ -42,6 +42,19 @@ function Crate:getSternLinks()
 	return self.portStern:getSternLinks()
 end
 
+function Crate:hit(hitter)
+	if self.portBow ~= nil then
+		if self.portBow.parent.portStern then
+			self.portBow.parent.portStern = Port("Port", self, "tail")
+		end
+		self.portBow:destroy()
+	end
+	if self.portStern ~= nil then 
+		self.portStern:destroy()
+	end
+	self:destroy()
+end
+
 function Crate:isAttachedToPlayer(checked)
 	checked = checked or {}
 	local attachedPort, attachedStern = false, false
