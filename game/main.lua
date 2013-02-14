@@ -117,6 +117,8 @@ function love.mousepressed(x, y, button)
 	
 	if player:inBounds(vector(x, y)) then
 		player:startPath()
+	else
+		player:resetPath()
 	end
 	
 	if button == "l" then

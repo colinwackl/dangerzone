@@ -34,6 +34,14 @@ function Port:getGunSprite()
 	return self.sprites[1]
 end
 
+function Port:destroy()
+	if self.attachedLink ~= nil then
+		self.attachedLink:destroy()
+	end
+
+	Entity.destroy(self)
+end
+
 function Port:getLinkSprite()
 	return self.sprites[2]
 end

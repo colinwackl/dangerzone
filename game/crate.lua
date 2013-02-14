@@ -29,6 +29,15 @@ Crate = Class({function(self, dataPath)
 end,
 name = "Crate", inherits = Entity})
 
+function Crate:destroy()
+	self.portBow:destroy()
+	self.portStern:destroy()
+	self.portSidePort:destroy()
+	self.starboardPort:destroy()
+
+	Entity.destroy(self)
+end
+
 function Crate:initSprite(strData, strAnimation)
 	self.sprite = LayeredSprite:new()
 	self.sprite:init(strData, strAnimation)
@@ -43,15 +52,6 @@ function Crate:getSternLinks()
 end
 
 function Crate:hit(hitter)
-	if self.portBow ~= nil then
-		if self.portBow.parent.portStern then
-			self.portBow.parent.portStern = Port("Port", self, "tail")
-		end
-		self.portBow:destroy()
-	end
-	if self.portStern ~= nil then 
-		self.portStern:destroy()
-	end
 	self:destroy()
 end
 
