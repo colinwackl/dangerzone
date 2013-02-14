@@ -86,13 +86,14 @@ function Locomotive:update(dt)
 	local v = Vector(self.world.camera:mousepos())	
 	local destination = self.path:getFront()
 
-	if self:inBounds(v) then
-		self.accel.x, self.accel.y = 0, 0
-		self.vel.x, self.vel.y = 0, 0
-		if destination then
-			self.path:popFront()
-		end
-	elseif destination then
+	-- if self:inBounds(v) then
+	-- 	self.accel.x, self.accel.y = 0, 0
+	-- 	self.vel.x, self.vel.y = 0, 0
+	-- 	if destination then
+	-- 		self.path:popFront()
+	-- 	end
+	-- else
+	if destination then
 		local diff = destination - self.pos
 		while diff:len2() < 300 do
 			self.path:popFront()

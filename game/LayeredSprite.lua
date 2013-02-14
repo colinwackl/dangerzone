@@ -12,11 +12,16 @@ LayeredSprite.effect = {}
 
 function LayeredSprite:init(strData, strAnimation)
 	self.baseLayer = spritemanager.createSprite()
-	self.baseLayer.strData = strData--.."_glow"
+	self.baseLayer.strData = strData
 	self.baseLayer.animation = strAnimation.."_glow"
+	self.baseLayer:setData(self.baseLayer.strData, nil, true)
+	--print("self.baseLayer.animation: ", self.baseLayer.animation)
+	--print("self.baseLayer.strData: ", self.baseLayer.strData)
 	if self.baseLayer:hasAnimation(self.baseLayer.animation) then
-		self.baseLayer:setData(self.baseLayer.strData, self.baseLayer.animation, true)
+		self.baseLayer:setAnimation(self.baseLayer.animation)
 		self.baseLayer.sprData.image:setFilter("linear", "linear")
+	else
+		self.baseLayer:setData()
 	end
 
 	self.topLayer = spritemanager.createSprite()
