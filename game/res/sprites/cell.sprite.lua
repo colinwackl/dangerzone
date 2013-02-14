@@ -165,19 +165,23 @@ data.animations = {
 		scale=1
 	},
 	spikey_glow={
-		[0]={u=0, v=1895, w=140, h=142, offsetX=74, offsetY=72, duration=0.0833333},
+		[0]={u=0, v=1895, w=140, h=142, offsetX=71, offsetY=69, duration=0.0833333},
 		scale=1
 	},
 	spikey_hit={
-		[0]={u=896, v=890, w=112, h=112, offsetX=38, offsetY=32, duration=0.0333333},
-		[1]={u=845, v=546, w=126, h=120, offsetX=49, offsetY=32, duration=0.0333333},
-		[2]={u=569, v=1888, w=148, h=154, offsetX=56, offsetY=56, duration=0.0333333},
-		[3]={u=1845, v=366, w=174, h=180, offsetX=72, offsetY=71, duration=0.0333333},
-		[4]={u=1845, v=0, w=178, h=183, offsetX=74, offsetY=72, duration=0.0666667},
-		[5]={u=1845, v=366, w=174, h=180, offsetX=72, offsetY=71, duration=0.0333333},
-		[6]={u=927, v=1888, w=148, h=154, offsetX=56, offsetY=56, duration=0.0333333},
-		[7]={u=893, v=379, w=126, h=120, offsetX=49, offsetY=32, duration=0.0333333},
-		[8]={u=1845, v=183, w=178, h=183, offsetX=74, offsetY=72, duration=0.0333333},
+		[0]={u=896, v=890, w=112, h=112, offsetX=54, offsetY=50, duration=0.0333333},
+		[1]={u=845, v=546, w=126, h=120, offsetX=65, offsetY=50, duration=0.0333333},
+		[2]={u=569, v=1888, w=148, h=154, offsetX=72, offsetY=74, duration=0.0333333},
+		[3]={u=1845, v=366, w=174, h=180, offsetX=88, offsetY=89, duration=0.0333333},
+		[4]={u=1845, v=0, w=178, h=183, offsetX=90, offsetY=90, duration=0.0666667},
+		[5]={u=1845, v=366, w=174, h=180, offsetX=88, offsetY=89, duration=0.0333333},
+		[6]={u=927, v=1888, w=148, h=154, offsetX=72, offsetY=74, duration=0.0333333},
+		[7]={u=893, v=379, w=126, h=120, offsetX=65, offsetY=50, duration=0.0333333},
+		[8]={u=1845, v=183, w=178, h=183, offsetX=90, offsetY=90, duration=0.0333333},
+		scale=1
+	},
+	gun_idle={
+		[0]={u=457, v=925, w=56, h=116, offsetX=27, offsetY=86, duration=0.0333333},
 		scale=1
 	},
 }
