@@ -1,1 +1,1 @@
-return { maxLinkDistance = 60 }
+return { maxLinkDistance = 60, sprite={"cell.sprite", "icon_link"} }

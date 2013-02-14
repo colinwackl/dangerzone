@@ -7,44 +7,42 @@ timer = require "hump.timer"
 
 Port = Class({function(self, dataPath, parent, type)
 	Entity.construct(self, dataPath)
+	self:createSprites()
+	self.sprites[1]:setAlpha(0)
+	
 	self.parent = parent
 	self.world.availablePorts[self] = self
 	
 	self.attachedLink = nil
 	self.type = type
 	
-	self.effectiveDistance = self.data.effectiveDistance or 500
+	self.portActive = false
+	
+	self.effectiveDistance = self.data.effectiveDistance or 300
 	self.maxLinkDistance = self.data.maxLinkDistance or 100
 end,
 name = "Port", inherits = Entity})
 
-function Port:startLink()
-	if self.link then
-		self.link:stop()
-		self.link = nil
-	end
-	
-	self.link = ChainLink("ChainLink")
-	self.world.availablePorts[self] = nil
-end
-
 function Port:linkWith(port)
 	assert(self ~= port, "Can't link with myself!")
-	assert(self.link, "No link found!")
 	local diff = self.pos - port.pos
 	local distance = diff:len()
 	
 	local meter = love.physics:getMeter()
 	local x1, y1 = self.pos.x, self.pos.y
 	local x2, y2 = port.pos.x, port.pos.y
-
-	self.link.joint = love.physics.newDistanceJoint(self.parent.physics.body, port.parent.physics.body, x1, y1, x2, y2)
 	
-	self.link.head = self
-	self.link.tail = port
-	self.attachedLink = self.link
-	port.attachedLink = self.link
-	self.link = nil
+	local link = ChainLink("ChainLink")
+
+	link.joint = love.physics.newDistanceJoint(self.parent.physics.body, port.parent.physics.body, x1, y1, x2, y2)
+	
+	link.head = self
+	link.tail = port
+	self.attachedLink = link
+	port.attachedLink = link
+	
+	self:setPortActive(false)
+	link:getOther(self).parent.portStern:setPortActive(true)
 	
 	self.world.availablePorts[port] = nil
 end
@@ -58,11 +56,15 @@ function Port:getSternLinks()
 	end
 end
 
-function Port:endLink()
-	local link = self.link
-	self.link = nil
-	self.world.availablePorts[self] = self
-	return link
+function Port:setPortActive(b)
+	self.sprites[1]:setAlpha(0)
+	self.portActive = b
+end
+
+function Port:clicked()
+	if self.portActive and self.closePort then
+		self:linkWith(self.closePort)
+	end
 end
 
 function Port:isCompatible(other)
@@ -89,6 +91,17 @@ end
 
 function Port:update(dt)
 	Entity.update(self, dt)
+	
+	if self.portActive then
+		local port, distance = self.world:getClosestAvailablePort(vector(self.pos.x, self.pos.y), self)
+		if port and distance < port.effectiveDistance then
+			self.closePort = port
+			self.sprites[1]:setAlpha(1)
+		else
+			self.closePort = nil
+			self.sprites[1]:setAlpha(0)
+		end
+	end
 	
 	if self.link then
 		self.link.points[1] = self.pos
