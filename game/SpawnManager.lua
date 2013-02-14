@@ -7,8 +7,9 @@ SpawnManager = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
 	self.shooters = {}
 	self.crates = {}
-	self.currentLevel = 1
+	self.currentLevel = 0
 	self.targetShooters = 0
+	self.targetCrates = 0
 
 	self.spawnRadius = 800
 end,
@@ -56,12 +57,14 @@ function SpawnManager:updateLevel()
 	
 	local nextLevelData = self.data.levels[self.currentLevel + 1]
 	local crateCount = self.world.player:getCrateCount()
-	if crateCount >= nextLevelData.cratesNeeded then
+	if nextLevelData and crateCount >= nextLevelData.cratesNeeded then
 		local function after() self.world:updateBoundaries() end
 		self.world.camera:setScaleOverTime(nextLevelData.zoom, 6, after)
 		
 		self.targetShooters = nextLevelData.shooters
+		self.targetCrates = nextLevelData.crates
 		self.currentLevel = self.currentLevel + 1
+		
 	end
 end
 
@@ -69,15 +72,15 @@ function SpawnManager:update(dt)
 	Entity.update(self, dt)
 	self:updateLevel()
 
-	if self:getShooterCount() < self.data.levels[self.currentLevel].shooters then
+	if self:getShooterCount() < self.targetShooters then
 		local enemy = Enemy("enemy", player)
 		enemy:setPosition(self:getSpawnPosition())
 		enemy.vel.x, enemy.vel.y = (math.random() * 20) - 10, (math.random() * 20) - 10
 		spawnManager:addEnemy(enemy)
 		self.world:addObject(enemy)
 	end
-
-	if self:getCrateCount() < self.data.levels[self.currentLevel + 1].cratesNeeded + 1 then
+	
+	if self:getCrateCount() < self.targetCrates then
 		local crate = Crate("crate")
 		crate:initSprite("cell.sprite", "body")
 		crate:setPosition(self:getSpawnPosition())

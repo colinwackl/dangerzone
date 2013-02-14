@@ -107,7 +107,6 @@ end
 xPressed = 0
 yPressed = 0
 mouseMoved = false
-local activePort = nil
 function love.mousepressed(x, y, button)
 	x,y = cam:worldCoords(x, y)
 
@@ -118,13 +117,6 @@ function love.mousepressed(x, y, button)
 	
 	if player:inBounds(vector(x, y)) then
 		player:startPath()
-		
-	else
-		local port, distance = world:getClosestAvailablePort(vector(x, y))
-		if distance < port.effectiveDistance then
-			port:startLink()
-			activePort = port
-		end
 	end
 	
 	if button == "l" then
@@ -133,16 +125,12 @@ function love.mousepressed(x, y, button)
 end
 
 function love.mousereleased(x, y, button)
+	x,y = cam:worldCoords(x, y)
+
 	player:stopPath()
-	if activePort then
-		local port, distance = world:getClosestAvailablePort(vector(x, y), activePort)
-		if port and distance < port.effectiveDistance then
-			activePort:linkWith(port)
-		else
-			activePort:endLink():destroy()
-			
-		end
-		activePort = nil
+	local port, distance = world:getClosestAvailablePort(vector(x, y), activePort)
+	if port and distance < port.effectiveDistance then
+		port:clicked()
 	end
 end
 

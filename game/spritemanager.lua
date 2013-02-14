@@ -74,7 +74,7 @@ function createSprite(strData, strAnimation)
 	function sprite:update(deltaTime)
 		self.animCounter = self.animCounter - (deltaTime * self.animationSpeed)
 
-		if self.animCounter < 0 then
+		if self.animCounter < 0 and self.sprData then
 			local animation = self.sprData.animations[self.animation]
 			
 			self.currentFrame = self.currentFrame + 1
@@ -89,6 +89,8 @@ function createSprite(strData, strAnimation)
 	
 	function sprite:draw()
 		local data = self.sprData
+		if data == nil then return sprite end
+		
 		local animation = data.animations[sprite.animation]
 		local frame = animation[self.currentFrame - 1]
 		local q = data.quad

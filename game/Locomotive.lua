@@ -13,11 +13,12 @@ Locomotive = Class({function(self, dataPath)
 	self.path = FingerPath("FingerPath")
 	
 	local body = self:getBody()
-	body:setMass(self.data.mass or 100)
+	body:setMass(self.data.mass or 200)
 	
 	self.friction = 5
 	
 	self.port = Port("Port", self, "tail")
+	self.port.portActive = true
 	
 	signal.register('keyPressed', function(...) self:keyPressed(...) end)
 	signal.register('keyReleased', function(...) self:keyReleased(...) end)

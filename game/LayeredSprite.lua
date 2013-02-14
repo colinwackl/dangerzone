@@ -14,8 +14,10 @@ function LayeredSprite:init(strData, strAnimation)
 	self.baseLayer = spritemanager.createSprite()
 	self.baseLayer.strData = strData--.."_glow"
 	self.baseLayer.animation = strAnimation.."_glow"
-	self.baseLayer:setData(self.baseLayer.strData, self.baseLayer.animation, true)
-	self.baseLayer.sprData.image:setFilter("linear", "linear")
+	if self.baseLayer:hasAnimation(self.baseLayer.animation) then
+		self.baseLayer:setData(self.baseLayer.strData, self.baseLayer.animation, true)
+		self.baseLayer.sprData.image:setFilter("linear", "linear")
+	end
 
 	self.topLayer = spritemanager.createSprite()
 	self.topLayer.strData = strData
