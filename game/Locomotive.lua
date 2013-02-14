@@ -14,6 +14,7 @@ Locomotive = Class({function(self, dataPath)
 	
 	local body = self:getBody()
 	body:setMass(self.data.mass or 200)
+	body:setFixedRotation(true)
 	
 	self.friction = 5
 	
@@ -58,6 +59,10 @@ function Locomotive:getCrateCount()
 	local count = self.port:getSternLinks()
 	--print("count", count)
 	return count
+end
+
+function Locomotive:isAttachedToPlayer()
+	return true
 end
 
 function Locomotive:update(dt)

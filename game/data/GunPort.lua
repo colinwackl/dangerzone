@@ -1,0 +1,1 @@
+return { sprites={ {"cell.sprite", "gun"} }, shootInterval=3, bulletData="GunBullet" }

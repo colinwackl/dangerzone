@@ -1,0 +1,1 @@
+return { size = {10, 10}, maxVelocity=80, sprite={"cell.sprite", "body_bullet"}}

@@ -150,6 +150,15 @@ function Entity:createSprites()
 		sprite:init(spriteData[1], spriteData[2])
 		table.insert(self.sprites, sprite)
 	end
+	
+	local spriteData = self.data.sprites
+	if spriteData then
+		for _, data in ipairs(spriteData) do
+			local sprite = LayeredSprite:new()
+			sprite:init(data[1], data[2])
+			table.insert(self.sprites, sprite)
+		end
+	end
 end
 
 function Entity:setPosition(position)
