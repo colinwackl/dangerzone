@@ -76,7 +76,20 @@ function Crate:update(dt)
 	
 	local rotation = self.physics.body:getAngle()
 
-	self.sprite:setAlpha(self.spawnTimer/10)
+	self.sprite:setAlpha(self.spawnTimer/3)
+	self.portStern:setLinkSpriteAlpha(self.spawnTimer/3)
+	self.portBow:setLinkSpriteAlpha(self.spawnTimer/3)
+	self.portSidePort:setLinkSpriteAlpha(self.spawnTimer/3)
+	self.starboardPort:setLinkSpriteAlpha(self.spawnTimer/3)
+	local gunsprite = self.starboardPort:getGunSprite()
+	if gunsprite then
+		gunsprite:setAlpha(self.spawnTimer/3)
+	end
+	gunsprite = self.portSidePort:getGunSprite()
+	if gunsprite then
+		gunsprite:setAlpha(self.spawnTimer/3)
+	end
+
 	
 	self.sprite:setPosition(self.pos)
 	self.sprite:setRotation(rotation)
