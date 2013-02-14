@@ -30,10 +30,6 @@ Port = Class({function(self, dataPath, parent, type)
 end,
 name = "Port", inherits = Entity})
 
-function Port:getGunSprite()
-	return self.sprites[1]
-end
-
 function Port:destroy()
 	if self.attachedLink ~= nil then
 		self.attachedLink:destroy()
@@ -42,13 +38,17 @@ function Port:destroy()
 	Entity.destroy(self)
 end
 
+function Port:getGunSprite()
+	return self.sprites[1]
+end
+
 function Port:getLinkSprite()
-	return self.sprites[2]
+	return self.sprites[1]
 end
 
 function Port:setLinkSpriteAlpha(a)
 	local linkSprite = self:getLinkSprite()
-	if linkSprite then linkSprite:setAlpha(a) end
+	if linkSprite and linkSprite.animation == "icon_link" then linkSprite:setAlpha(a) end
 end
 
 function Port:linkWith(port)
@@ -131,6 +131,39 @@ function Port:isAttachedToPlayer(checked)
 	return self.parent:isAttachedToPlayer(checked)
 end
 
+function Port:firePort(delay, additionalDelay)
+	local link = self.attachedLink
+	if link then
+		link:getOther(self).parent:firePort(delay, additionalDelay)
+	end
+end
+
+function Port:fireStarboard(delay, additionalDelay)
+	local link = self.attachedLink
+	if link then
+		link:getOther(self).parent:fireStarboard(delay, additionalDelay)
+	end
+end
+
+function Port:shoot(delay)
+	if delay then
+		timer.add(delay, function() self:shoot() end)
+	else
+		local bulletAngle = self.angle - math.pi / 2
+		local direction = Vector(math.cos(bulletAngle), math.sin(bulletAngle))
+		local bullet = Bullet(self.bulletData, true)
+		bullet:setPosition(self.pos + direction * 85)
+		
+		bullet.vel = direction * bullet.maxvel
+		
+		local gun = self:getGunSprite()
+		gun:setAnimation(self.gunShoot)
+		timer.add(0.2, function()
+			gun:setAnimation(self.gunIdle)
+		end)
+	end
+end
+
 function Port:update(dt)
 	Entity.update(self, dt)
 	
@@ -155,18 +188,7 @@ function Port:update(dt)
 		self.timeToNextShot = self.timeToNextShot - dt
 		if self.timeToNextShot <= 0 then
 			self.timeToNextShot = self.shootInterval
-			local bulletAngle = self.angle + math.pi / 2
-			local direction = Vector(math.cos(bulletAngle), math.sin(bulletAngle))
-			local bullet = Bullet(self.bulletData, true)
-			bullet:setPosition(self.pos + direction * 150)
-			
-			bullet.vel = direction * bullet.maxvel
-			
-			local gun = self:getGunSprite()
-			gun:setAnimation(self.gunShoot)
-			timer.add(0.2, function()
-				gun:setAnimation(self.gunIdle)
-			end)
+			--self:shoot()
 			
 		end
 	end
@@ -213,10 +235,10 @@ end
 function Port:draw()
 	Entity.draw(self)
 	
-	if self.type == "head" then
+	--[[if self.type == "head" then
 		love.graphics.setColor(0, 0, 255, 255)
 	else
 		love.graphics.setColor(255, 0, 0, 255)
 	end
-	self:drawBounds()
+	self:drawBounds()]]
 end

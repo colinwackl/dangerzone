@@ -1,1 +1,1 @@
-return { size = {50, 50} , colour = {0, 120, 0, 255 }, shootInterval=1, sprite={"cell.sprite", "flesheater"}}
+return { size = {50, 50} , colour = {0, 120, 0, 255 }, shootInterval=20, shootBurst=3, sprite={"cell.sprite", "flesheater"}}

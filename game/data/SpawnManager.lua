@@ -2,8 +2,8 @@ return {
 	levels = {
 		[1] = {
 			cratesNeeded = 0,
-			shooters = 0,
-			spikey = 2,
+			shooters = 1,
+			spikey = 0,
 			crates = 2,
 			zoom = 0.5
 		},

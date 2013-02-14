@@ -15,8 +15,8 @@ require "ChainLink"
 testLayeredSprite = {}
 zoom = 1
 
-DEBUG = true
-DRAWPHYSICS = true
+DEBUG = false
+DRAWPHYSICS = false
 DRAWGROUND = false
 
 function love.load()

@@ -37,6 +37,15 @@ function Locomotive:keyPressed(key)
 	elseif key == "right" then
 		self.accel.x = accel
 	end
+	
+	local attachedLink = self.port.attachedLink
+	if attachedLink then
+		if key == "z" then
+			self.port:firePort(0, 0.5)
+		elseif key == "x" then
+			self.port:fireStarboard(0, 0.5)
+		end
+	end
 end
 
 function Locomotive:keyReleased(key)

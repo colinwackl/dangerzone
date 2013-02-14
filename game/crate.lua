@@ -15,7 +15,7 @@ Crate = Class({function(self, dataPath)
 	fixture:setDensity(0.1)
 	
 	local body = self:getBody()
-	body:setMass(1)
+	body:setMass(0)
 	body:setAngularDamping(0)
 	body:setAngle(math.rad(45))
 	body:setLinearDamping(0)
@@ -53,6 +53,16 @@ end
 
 function Crate:hit(hitter)
 	self:destroy()
+end
+
+function Crate:firePort(delay, additionalDelay)
+	self.portSidePort:shoot(delay)
+	self.portStern:firePort(delay, delay + additionalDelay)
+end
+
+function Crate:fireStarboard(delay, additionalDelay)
+	self.starboardPort:shoot(delay)
+	self.portStern:fireStarboard(delay, delay + additionalDelay)
 end
 
 function Crate:isAttachedToPlayer(checked)

@@ -24,6 +24,8 @@ function LayeredSprite:init(strData, strAnimation)
 	self.topLayer.animation = strAnimation
 	self.topLayer:setData(self.topLayer.strData, self.topLayer.animation, true)
 	self.topLayer.sprData.image:setFilter("linear", "linear")
+	
+	self.animation = strAnimation
 
 	self.effect = AlphaEffect:new()
 	self.effect:load()
@@ -48,6 +50,7 @@ function LayeredSprite:setAnimation(animation)
 	end
 	
 	self.topLayer:setAnimation(animation, true)
+	self.animation = animation
 end
 
 function LayeredSprite:update(dt)

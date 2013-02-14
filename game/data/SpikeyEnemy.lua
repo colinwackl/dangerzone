@@ -1,1 +1,1 @@
-return { size = {50, 50} , sprite={"cell.sprite", "spikey"}, kamikaze = true}
+return { size = {50, 50} , sprite={"cell.sprite", "spikey"}, shootInterval = 0, kamikaze = true}

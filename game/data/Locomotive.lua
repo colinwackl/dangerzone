@@ -1,1 +1,1 @@
-return { pos= {300, 300}, size = {85, 85} , colour = {255, 255, 255, 255}, maxVelocity = 300, mass = 100, sprite={"cell.sprite", "head"}}
+return { pos= {300, 300}, size = {85, 85} , colour = {255, 255, 255, 255}, maxVelocity = 200, mass = 200, sprite={"cell.sprite", "head"}}
