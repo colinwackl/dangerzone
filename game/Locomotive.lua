@@ -93,8 +93,8 @@ function Locomotive:boost()
 		local foundGenerator = false
 		local generators = self:getGenerators()
 		for _, generator in ipairs(generators) do
-			if generator.currentEnergy >= 5 then
-				generator.currentEnergy = generator.currentEnergy - 5
+			if generator.currentEnergy >= 4 then
+				generator.currentEnergy = generator.currentEnergy - 4
 				foundGenerator = true
 				break
 			end

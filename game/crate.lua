@@ -32,6 +32,7 @@ Crate = Class({function(self, dataPath)
 	self.hp = self.data.hp or 1
 	self.maxEnergy = self.data.maxEnergy or 0
 	self.currentEnergy = self.maxEnergy
+	self.prevEnergy = self.currentEnergy
 	self.regenRate = 3
 	self.timeToNextRegen = self.regenRate
 	
@@ -50,10 +51,6 @@ function Crate:destroy()
 	if self.starboardPort then self.starboardPort:destroy() end
 
 	Entity.destroy(self)
-end
-
-function Crate:setAnimation(strAnimation)
-	self.sprite:setAnimation(strAnimation)
 end
 
 function Crate:getGenerators(generators)
@@ -127,6 +124,13 @@ function Crate:update(dt)
 	self.spawnTimer = self.spawnTimer + dt
 	
 	local rotation = self.physics.body:getAngle()
+	
+	if self.prevEnergy ~= self.currentEnergy then
+		self.prevEnergy = self.currentEnergy
+		
+		local animationName = "reactor" .. self.currentEnergy
+		self.sprites[1]:setAnimation(animationName)
+	end
 
 	self:setAlpha(self.spawnTimer / 3)
 	
@@ -183,9 +187,9 @@ end
 function Crate:draw()
 	Entity.draw(self)
 	
-	if self.currentEnergy > 0 then
+	--[[if self.currentEnergy > 0 then
 		love.graphics.print(self.currentEnergy, self.pos.x, self.pos.y, self.angle, 2, 2)
-	end
+	end]]
 	
 	--[[if self.timeToUnlinkDeath then
 		local text = "unlink: " .. self.timeToUnlinkDeath

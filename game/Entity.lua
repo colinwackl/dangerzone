@@ -29,7 +29,7 @@ end, inherits = Base})
 function Entity:load(path)
 	path =  'data/' .. path
 	if string.find(path, ".lua") == nil then path = path .. ".lua" end
-	assert(love.filesystem.exists(path))
+	assert(love.filesystem.exists(path), path .. " is not a valid path")
 	
 	self.data = love.filesystem.load(path)()
 	

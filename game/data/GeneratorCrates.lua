@@ -1,1 +1,1 @@
-return { size = {70, 130} , colour = {255, 255, 255, 255}, sprite={"cell.sprite", "heart"}, hp = 2, maxEnergy = 10 }
+return { size = {70, 130} , colour = {255, 255, 255, 255}, sprite={"cell.sprite", "reactor9"}, hp = 2, maxEnergy = 8 }
