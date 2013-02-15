@@ -37,6 +37,10 @@ function Enemy:beginContact(collidedWith)
 	end
 end
 
+function Enemy:hit(hitter)
+	self:destroy()
+end
+
 function Enemy:update(dt)
 	Entity.update(self, dt)
 

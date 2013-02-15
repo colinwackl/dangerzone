@@ -117,23 +117,29 @@ function love.mousepressed(x, y, button)
 	
 	if player:inBounds(vector(x, y)) then
 		player:startPath()
-	-- else
-	-- 	player:resetPath()
 	end
 	
 	if button == "l" then
 	elseif  button == "r" then
 	end
+	
+	signals.emit("mousePressed", x, y, button)
 end
 
 function love.mousereleased(x, y, button)
 	x,y = cam:worldCoords(x, y)
 
 	player:stopPath()
-	local port, distance = world:getClosestAvailablePort(vector(x, y), activePort)
-	if port and distance < port.effectiveDistance then
+	local port, portDistance = world:getClosestAvailablePort(vector(x, y))
+	local gun, gunDistance = world:getClosestGunPort(vector(x, y))
+	
+	if port and portDistance < port.effectiveDistance and port.portActive and port.closePort then
 		port:clicked()
+	elseif gun and gunDistance < gun.effectiveDistance then
+		gun:clicked()
 	end
+	
+	signals.emit("mouseReleased", x, y, button)
 end
 
 function love.keypressed( key, unicode )

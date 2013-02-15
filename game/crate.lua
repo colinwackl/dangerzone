@@ -12,13 +12,12 @@ Crate = Class({function(self, dataPath)
 	local fixture = self:createFixture(nil, 1)
 	fixture:setRestitution(0.4)
 	fixture:setFriction(0)
-	fixture:setDensity(0.1)
 	
 	local body = self:getBody()
 	body:setMass(0)
 	body:setAngularDamping(0)
 	body:setAngle(math.rad(45))
-	body:setLinearDamping(0)
+	body:setLinearDamping(100)
 
 	self.portSidePort = Port("GunPort", self, "port")
 	self.starboardPort = Port("GunPort", self, "starboard")
@@ -57,12 +56,12 @@ end
 
 function Crate:firePort(delay, additionalDelay)
 	self.portSidePort:shoot(delay)
-	self.portStern:firePort(delay, delay + additionalDelay)
+	self.portStern:firePort(delay + additionalDelay, additionalDelay)
 end
 
 function Crate:fireStarboard(delay, additionalDelay)
 	self.starboardPort:shoot(delay)
-	self.portStern:fireStarboard(delay, delay + additionalDelay)
+	self.portStern:fireStarboard(delay + additionalDelay, additionalDelay)
 end
 
 function Crate:isAttachedToPlayer(checked)
@@ -87,10 +86,10 @@ function Crate:update(dt)
 	local rotation = self.physics.body:getAngle()
 
 	self.sprite:setAlpha(self.spawnTimer/3)
-	self.portStern:setLinkSpriteAlpha(self.spawnTimer/3)
+	--[[self.portStern:setLinkSpriteAlpha(self.spawnTimer/3)
 	self.portBow:setLinkSpriteAlpha(self.spawnTimer/3)
 	self.portSidePort:setLinkSpriteAlpha(self.spawnTimer/3)
-	self.starboardPort:setLinkSpriteAlpha(self.spawnTimer/3)
+	self.starboardPort:setLinkSpriteAlpha(self.spawnTimer/3)]]
 	local gunsprite = self.starboardPort:getGunSprite()
 	if gunsprite then
 		gunsprite:setAlpha(self.spawnTimer/3)
@@ -99,7 +98,6 @@ function Crate:update(dt)
 	if gunsprite then
 		gunsprite:setAlpha(self.spawnTimer/3)
 	end
-
 	
 	self.sprite:setPosition(self.pos)
 	self.sprite:setRotation(rotation)

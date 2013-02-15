@@ -151,6 +151,7 @@ function World:init()
 
 	self.physworld = world
 	self.availablePorts = {}
+	self.gunPorts = {}
 	world:setCallbacks( self.beginContact, self.endContact, self.preSolve, self.postSolve )
 	
 	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
@@ -284,6 +285,23 @@ function World:getClosestAvailablePort(pos, compatibleWith)
 			if currentDistance < bestDistance then
 				bestPort, bestDistance = port, currentDistance
 			end
+		end
+	end
+	
+	if bestPort then
+		bestDistance = (bestPort.pos - pos):len()
+	end
+	
+	return bestPort, bestDistance
+end
+
+function World:getClosestGunPort(pos)
+	local bestPort, bestDistance = nil, math.huge
+	for i, port in pairs(self.gunPorts) do
+		local diff = port.pos - pos 
+		local currentDistance = diff:len2()
+		if currentDistance < bestDistance then
+			bestPort, bestDistance = port, currentDistance
 		end
 	end
 	

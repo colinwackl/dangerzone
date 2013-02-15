@@ -8,6 +8,8 @@ signal = require "hump.signal"
 Locomotive = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
 	
+	self.physicsBodyType = "kinematic"
+	
 	self:createSprites()
 	self:createFixture()
 	self.path = FingerPath("FingerPath")
@@ -15,8 +17,7 @@ Locomotive = Class({function(self, dataPath)
 	local body = self:getBody()
 	body:setMass(self.data.mass or 200)
 	body:setFixedRotation(true)
-	
-	self.friction = 5
+	body:setLinearDamping(100)
 	
 	self.port = Port("Port", self, "tail")
 	self.port.portActive = true
@@ -41,9 +42,9 @@ function Locomotive:keyPressed(key)
 	local attachedLink = self.port.attachedLink
 	if attachedLink then
 		if key == "z" then
-			self.port:firePort(0, 0.5)
+			self.port:firePort(0, 0.3)
 		elseif key == "x" then
-			self.port:fireStarboard(0, 0.5)
+			self.port:fireStarboard(0, 0.3)
 		end
 	end
 end
@@ -109,6 +110,7 @@ function Locomotive:update(dt)
 		self.vel = diff * self.maxvel
 		self:setAngle(math.atan2(diff.y, diff.x) + math.pi / 2)
 	else
+		self.vel.x, self.vel.y = 0, 0
 		self.accel.x, self.accel.y = 0, 0
 	end
 	

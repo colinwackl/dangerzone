@@ -11,7 +11,6 @@ Port = Class({function(self, dataPath, parent, type)
 	self:setLinkSpriteAlpha(0)
 	
 	self.parent = parent
-	self.world.availablePorts[self] = self
 	
 	self.attachedLink = nil
 	self.type = type
@@ -20,12 +19,24 @@ Port = Class({function(self, dataPath, parent, type)
 	
 	self.gunIdle = self.data.gunIdle
 	self.gunShoot = self.data.gunShoot
+	self.arcIdle = self.data.arcIdle
+	self.arcShoot = self.data.arcShoot
+	self.gunTripleShot = self.data.gunTripleShot
+	self.arcTripleShot = self.data.arcTripleShot
+	
+	if self.gunIdle and self.gunShoot and self.arcIdle and self.arcShoot then
+		self:setGunType("arc")
+		self.world.gunPorts[self] = self
+	else
+		self.world.availablePorts[self] = self
+	end
 	
 	self.effectiveDistance = self.data.effectiveDistance or 300
 	self.maxLinkDistance = self.data.maxLinkDistance or 100
 	
 	self.shootInterval = self.data.shootInterval or 0
-	self.bulletData = self.data.bulletData or "Bullet"
+	self.gunBulletData = self.data.gunBulletData
+	self.arcBulletData = self.data.arcBulletData
 	self.timeToNextShot = 0
 end,
 name = "Port", inherits = Entity})
@@ -35,11 +46,37 @@ function Port:destroy()
 		self.attachedLink:destroy()
 	end
 
+	self.world.availablePorts[self] = nil
+	self.world.gunPorts[self] = nil
 	Entity.destroy(self)
+end
+
+function Port:setGunType(type)
+	self.gunType = type
+	local gun = self:getGunSprite()
+	if gun then
+		gun:setAnimation(self:getGunIdle())
+	end
+end
+
+function Port:getBulletData()
+	return self[self.gunType.."BulletData"]
+end
+
+function Port:getGunIdle()
+	return self[self.gunType.."Idle"]
+end
+
+function Port:getGunShoot()
+	return self[self.gunType.."Shoot"]
 end
 
 function Port:getGunSprite()
 	return self.sprites[1]
+end
+
+function Port:getTripleShot()
+	return self[self.gunType.."TripleShot"]
 end
 
 function Port:getLinkSprite()
@@ -75,6 +112,14 @@ function Port:linkWith(port)
 	self.world.availablePorts[port] = nil
 end
 
+function Port:switchGuns()
+	if self.gunType == "arc" then
+		self:setGunType("gun")
+	elseif self.gunType == "gun" then
+		self:setGunType("arc")
+	end
+end
+
 function Port:getSternLinks()
 	local link = self.attachedLink
 	if link then
@@ -92,6 +137,9 @@ end
 function Port:clicked()
 	if self.portActive and self.closePort then
 		self:linkWith(self.closePort)
+		
+	else
+		self:switchGuns()
 	end
 end
 
@@ -146,20 +194,36 @@ function Port:fireStarboard(delay, additionalDelay)
 end
 
 function Port:shoot(delay)
-	if delay then
+	if delay ~= nil and delay > 0 then
 		timer.add(delay, function() self:shoot() end)
 	else
-		local bulletAngle = self.angle - math.pi / 2
-		local direction = Vector(math.cos(bulletAngle), math.sin(bulletAngle))
-		local bullet = Bullet(self.bulletData, true)
-		bullet:setPosition(self.pos + direction * 85)
+		local forward = self.angle - math.pi / 2
+		local angles
 		
-		bullet.vel = direction * bullet.maxvel
+		if self:getTripleShot() then
+			angles = {forward, forward - math.pi / 4, forward + math.pi / 4}
+		else
+			angles = {forward}
+		end
+		
+		for _, bulletAngle in ipairs(angles) do		
+			local direction = Vector(math.cos(bulletAngle), math.sin(bulletAngle))
+			local bulletPosition = self.pos + direction * 85
+			local bullet = Bullet(self:getBulletData(), true)
+			bullet:setPosition(bulletPosition)
+			
+			if bullet.followGunRotation then
+				local diff = bulletPosition - self.pos
+				bullet:setAngle(math.atan2(diff.y, diff.x) + math.pi / 2)
+			end
+			
+			bullet.vel = direction * bullet.maxvel
+		end
 		
 		local gun = self:getGunSprite()
-		gun:setAnimation(self.gunShoot)
+		gun:setAnimation(self:getGunIdle())
 		timer.add(0.2, function()
-			gun:setAnimation(self.gunIdle)
+			gun:setAnimation(self:getGunIdle())
 		end)
 	end
 end

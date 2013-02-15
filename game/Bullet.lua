@@ -9,8 +9,21 @@ Class = require "hump.class"
 Bullet = Class({function(self, dataPath, friendly)
 	Entity.construct(self, dataPath)
 	self.signals:register("beginContact", self.beginContact)
+	
+	self.followGunRotation = self.data.followGunRotation
+	self.deflect = self.data.deflect or false
+	
+	if self.deflect then
+		self.physicsBodyType = "kinematic"
+	end
+	
 	self:createFixture()
 	self:createSprites()
+	
+	if self.deflect then
+		local body = self:getBody()
+		body:setFixedRotation(true)
+	end
 	
 	self.friendly = friendly
 end,
@@ -18,7 +31,14 @@ name = "Bullet", inherits = Entity})
 
 function Bullet:beginContact(collideWith)
 	if self.friendly then
-	
+		if collideWith:is_a(Enemy) and self.deflect ~= true then
+			collideWith:hit(self)
+			self:destroy()
+		end
+		
+		if collideWith:is_a(Bullet) and self.deflect == true and collideWith.deflect ~= true then
+			collideWith.vel = -collideWith.vel
+		end
 	else
 		if collideWith:is_a(Crate) then 
 			collideWith:hit(self)
