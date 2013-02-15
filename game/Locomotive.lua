@@ -22,6 +22,11 @@ Locomotive = Class({function(self, dataPath)
 	self.port = Port("Port", self, "tail")
 	self.port.portActive = true
 	
+	self.boostTime = 5
+	self.timeLeftInBoost = 0
+	
+	self.defaultSpeed = self.data.maxVelocity
+	
 	signal.register('keyPressed', function(...) self:keyPressed(...) end)
 	signal.register('keyReleased', function(...) self:keyReleased(...) end)
 end,
@@ -54,6 +59,9 @@ function Locomotive:keyReleased(key)
 		self.accel.y = 0
 	elseif key == "left" or key == "right"then
 		self.accel.x = 0
+		
+	elseif key == " " then
+		self:boost()
 	end
 end
 
@@ -71,8 +79,32 @@ end
 
 function Locomotive:getCrateCount()
 	local count = self.port:getSternLinks()
-	--print("count", count)
 	return count
+end
+
+function Locomotive:getGenerators()
+	local generators = {}
+	self.port:getGenerators(generators)
+	return generators
+end
+
+function Locomotive:boost()
+	if self.timeLeftInBoost <= 0 then
+		local foundGenerator = false
+		local generators = self:getGenerators()
+		for _, generator in ipairs(generators) do
+			if generator.currentEnergy >= 5 then
+				generator.currentEnergy = generator.currentEnergy - 5
+				foundGenerator = true
+				break
+			end
+		end
+		
+		if foundGenerator == false then return end
+		
+		self.timeLeftInBoost = self.boostTime
+		self.maxvel = self.defaultSpeed * 3
+	end
 end
 
 function Locomotive:isAttachedToPlayer()
@@ -86,6 +118,11 @@ function Locomotive:update(dt)
 	
 	local v = Vector(self.world.camera:mousepos())	
 	local destination = self.path:getFront()
+	
+	if self.timeLeftInBoost <= 0 then
+		self.maxvel = self.defaultSpeed
+	end
+	self.timeLeftInBoost = self.timeLeftInBoost - dt
 
 	-- if self:inBounds(v) then
 	-- 	self.accel.x, self.accel.y = 0, 0
@@ -100,9 +137,7 @@ function Locomotive:update(dt)
 			self.path:popFront()
 			destination = self.path:getFront()
 			
-			if destination == nil then
-				return
-			end
+			if destination == nil then return end
 			diff = destination - self.pos
 		end
 		

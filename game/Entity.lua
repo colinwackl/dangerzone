@@ -80,7 +80,6 @@ function Entity:update(dt)
 	if self.physics and self.physics.body then
 		local body = self:getBody()
 		body:setLinearVelocity(self.vel.x, self.vel.y)
-		--body:setPosition(self.pos.x, self.pos.y)
 		self.pos.x, self.pos.y = body:getPosition()
 		self.angle = body:getAngle()
 	else

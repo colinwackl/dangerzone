@@ -30,6 +30,14 @@ Crate = Class({function(self, dataPath)
 	self:createSprites()
 	
 	self.hp = self.data.hp or 1
+	self.maxEnergy = self.data.maxEnergy or 0
+	self.currentEnergy = self.maxEnergy
+	self.regenRate = 3
+	self.timeToNextRegen = self.regenRate
+	
+	self.unlinkTime = 20
+	self.fadeOutTime = 5
+	self.timeToUnlinkDeath = self.unlinkTime
 
 	self.spawnTimer = 0
 end,
@@ -38,14 +46,21 @@ name = "Crate", inherits = Entity})
 function Crate:destroy()
 	self.portBow:destroy()
 	self.portStern:destroy()
-	self.portSidePort:destroy()
-	self.starboardPort:destroy()
+	if self.portSidePort then self.portSidePort:destroy() end
+	if self.starboardPort then self.starboardPort:destroy() end
 
 	Entity.destroy(self)
 end
 
 function Crate:setAnimation(strAnimation)
 	self.sprite:setAnimation(strAnimation)
+end
+
+function Crate:getGenerators(generators)
+	if self.maxEnergy > 0 then
+		table.insert(generators, self)
+	end
+	self.portStern:getGenerators(generators)
 end
 
 function Crate:getSternLinks()
@@ -89,6 +104,23 @@ function Crate:isAttachedToPlayer(checked)
 	return attachedPort or attachedStern
 end
 
+function Crate:setAlpha(a)
+	Entity.setAlpha(self, a)
+	if self.starboardPort then
+		local gunsprite = self.starboardPort:getGunSprite()
+		if gunsprite then
+			gunsprite:setAlpha(a)
+		end
+	end
+	
+	if self.portSidePort then
+		local gunsprite = self.portSidePort:getGunSprite()
+		if gunsprite then
+			gunsprite:setAlpha(a)
+		end
+	end
+end
+
 function Crate:update(dt)
 	Entity.update(self, dt)
 
@@ -96,24 +128,28 @@ function Crate:update(dt)
 	
 	local rotation = self.physics.body:getAngle()
 
-	self:setAlpha(self.spawnTimer/3)
-	--[[self.portStern:setLinkSpriteAlpha(self.spawnTimer/3)
-	self.portBow:setLinkSpriteAlpha(self.spawnTimer/3)
-	self.portSidePort:setLinkSpriteAlpha(self.spawnTimer/3)
-	self.starboardPort:setLinkSpriteAlpha(self.spawnTimer/3)]]
-	if self.starboardPort then
-		local gunsprite = self.starboardPort:getGunSprite()
-		if gunsprite then
-			gunsprite:setAlpha(self.spawnTimer/3)
+	self:setAlpha(self.spawnTimer / 3)
+	
+	if self.maxEnergy > 0 and self.currentEnergy < self.maxEnergy and self.timeToNextRegen <= 0 then
+		self.timeToNextRegen = self.regenRate
+		self.currentEnergy = self.currentEnergy + 1
+		
+	end
+	self.timeToNextRegen = self.timeToNextRegen - dt
+	
+	if self:isAttachedToPlayer() then
+		self.timeToUnlinkDeath = self.unlinkTime
+	else
+		if self.timeToUnlinkDeath < 0 then
+			self:destroy()
 		end
 	end
 	
-	if self.portSidePort then
-		local gunsprite = self.portSidePort:getGunSprite()
-		if gunsprite then
-			gunsprite:setAlpha(self.spawnTimer/3)
-		end
+	if self.timeToUnlinkDeath < self.fadeOutTime then
+		local a = 1 / (self.fadeOutTime / self.timeToUnlinkDeath)
+		self:setAlpha(a)
 	end
+	self.timeToUnlinkDeath = self.timeToUnlinkDeath - dt
 
 	-- update bow and stern ports
 	local bowPos, sternPos = Vector(0, self.bounds.top), Vector(0, self.bounds.bottom)
@@ -142,9 +178,17 @@ function Crate:update(dt)
 		self.starboardPort:setPosition(starboardPos)
 		self.starboardPort:update(dt)
 	end
-	
 end
 
 function Crate:draw()
 	Entity.draw(self)
+	
+	if self.currentEnergy > 0 then
+		love.graphics.print(self.currentEnergy, self.pos.x, self.pos.y, self.angle, 2, 2)
+	end
+	
+	--[[if self.timeToUnlinkDeath then
+		local text = "unlink: " .. self.timeToUnlinkDeath
+		love.graphics.print(text, self.pos.x, self.pos.y, self.angle, 2, 2)
+	end]]
 end

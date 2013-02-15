@@ -138,6 +138,15 @@ function Port:switchGuns()
 	end)
 end
 
+function Port:getGenerators(generators)
+	local link = self.attachedLink
+	if link then
+		return link:getOther(self).parent:getGenerators(generators)
+	else
+		return 0
+	end
+end
+
 function Port:getSternLinks()
 	local link = self.attachedLink
 	if link then
@@ -221,15 +230,27 @@ function Port:shoot(delay)
 		local forward = self.angle - math.pi / 2
 		local angles
 		
+		local hasEnergy = false
+		local generators = self.world.player:getGenerators()
+		for _, gen in ipairs(generators) do
+			if gen.currentEnergy > 0 then
+				gen.currentEnergy = gen.currentEnergy - 1
+				hasEnergy = true
+				break
+			end
+		end
+		
+		if hasEnergy == false then return end
+		
 		if self:getTripleShot() then
-			angles = {forward, forward - math.pi / 4, forward + math.pi / 4}
+			angles = {forward, forward - math.pi / 5, forward + math.pi / 5}
 		else
 			angles = {forward}
 		end
 		
 		for _, bulletAngle in ipairs(angles) do		
 			local direction = Vector(math.cos(bulletAngle), math.sin(bulletAngle))
-			local bulletPosition = self.pos + direction * 85
+			local bulletPosition = self.pos + direction * 95
 			local bullet = Bullet(self:getBulletData(), true)
 			bullet:setPosition(bulletPosition)
 			

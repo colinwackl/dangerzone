@@ -39,36 +39,12 @@ function love.load()
 	
 	world.camera = cam
 	world:init()
-
+	
 	world:create()
 	
 	player = Locomotive("Locomotive")
-	--[[enemy = Enemy("enemy", player)
-	enemy:setPosition(vector(10, 10))
-	enemy.vel.x, enemy.vel.y = -200, -200
-	spawnManager:addEnemy(enemy)]]
 	
 	world.player = player
-
-	-- crate = Crate("Crate")
-	-- crate:initSprite("cell.sprite", "body")
-	-- crate:setPosition(Vector(100, 100))
-	-- crate2 = Crate("Crate")
-	-- crate2:initSprite("cell.sprite", "heart")
-	-- crate2:setPosition(Vector(200, 200))
-	-- crate3 = Crate("Crate")
-	-- crate3:initSprite("cell.sprite", "body_grey")
-	-- crate3:setPosition(Vector(300, 300))
-	-- crate4 = Crate("Crate")
-	-- crate4:initSprite("cell.sprite", "body_grey")
-	-- crate4:setPosition(Vector(400, 400))
-	
-	--world:addObject(player)
-	--world:addObject(enemy)
-	-- world:addObject(crate)
-	-- world:addObject(crate2)
-	-- world:addObject(crate3)
-	-- world:addObject(crate4)
 
 	Tools:loadFonts()
 
@@ -80,7 +56,7 @@ function love.load()
 		music = love.audio.newSource("some.mp3", "stream")
 		music:setLooping(true)
 		love.audio.play(music)
-
+		
 	end
 end
 
@@ -130,6 +106,7 @@ function love.mousepressed(x, y, button)
 	
 	if button == "l" then
 	elseif  button == "r" then
+		port.parent:destroy()
 	end
 	
 	signals.emit("mousePressed", x, y, button)

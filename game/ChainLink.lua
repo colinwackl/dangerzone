@@ -16,19 +16,16 @@ ChainLink = Class({function(self, dataPath)
 		table.insert(self.sprites, sprite)
 	end
 	
-	end,
-name = "ChainLink", inherits = Entity})
+end, name = "ChainLink", inherits = Entity})
 
 function ChainLink:destroy()
 	self.joint:destroy()
 	self.head:setPortActive(true)
 	self.head.attachedLink = nil
 	self.world.availablePorts[self.head] = self.head
-	self.tail:setPortActive(true)
+	--self.tail:setPortActive(true)
 	self.tail.attachedLink = nil
 	self.world.availablePorts[self.tail] = self.tail
-
-	
 
 	Entity.destroy(self)
 end
