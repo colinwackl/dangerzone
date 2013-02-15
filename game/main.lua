@@ -72,7 +72,7 @@ function love.load()
 
 	Tools:loadFonts()
 
-	love.graphics.setBackgroundColor(195, 211,211)
+	love.graphics.setBackgroundColor(35,28,10)
 
 	titlefont = Tools.fontMainLarge
 

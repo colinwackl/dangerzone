@@ -9,203 +9,191 @@ end
 data.image = love.graphics.newImage(path.."cell.sprite.png")
 data.image:setFilter("nearest", "nearest")
 data.animations = {
-	flesheater={
-		[0]={u=930, v=1535, w=64, h=80, offsetX=33, offsetY=39, duration=0.0833333},
-		[1]={u=724, v=1535, w=64, h=80, offsetX=33, offsetY=39, duration=0.0833333},
-		[2]={u=788, v=1535, w=64, h=80, offsetX=33, offsetY=39, duration=0.0833333},
-		[3]={u=724, v=1535, w=64, h=80, offsetX=33, offsetY=39, duration=0.0833333},
-		[4]={u=852, v=1535, w=64, h=80, offsetX=33, offsetY=39, duration=0.0833333},
-		scale=1
-	},
-	flesheater_glow={
-		[0]={u=347, v=432, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
-		[1]={u=443, v=432, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
-		[2]={u=347, v=1724, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
-		[3]={u=995, v=379, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
-		[4]={u=1259, v=778, w=96, h=112, offsetX=46, offsetY=53, duration=0.0833333},
-		scale=1
-	},
-	bullet={
-		[0]={u=501, v=379, w=32, h=32, offsetX=16, offsetY=17, duration=0.0833333},
-		[1]={u=489, v=923, w=28, h=28, offsetX=14, offsetY=16, duration=0.0833333},
-		scale=1
-	},
-	bullet_glow={
-		[0]={u=1438, v=819, w=63, h=64, offsetX=31, offsetY=32, duration=0.0833333},
-		[1]={u=1280, v=1397, w=63, h=64, offsetX=31, offsetY=32, duration=0.0833333},
+	body_hit={
+		[0]={u=0, v=0, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[1]={u=0, v=379, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[2]={u=0, v=758, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[3]={u=0, v=1137, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[4]={u=0, v=1516, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[5]={u=483, v=0, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[6]={u=830, v=0, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[7]={u=1177, v=0, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[8]={u=1524, v=0, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[9]={u=347, v=532, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[10]={u=347, v=911, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[11]={u=347, v=1290, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
+		[12]={u=483, v=1669, w=347, h=379, offsetX=174, offsetY=174, duration=0.0333333},
 		scale=1
 	},
 	icon_link={
-		[0]={u=800, v=778, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
-		[1]={u=1355, v=768, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
-		[2]={u=1438, v=736, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
-		[3]={u=1280, v=1314, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
-		[4]={u=1432, v=379, w=83, h=83, offsetX=41, offsetY=40, duration=0.0666667},
-		[5]={u=1280, v=1314, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
-		[6]={u=1438, v=736, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
-		[7]={u=1355, v=768, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
-		scale=1
-	},
-	head={
-		[0]={u=1091, v=379, w=112, h=112, offsetX=56, offsetY=56, duration=0.0833333},
-		[1]={u=960, v=1372, w=112, h=112, offsetX=56, offsetY=56, duration=0.0833333},
-		[2]={u=994, v=1484, w=112, h=112, offsetX=56, offsetY=56, duration=0.0833333},
-		[3]={u=960, v=1372, w=112, h=112, offsetX=56, offsetY=56, duration=0.0833333},
-		[4]={u=994, v=1484, w=112, h=112, offsetX=56, offsetY=56, duration=0.0833333},
-		scale=1
-	},
-	head_glow={
-		[0]={u=990, v=1615, w=233, h=234, offsetX=116, offsetY=114, duration=0.0333333},
-		[1]={u=800, v=544, w=233, h=234, offsetX=116, offsetY=114, duration=0.0333333},
-		[2]={u=1033, v=544, w=233, h=234, offsetX=116, offsetY=114, duration=0.0333333},
-		[3]={u=930, v=904, w=233, h=234, offsetX=116, offsetY=114, duration=0.0333333},
-		[4]={u=960, v=1138, w=233, h=234, offsetX=116, offsetY=114, duration=0.0333333},
-		[5]={u=930, v=904, w=233, h=234, offsetX=116, offsetY=114, duration=0.0333333},
-		[6]={u=1033, v=544, w=233, h=234, offsetX=116, offsetY=114, duration=0.0333333},
-		[7]={u=800, v=544, w=233, h=234, offsetX=116, offsetY=114, duration=0.0333333},
+		[0]={u=1869, v=710, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
+		[1]={u=1952, v=710, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
+		[2]={u=1589, v=379, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
+		[3]={u=1672, v=379, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
+		[4]={u=830, v=796, w=83, h=83, offsetX=41, offsetY=40, duration=0.0666667},
+		[5]={u=1672, v=379, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
+		[6]={u=1589, v=379, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
+		[7]={u=1952, v=710, w=83, h=83, offsetX=41, offsetY=40, duration=0.0333333},
 		scale=1
 	},
 	body_grey_glow={
-		[0]={u=1304, v=544, w=128, h=224, offsetX=65, offsetY=106, duration=0.0833333},
+		[0]={u=347, v=0, w=128, h=224, offsetX=65, offsetY=106, duration=0.0833333},
 		scale=1
 	},
 	body_grey={
-		[0]={u=1112, v=1849, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		[1]={u=1208, v=1849, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		[2]={u=1432, v=544, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		[3]={u=1208, v=1849, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		[4]={u=1432, v=544, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		scale=1
-	},
-	body={
-		[0]={u=347, v=1340, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		[1]={u=347, v=1532, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		[2]={u=1016, v=1849, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		[3]={u=347, v=1532, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		[4]={u=1016, v=1849, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
-		scale=1
-	},
-	body_glow={
-		[0]={u=1163, v=898, w=128, h=224, offsetX=66, offsetY=108, duration=0.0833333},
+		[0]={u=1107, v=739, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
+		[1]={u=694, v=979, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
+		[2]={u=694, v=1171, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
+		[3]={u=694, v=979, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
+		[4]={u=694, v=1171, w=96, h=192, offsetX=49, offsetY=92, duration=0.0833333},
 		scale=1
 	},
 	heart={
-		[0]={u=595, v=379, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
-		[1]={u=691, v=379, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
-		[2]={u=787, v=379, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
-		[3]={u=691, v=379, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
-		[4]={u=787, v=379, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
+		[0]={u=1655, v=758, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
+		[1]={u=1066, v=931, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
+		[2]={u=1520, v=1070, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
+		[3]={u=1066, v=931, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
+		[4]={u=1520, v=1070, w=96, h=160, offsetX=49, offsetY=81, duration=0.0833333},
 		scale=1
 	},
 	heart_glow={
-		[0]={u=1193, v=1122, w=128, h=192, offsetX=65, offsetY=91, duration=0.0833333},
+		[0]={u=347, v=224, w=128, h=192, offsetX=65, offsetY=91, duration=0.0833333},
 		scale=1
 	},
 	trail={
-		[0]={u=2023, v=0, w=22, h=22, offsetX=11, offsetY=11, duration=0.0833333},
-		scale=1
-	},
-	trail_glow={
-		[0]={u=453, v=379, w=48, h=48, offsetX=24, offsetY=25, duration=0.0833333},
-		scale=1
-	},
-	port={
-		[0]={u=347, v=859, w=100, h=102, offsetX=50, offsetY=50, duration=0.0833333},
-		[1]={u=1193, v=1470, w=96, h=96, offsetX=48, offsetY=47, duration=0.0833333},
-		[2]={u=347, v=327, w=106, h=105, offsetX=53, offsetY=51, duration=0.0833333},
-		[3]={u=347, v=544, w=106, h=105, offsetX=53, offsetY=51, duration=0.0833333},
-		[4]={u=1184, v=1372, w=96, h=98, offsetX=48, offsetY=47, duration=0.0833333},
-		[5]={u=347, v=649, w=106, h=105, offsetX=53, offsetY=51, duration=0.0833333},
-		[6]={u=347, v=754, w=106, h=105, offsetX=53, offsetY=51, duration=0.0833333},
-		scale=1
-	},
-	port_glow={
-		[0]={u=196, v=1895, w=128, h=132, offsetX=64, offsetY=65, duration=0.0833333},
-		[1]={u=883, v=778, w=126, h=126, offsetX=64, offsetY=60, duration=0.0833333},
-		[2]={u=324, v=1895, w=133, h=132, offsetX=67, offsetY=65, duration=0.0833333},
-		[3]={u=883, v=1885, w=133, h=132, offsetX=67, offsetY=65, duration=0.0833333},
-		[4]={u=1009, v=778, w=124, h=126, offsetX=62, offsetY=61, duration=0.0833333},
-		[5]={u=694, v=1163, w=133, h=132, offsetX=67, offsetY=65, duration=0.0833333},
-		[6]={u=827, v=1163, w=133, h=132, offsetX=67, offsetY=65, duration=0.0833333},
-		scale=1
-	},
-	body_hit={
-		[0]={u=0, v=0, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[1]={u=0, v=379, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[2]={u=0, v=758, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[3]={u=0, v=1137, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[4]={u=0, v=1516, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[5]={u=457, v=0, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[6]={u=804, v=0, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[7]={u=1151, v=0, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[8]={u=1498, v=0, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[9]={u=453, v=544, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		[10]={u=347, v=961, w=347, h=379, offsetX=178, offsetY=178, duration=0.0833333},
-		scale=1
-	},
-	gun={
-		[0]={u=883, v=379, w=56, h=116, offsetX=28, offsetY=87, duration=0.0833333},
-		[1]={u=513, v=1890, w=56, h=154, offsetX=28, offsetY=121, duration=0.0833333},
-		[2]={u=539, v=379, w=56, h=162, offsetX=28, offsetY=135, duration=0.0833333},
-		[3]={u=457, v=1890, w=56, h=156, offsetX=28, offsetY=127, duration=0.0833333},
-		[4]={u=140, v=1895, w=56, h=134, offsetX=28, offsetY=105, duration=0.0833333},
-		[5]={u=939, v=379, w=56, h=116, offsetX=28, offsetY=87, duration=0.0833333},
-		scale=1
-	},
-	body_bullet={
-		[0]={u=457, v=923, w=32, h=34, offsetX=16, offsetY=17, duration=0.0833333},
-		[1]={u=347, v=1836, w=40, h=42, offsetX=20, offsetY=20, duration=0.0833333},
-		[2]={u=387, v=1836, w=42, h=42, offsetX=20, offsetY=21, duration=0.0833333},
-		scale=1
-	},
-	spikey={
-		[0]={u=347, v=0, w=109, h=109, offsetX=56, offsetY=56, duration=0.0833333},
-		[1]={u=347, v=109, w=109, h=109, offsetX=56, offsetY=56, duration=0.0833333},
-		[2]={u=347, v=218, w=109, h=109, offsetX=56, offsetY=56, duration=0.0833333},
-		scale=1
-	},
-	spikey_glow={
-		[0]={u=0, v=1895, w=140, h=142, offsetX=71, offsetY=69, duration=0.0833333},
-		scale=1
-	},
-	spikey_hit={
-		[0]={u=1072, v=1372, w=112, h=112, offsetX=54, offsetY=50, duration=0.0333333},
-		[1]={u=1133, v=778, w=126, h=120, offsetX=65, offsetY=50, duration=0.0333333},
-		[2]={u=569, v=1890, w=148, h=154, offsetX=72, offsetY=74, duration=0.0333333},
-		[3]={u=1291, v=890, w=174, h=180, offsetX=88, offsetY=89, duration=0.0333333},
-		[4]={u=1845, v=0, w=178, h=183, offsetX=90, offsetY=90, duration=0.0666667},
-		[5]={u=1291, v=890, w=174, h=180, offsetX=88, offsetY=89, duration=0.0333333},
-		[6]={u=717, v=1890, w=148, h=154, offsetX=72, offsetY=74, duration=0.0333333},
-		[7]={u=1223, v=379, w=126, h=120, offsetX=65, offsetY=50, duration=0.0333333},
-		[8]={u=1845, v=183, w=178, h=183, offsetX=90, offsetY=90, duration=0.0333333},
-		scale=1
-	},
-	gun_idle={
-		[0]={u=883, v=379, w=56, h=116, offsetX=27, offsetY=86, duration=0.0333333},
+		[0]={u=603, v=379, w=22, h=22, offsetX=11, offsetY=11, duration=0.0333333},
 		scale=1
 	},
 	flesheater_hit={
-		[0]={u=1349, v=462, w=66, h=82, offsetX=33, offsetY=37, duration=0.0833333},
-		[1]={u=1106, v=1484, w=84, h=102, offsetX=44, offsetY=47, duration=0.0833333},
-		[2]={u=1845, v=366, w=178, h=178, offsetX=88, offsetY=85, duration=0.0833333},
-		[3]={u=694, v=923, w=236, h=240, offsetX=118, offsetY=117, duration=0.0833333},
-		[4]={u=720, v=1615, w=270, h=270, offsetX=135, offsetY=130, duration=0.0833333},
-		[5]={u=447, v=1340, w=277, h=275, offsetX=141, offsetY=133, duration=0.166667},
-		[6]={u=720, v=1615, w=270, h=270, offsetX=135, offsetY=130, duration=0.0833333},
-		[7]={u=724, v=1295, w=236, h=240, offsetX=118, offsetY=117, duration=0.0833333},
-		[8]={u=443, v=1615, w=277, h=275, offsetX=141, offsetY=133, duration=0.0833333},
+		[0]={u=762, v=477, w=66, h=82, offsetX=33, offsetY=44, duration=0.0333333},
+		[1]={u=389, v=1895, w=84, h=102, offsetX=44, offsetY=54, duration=0.0333333},
+		[2]={u=1869, v=532, w=178, h=178, offsetX=88, offsetY=92, duration=0.0333333},
+		[3]={u=1205, v=654, w=236, h=240, offsetX=118, offsetY=124, duration=0.0333333},
+		[4]={u=1491, v=488, w=270, h=270, offsetX=135, offsetY=137, duration=0.0333333},
+		[5]={u=830, v=521, w=277, h=275, offsetX=141, offsetY=140, duration=0.0666667},
+		[6]={u=1491, v=488, w=270, h=270, offsetX=135, offsetY=137, duration=0.0333333},
+		[7]={u=830, v=894, w=236, h=240, offsetX=118, offsetY=124, duration=0.0333333},
+		[8]={u=1214, v=379, w=277, h=275, offsetX=141, offsetY=140, duration=0.0333333},
+		scale=1
+	},
+	spikey_hit={
+		[0]={u=389, v=416, w=112, h=112, offsetX=53, offsetY=49, duration=0.0333333},
+		[1]={u=501, v=411, w=126, h=120, offsetX=64, offsetY=49, duration=0.0333333},
+		[2]={u=1152, v=1233, w=148, h=154, offsetX=71, offsetY=73, duration=0.0333333},
+		[3]={u=1871, v=0, w=174, h=180, offsetX=87, offsetY=88, duration=0.0333333},
+		[4]={u=1869, v=796, w=178, h=183, offsetX=89, offsetY=89, duration=0.0666667},
+		[5]={u=1871, v=0, w=174, h=180, offsetX=87, offsetY=88, duration=0.0333333},
+		[6]={u=1300, v=1363, w=148, h=154, offsetX=71, offsetY=73, duration=0.0333333},
+		[7]={u=627, v=401, w=126, h=120, offsetX=64, offsetY=49, duration=0.0333333},
+		[8]={u=1869, v=979, w=178, h=183, offsetX=89, offsetY=89, duration=0.0333333},
+		scale=1
+	},
+	spikey_glow={
+		[0]={u=0, v=1895, w=140, h=142, offsetX=71, offsetY=69, duration=0.0333333},
+		scale=1
+	},
+	spikey={
+		[0]={u=887, v=379, w=109, h=109, offsetX=56, offsetY=55, duration=0.0333333},
+		[1]={u=996, v=379, w=109, h=109, offsetX=56, offsetY=55, duration=0.0333333},
+		[2]={u=1105, v=379, w=109, h=109, offsetX=56, offsetY=55, duration=0.0333333},
+		scale=1
+	},
+	head={
+		[0]={u=1364, v=1007, w=156, h=163, offsetX=78, offsetY=76, duration=0.0666667},
+		[1]={u=1162, v=1070, w=156, h=163, offsetX=78, offsetY=76, duration=0.0666667},
+		[2]={u=1318, v=1170, w=156, h=163, offsetX=78, offsetY=76, duration=0.0666667},
+		scale=1
+	},
+	head_glow={
+		[0]={u=830, v=1134, w=222, h=172, offsetX=112, offsetY=80, duration=0.0666667},
+		[1]={u=1441, v=758, w=214, h=70, offsetX=108, offsetY=-4, duration=0.0666667},
+		[2]={u=830, v=1134, w=222, h=172, offsetX=112, offsetY=80, duration=0.0666667},
+		scale=1
+	},
+	port={
+		[0]={u=1107, v=532, w=106, h=105, offsetX=54, offsetY=54, duration=0.0333333},
+		scale=1
+	},
+	port_glow={
+		[0]={u=256, v=1895, w=133, h=132, offsetX=75, offsetY=48, duration=0.0333333},
+		scale=1
+	},
+	flesheater={
+		[0]={u=694, v=521, w=66, h=93, offsetX=33, offsetY=43, duration=0.0666667},
+		[1]={u=694, v=614, w=66, h=93, offsetX=33, offsetY=43, duration=0.0666667},
+		[2]={u=694, v=707, w=66, h=93, offsetX=33, offsetY=43, duration=0.0666667},
+		scale=1
+	},
+	flesheater_glow={
+		[0]={u=1107, v=637, w=98, h=102, offsetX=49, offsetY=47, duration=0.0666667},
+		[1]={u=1491, v=379, w=98, h=102, offsetX=49, offsetY=47, duration=0.0666667},
+		[2]={u=1107, v=637, w=98, h=102, offsetX=49, offsetY=47, duration=0.0666667},
+		scale=1
+	},
+	body={
+		[0]={u=1871, v=180, w=161, h=176, offsetX=80, offsetY=86, duration=0.0666667},
+		[1]={u=1871, v=356, w=161, h=176, offsetX=80, offsetY=86, duration=0.0666667},
+		[2]={u=1203, v=894, w=161, h=176, offsetX=80, offsetY=86, duration=0.0666667},
+		scale=1
+	},
+	body_glow={
+		[0]={u=1650, v=931, w=204, h=78, offsetX=101, offsetY=27, duration=0.0666667},
+		[1]={u=1650, v=1009, w=202, h=68, offsetX=101, offsetY=26, duration=0.0666667},
+		[2]={u=1441, v=831, w=209, h=176, offsetX=103, offsetY=86, duration=0.0666667},
+		scale=1
+	},
+	gun={
+		[0]={u=760, v=715, w=58, h=110, offsetX=27, offsetY=80, duration=0.0666667},
+		[1]={u=347, v=1669, w=108, h=226, offsetX=53, offsetY=139, duration=0.0666667},
+		[2]={u=1761, v=379, w=108, h=226, offsetX=53, offsetY=139, duration=0.0666667},
+		[3]={u=760, v=559, w=70, h=156, offsetX=34, offsetY=126, duration=0.0666667},
+		[4]={u=140, v=1895, w=58, h=140, offsetX=27, offsetY=110, duration=0.0666667},
+		[5]={u=760, v=715, w=58, h=110, offsetX=27, offsetY=80, duration=0.0666667},
+		scale=1
+	},
+	gun_idle={
+		[0]={u=760, v=715, w=58, h=110, offsetX=28, offsetY=80, duration=0.0666667},
 		scale=1
 	},
 	gun_bounce_idle={
-		[0]={u=1349, v=379, w=78, h=83, offsetX=41, offsetY=57, duration=0.0333333},
+		[0]={u=694, v=800, w=58, h=110, offsetX=30, offsetY=82, duration=0.0666667},
 		scale=1
 	},
 	gun_bounce_fire={
-		[0]={u=1349, v=379, w=78, h=83, offsetX=41, offsetY=55, duration=0.0333333},
+		[0]={u=694, v=800, w=58, h=110, offsetX=30, offsetY=82, duration=0.0666667},
+		[1]={u=1066, v=1091, w=86, h=162, offsetX=44, offsetY=132, duration=0.0666667},
+		[2]={u=1761, v=605, w=108, h=226, offsetX=55, offsetY=140, duration=0.0666667},
+		[3]={u=1520, v=1230, w=96, h=166, offsetX=52, offsetY=136, duration=0.0666667},
+		[4]={u=198, v=1895, w=58, h=138, offsetX=30, offsetY=110, duration=0.0666667},
+		[5]={u=829, v=379, w=58, h=110, offsetX=30, offsetY=82, duration=0.0666667},
+		scale=1
+	},
+	bullet_glow={
+		[0]={u=753, v=401, w=76, h=76, offsetX=38, offsetY=36, duration=0.0666667},
+		[1]={u=752, v=905, w=74, h=74, offsetX=37, offsetY=35, duration=0.0666667},
+		[2]={u=752, v=825, w=78, h=80, offsetX=39, offsetY=39, duration=0.0666667},
+		[3]={u=913, v=796, w=74, h=76, offsetX=36, offsetY=35, duration=0.0666667},
+		scale=1
+	},
+	bullet={
+		[0]={u=475, v=379, w=32, h=32, offsetX=16, offsetY=16, duration=0.0666667},
+		[1]={u=507, v=379, w=32, h=32, offsetX=16, offsetY=16, duration=0.0666667},
+		[2]={u=539, v=379, w=32, h=32, offsetX=16, offsetY=16, duration=0.0666667},
+		[3]={u=571, v=379, w=32, h=32, offsetX=16, offsetY=16, duration=0.0666667},
 		scale=1
 	},
 	bullet_bounce={
-		[0]={u=196, v=2027, w=73, h=20, offsetX=37, offsetY=10, duration=0.0333333},
+		[0]={u=347, v=2027, w=68, h=16, offsetX=34, offsetY=8, duration=0.0666667},
+		[1]={u=415, v=2027, w=68, h=16, offsetX=34, offsetY=8, duration=0.0666667},
+		[2]={u=256, v=2027, w=68, h=16, offsetX=34, offsetY=8, duration=0.0666667},
+		[3]={u=415, v=2027, w=68, h=16, offsetX=34, offsetY=8, duration=0.0666667},
+		scale=1
+	},
+	body_bullet={
+		[0]={u=625, v=379, w=23, h=22, offsetX=12, offsetY=11, duration=0.0666667},
+		[1]={u=694, v=379, w=22, h=22, offsetX=12, offsetY=11, duration=0.0666667},
+		[2]={u=716, v=379, w=23, h=22, offsetX=12, offsetY=11, duration=0.0666667},
+		[3]={u=739, v=379, w=23, h=22, offsetX=12, offsetY=11, duration=0.0666667},
 		scale=1
 	},
 }
