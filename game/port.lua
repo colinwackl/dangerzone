@@ -38,6 +38,8 @@ Port = Class({function(self, dataPath, parent, type)
 	self.gunBulletData = self.data.gunBulletData
 	self.arcBulletData = self.data.arcBulletData
 	self.timeToNextShot = 0
+	
+	self.lastClicked = math.huge
 end,
 name = "Port", inherits = Entity})
 
@@ -107,7 +109,10 @@ function Port:linkWith(port)
 	port.attachedLink = link
 	
 	self:setPortActive(false)
-	link:getOther(self).parent.portStern:setPortActive(true)
+	local stern = link:getOther(self).parent.portStern
+	if stern then
+		stern:setPortActive(true)
+	end
 	
 	self.world.availablePorts[port] = nil
 end
@@ -138,9 +143,10 @@ function Port:clicked()
 	if self.portActive and self.closePort then
 		self:linkWith(self.closePort)
 		
-	else
+	elseif self.lastClicked < 0.5 then
 		self:switchGuns()
 	end
+	self.lastClicked = 0
 end
 
 function Port:isCompatible(other)
@@ -293,6 +299,8 @@ function Port:update(dt)
 		-- end
 
 	end
+	
+	self.lastClicked = self.lastClicked + dt
 	
 end
 

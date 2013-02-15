@@ -13,16 +13,13 @@ Bullet = Class({function(self, dataPath, friendly)
 	self.followGunRotation = self.data.followGunRotation
 	self.deflect = self.data.deflect or false
 	
-	if self.deflect then
-		self.physicsBodyType = "kinematic"
-	end
-	
 	self:createFixture()
 	self:createSprites()
 	
 	if self.deflect then
 		local body = self:getBody()
 		body:setFixedRotation(true)
+		body:setMass(10)
 	end
 	
 	self.friendly = friendly
