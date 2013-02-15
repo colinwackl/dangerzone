@@ -19,8 +19,11 @@ Crate = Class({function(self, dataPath)
 	body:setAngle(math.rad(45))
 	body:setLinearDamping(100)
 
-	self.portSidePort = Port("GunPort", self, "port")
-	self.starboardPort = Port("GunPort", self, "starboard")
+	if self.data.hasGuns == true then
+		self.portSidePort = Port("GunPort", self, "port")
+		self.starboardPort = Port("GunPort", self, "starboard")
+	end
+	
 	self.portBow = Port("Port", self, "head")
 	self.portStern = Port("Port", self, "tail")
 	
@@ -57,12 +60,18 @@ function Crate:hit(hitter)
 end
 
 function Crate:firePort(delay, additionalDelay)
-	self.portSidePort:shoot(delay)
+	if self.portSidePort then
+		self.portSidePort:shoot(delay)
+	end
+	
 	self.portStern:firePort(delay + additionalDelay, additionalDelay)
 end
 
 function Crate:fireStarboard(delay, additionalDelay)
-	self.starboardPort:shoot(delay)
+	if self.starboardPort then
+		self.starboardPort:shoot(delay)
+	end
+	
 	self.portStern:fireStarboard(delay + additionalDelay, additionalDelay)
 end
 
@@ -92,16 +101,21 @@ function Crate:update(dt)
 	self.portBow:setLinkSpriteAlpha(self.spawnTimer/3)
 	self.portSidePort:setLinkSpriteAlpha(self.spawnTimer/3)
 	self.starboardPort:setLinkSpriteAlpha(self.spawnTimer/3)]]
-	local gunsprite = self.starboardPort:getGunSprite()
-	if gunsprite then
-		gunsprite:setAlpha(self.spawnTimer/3)
+	if self.starboardPort then
+		local gunsprite = self.starboardPort:getGunSprite()
+		if gunsprite then
+			gunsprite:setAlpha(self.spawnTimer/3)
+		end
 	end
-	gunsprite = self.portSidePort:getGunSprite()
-	if gunsprite then
-		gunsprite:setAlpha(self.spawnTimer/3)
+	
+	if self.portSidePort then
+		local gunsprite = self.portSidePort:getGunSprite()
+		if gunsprite then
+			gunsprite:setAlpha(self.spawnTimer/3)
+		end
 	end
 
-	-- -- update bow and stern ports
+	-- update bow and stern ports
 	local bowPos, sternPos = Vector(0, self.bounds.top), Vector(0, self.bounds.bottom)
 	local portPos, starboardPos = Vector(self.bounds.left, 0), Vector(self.bounds.right, 0)
 

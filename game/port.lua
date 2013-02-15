@@ -21,6 +21,7 @@ Port = Class({function(self, dataPath, parent, type)
 	self.gunShoot = self.data.gunShoot
 	self.arcIdle = self.data.arcIdle
 	self.arcShoot = self.data.arcShoot
+	self.repairIdle = self.data.repairIdle
 	self.gunTripleShot = self.data.gunTripleShot
 	self.arcTripleShot = self.data.arcTripleShot
 	
@@ -124,11 +125,17 @@ function Port:linkWith(port)
 end
 
 function Port:switchGuns()
-	if self.gunType == "arc" then
-		self:setGunType("gun")
-	elseif self.gunType == "gun" then
-		self:setGunType("arc")
-	end
+	local gunType = self.gunType
+	if gunType == "repair" then return end
+	
+	self:setGunType("repair")
+	timer.add(4, function()
+		if gunType == "arc" then
+			self:setGunType("gun")
+		elseif gunType == "gun" then
+			self:setGunType("arc")
+		end
+	end)
 end
 
 function Port:getSternLinks()
@@ -206,6 +213,8 @@ function Port:fireStarboard(delay, additionalDelay)
 end
 
 function Port:shoot(delay)
+	if self.gunType == "repair" then return end
+	
 	if delay ~= nil and delay > 0 then
 		timer.add(delay, function() self:shoot() end)
 	else

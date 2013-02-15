@@ -4,14 +4,16 @@ return {
 			cratesNeeded = 0,
 			shooters = 0,
 			spikey = 0,
-			crates = 2,
+			crates = 3,
+			crateChances = { Crate=2, MetalCrates=1 },
 			zoom = 0.6
 		},
 		[2] = {
-			cratesNeeded = 2,
+			cratesNeeded = 3,
 			shooters = 3,
 			crates = 5,
-			zoom = 0.5
+			zoom = 0.5,
+			crateChances = { Crate=4, GeneratorCrates=1 }
 		},
 		[3] = {
 			cratesNeeded = 5,

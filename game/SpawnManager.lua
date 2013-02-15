@@ -66,6 +66,18 @@ function SpawnManager:updateLevel()
 		self.targetShooters = nextLevelData.shooters or self.targetShooters
 		self.targetCrates = nextLevelData.crates or self.targetCrates
 		self.targetSpikey = nextLevelData.spikey or self.targetSpikey
+		self.crateSpawnChances = nextLevelData.crateChances or self.crateSpawnChances
+		
+		-- normalize spawn chance
+		local totalChances = 0
+		for _, chance in pairs(self.crateSpawnChances) do
+			totalChances = totalChances + chance
+		end
+		
+		for name, chance in pairs(self.crateSpawnChances) do
+			self.crateSpawnChances[name] = chance / totalChances
+		end
+		
 		self.currentLevel = self.currentLevel + 1
 		
 	end
@@ -84,7 +96,18 @@ function SpawnManager:update(dt)
 	end
 	
 	if self:getCrateCount() < self.targetCrates then
-		local crate = Crate("crate")
+		local r = math.random()
+		local crateData = nil
+		local cumulative = 0
+		for name, changes in pairs(self.crateSpawnChances) do
+			if r < cumulative + changes then
+				crateData = name
+				break
+			end
+			cumulative = cumulative + changes
+		end
+		
+		local crate = Crate(crateData)
 		crate:setPosition(self:getSpawnPosition())
 		crate.vel.x, crate.vel.y = (math.random() * 20) - 10, (math.random() * 20) - 10
 		spawnManager:addCrate(crate)
