@@ -211,6 +211,28 @@ function World:addFastSmallParticleFour(r, g, b)
 
 end
 
+function World:addFastSmallParticleTexture(r, g, b)
+	local image = love.graphics.newImage("res/texture.png")
+	local p = BgParticleSystem(image, 40)
+	table.insert(self.particles, p)
+	p:setColors(r, g, b, 0, r, g, b, 255, r, g, b, 0)
+	p:setEmissionRate(2)
+	p:setSizes(1, 1.5)
+	p:setRotation(0, math.pi * 2)
+	p:setDirection(math.random() * math.pi * 2)
+	p:setSpeed(0, 0)
+	p:setParticleLife(3, 6)
+	
+	local function periodic(particles, dt)
+		local spot = self:randomSpot()
+		particles:setPosition(spot.x, spot.y)
+		p:setDirection(math.random() * math.pi * 2)
+	end
+	p:setPeriodic(0.1, periodic, math.huge)
+	p:start()
+
+end
+
 function World:init()
 	love.physics.setMeter(128)
 	local world = love.physics.newWorld(0, 0, true)
@@ -229,6 +251,7 @@ function World:init()
 	self:addFastSmallParticleTwo(109, 55, 67)
 	self:addFastSmallParticleThree(234, 138, 121)
 	self:addFastSmallParticleFour(234, 138, 121)
+	self:addFastSmallParticleTexture(144, 90, 53)
 end
 
 function World:updateBoundaries()
