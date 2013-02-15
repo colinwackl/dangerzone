@@ -43,6 +43,24 @@ function FingerPath:popFront()
 	table.remove(self.points, 1)
 end
 
+function FingerPath:pushBack(point)
+	table.insert(self.points, point)
+		
+	if #self.points > 1 then
+		local lastVector = self.points[#self.points - 1]
+		local diff = point - lastVector
+		local diffLength = diff:len()
+		self.currentLength = self.currentLength + diffLength
+		
+		local diffNormal = diff:normalized()
+		while diffLength > self.maxDistanceBetweenLines do
+			lastVector = self.points[#self.points - 1]
+			table.insert(self.points, #self.points, lastVector + diffNormal * self.maxDistanceBetweenLines)
+			diffLength = diffLength - self.maxDistanceBetweenLines
+		end
+	end
+end
+
 function FingerPath:update(dt)
 	Entity.update(self, dt)
 	
@@ -52,22 +70,8 @@ function FingerPath:update(dt)
 		-- if self.world.player:inBounds(v)  andthen
 		-- 	return
 		-- end
-
-		table.insert(self.points, v)
+		self:pushBack(v)
 		
-		if #self.points > 1 then
-			local lastVector = self.points[#self.points - 1]
-			local diff = v - lastVector
-			local diffLength = diff:len()
-			self.currentLength = self.currentLength + diffLength
-			
-			local diffNormal = diff:normalized()
-			while diffLength > self.maxDistanceBetweenLines do
-				lastVector = self.points[#self.points - 1]
-				table.insert(self.points, #self.points, lastVector + diffNormal * self.maxDistanceBetweenLines)
-				diffLength = diffLength - self.maxDistanceBetweenLines
-			end
-		end
 	end	
 end
 

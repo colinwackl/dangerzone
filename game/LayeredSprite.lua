@@ -48,6 +48,16 @@ function LayeredSprite:setRotation(rot)
 	self.rotation = rot
 end
 
+function LayeredSprite:setData(sprite, animation, keepTime)
+	local glow = animation.."_glow"
+	if self.baseLayer:hasAnimation(glow) then
+		self.baseLayer:setData(sprite, animation, keepTime)
+	end
+	
+	self.topLayer:setData(sprite, animation, keepTime)
+	self.animation = animation
+end
+
 function LayeredSprite:setAnimation(animation)
 	local glow = animation.."_glow"
 	if self.baseLayer:hasAnimation(glow) then

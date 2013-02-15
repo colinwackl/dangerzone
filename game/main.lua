@@ -29,7 +29,7 @@ function love.load()
 	
 	local cameraX = love.graphics.getWidth() / 2
 	local cameraY = love.graphics.getHeight() / 2
-	local cameraZoom = 0.6
+	local cameraZoom = 0.7
 	cam = Camera(cameraX, cameraY, cameraZoom, 0)
 
 	gameRight = love.graphics.getWidth() / 2
@@ -106,7 +106,7 @@ function love.mousepressed(x, y, button)
 	
 	if button == "l" then
 	elseif  button == "r" then
-		port.parent:destroy()
+		port.parent:destroy(true)
 	end
 	
 	signals.emit("mousePressed", x, y, button)

@@ -36,7 +36,7 @@ return {
 			shooters = 2,
 			spikey = 6,
 			crates = 15,
-			zoom = 0.4,
+			zoom = 0.3,
 			crateChances = { GunCrates=1, MetalCrates=2 }
 		},
 		[6] = {
@@ -44,7 +44,7 @@ return {
 			shooters = 8,
 			spikey = 8,
 			crates = 20,
-			zoom = 0.3,
+			zoom = 0.2,
 			crateChances = { GunCrates=1, GeneratorCrates=1, MetalCrates=1 }
 		}
 	}

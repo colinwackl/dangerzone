@@ -44,12 +44,24 @@ Crate = Class({function(self, dataPath)
 end,
 name = "Crate", inherits = Entity})
 
-function Crate:destroy()
+function Crate:destroy(explode)
+	if explode == nil then
+		explode = true
+	end
+	
+	if explode then
+		self.sprites[1]:setData("cell.sprite2", "explosion")
+		timer.add(0.4, function() self:realDestroy() end)
+	else
+		self:realDestroy()
+	end
+end
+
+function Crate:realDestroy()
 	self.portBow:destroy()
 	self.portStern:destroy()
 	if self.portSidePort then self.portSidePort:destroy() end
 	if self.starboardPort then self.starboardPort:destroy() end
-
 	Entity.destroy(self)
 end
 
@@ -145,7 +157,7 @@ function Crate:update(dt)
 		self.timeToUnlinkDeath = self.unlinkTime
 	else
 		if self.timeToUnlinkDeath < 0 then
-			self:destroy()
+			self:destroy(false)
 		end
 	end
 	
