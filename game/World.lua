@@ -145,6 +145,72 @@ function World:addFastSmallParticle(r, g, b)
 
 end
 
+function World:addFastSmallParticleTwo(r, g, b)
+	local image = love.graphics.newImage("res/smallparticle2.png")
+	local p = BgParticleSystem(image, 40)
+	table.insert(self.particles, p)
+	p:setColors(r, g, b, 0, r, g, b, 255, r, g, b, 0)
+	p:setEmissionRate(2)
+	p:setSizes(1, 1.5)
+	p:setRotation(0, math.pi * 2)
+	p:setDirection(math.random() * math.pi * 2)
+	p:setSpeed(15, 100)
+	p:setParticleLife(3, 6)
+	
+	local function periodic(particles, dt)
+		local spot = self:randomSpot()
+		particles:setPosition(spot.x, spot.y)
+		p:setDirection(math.random() * math.pi * 2)
+	end
+	p:setPeriodic(0.1, periodic, math.huge)
+	p:start()
+
+end
+
+function World:addFastSmallParticleThree(r, g, b)
+	local image = love.graphics.newImage("res/smallparticle3.png")
+	local p = BgParticleSystem(image, 40)
+	table.insert(self.particles, p)
+	p:setColors(r, g, b, 0, r, g, b, 255, r, g, b, 0)
+	p:setEmissionRate(2)
+	p:setSizes(1, 1.5)
+	p:setRotation(0, math.pi * 2)
+	p:setDirection(math.random() * math.pi * 2)
+	p:setSpeed(15, 100)
+	p:setParticleLife(3, 6)
+	
+	local function periodic(particles, dt)
+		local spot = self:randomSpot()
+		particles:setPosition(spot.x, spot.y)
+		p:setDirection(math.random() * math.pi * 2)
+	end
+	p:setPeriodic(0.1, periodic, math.huge)
+	p:start()
+
+end
+
+function World:addFastSmallParticleFour(r, g, b)
+	local image = love.graphics.newImage("res/smallparticle3.png")
+	local p = BgParticleSystem(image, 40)
+	table.insert(self.particles, p)
+	p:setColors(r, g, b, 0, r, g, b, 255, r, g, b, 0)
+	p:setEmissionRate(2)
+	p:setSizes(1, 1.5)
+	p:setRotation(0, math.pi * 2)
+	p:setDirection(math.random() * math.pi * 2)
+	p:setSpeed(15, 100)
+	p:setParticleLife(3, 6)
+	
+	local function periodic(particles, dt)
+		local spot = self:randomSpot()
+		particles:setPosition(spot.x, spot.y)
+		p:setDirection(math.random() * math.pi * 2)
+	end
+	p:setPeriodic(0.1, periodic, math.huge)
+	p:start()
+
+end
+
 function World:init()
 	love.physics.setMeter(128)
 	local world = love.physics.newWorld(0, 0, true)
@@ -156,10 +222,12 @@ function World:init()
 	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
 	self:updateBoundaries()
 	
-	self:addStableParticle(188, 187, 183)
+	--self:addStableParticle(188, 187, 183)
 	
-	self:addFastSmallParticle(188, 187, 183)
-	
+	self:addFastSmallParticle(126, 53, 52)
+	self:addFastSmallParticleTwo(109, 55, 67)
+	self:addFastSmallParticleThree(234, 138, 121)
+	self:addFastSmallParticleFour(234, 138, 121)
 end
 
 function World:updateBoundaries()
