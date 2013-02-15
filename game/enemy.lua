@@ -21,7 +21,7 @@ Enemy = Class({function(self, dataPath, player)
 	self.signals:register("beginContact", self.beginContact)
 
 	self.spawnTimer = 0
-	self.timeUntilShot = 0
+	self.timeUntilShot = self.shootInterval
 	self.currentBurstCount = 0
 	
 end,

@@ -17,13 +17,8 @@ SpawnManager = Class({function(self, dataPath)
 end,
 name = "SpawnManager", inherits = Entity})
 
-function SpawnManager:addEnemy(enemy)
-	self.shooters[enemy] = enemy
-	enemy.signals:register("destroyed", function(...) self:enemyDestroyed(...) end)
-end
-
-function SpawnManager:addSpikey(enemy)
-	self.spikey[enemy] = enemy
+function SpawnManager:addEnemy(enemy, t)
+	t[enemy] = enemy
 	enemy.signals:register("destroyed", function(...) self:enemyDestroyed(...) end)
 end
 
@@ -59,7 +54,6 @@ function SpawnManager:getCrateCount()
 	return crateCount
 end
 
-
 function SpawnManager:updateLevel()
 	if self.currentLevel > #self.data.levels - 1 then return end
 	
@@ -86,12 +80,11 @@ function SpawnManager:update(dt)
 		local speed = math.max(0.2, math.random())
 		enemy:setPosition(self:getSpawnPosition())
 		enemy.vel.x, enemy.vel.y = (speed * 20) - 10, (speed * 20) - 10
-		spawnManager:addEnemy(enemy)
+		spawnManager:addEnemy(enemy, self.shooters)
 	end
 	
 	if self:getCrateCount() < self.targetCrates then
 		local crate = Crate("crate")
-		crate:initSprite("cell.sprite", "body")
 		crate:setPosition(self:getSpawnPosition())
 		crate.vel.x, crate.vel.y = (math.random() * 20) - 10, (math.random() * 20) - 10
 		spawnManager:addCrate(crate)
@@ -102,9 +95,8 @@ function SpawnManager:update(dt)
 		local speed = math.max(0.4, math.random())
 		enemy:setPosition(self:getSpawnPosition())
 		enemy.vel.x, enemy.vel.y = (speed * 400) - 200, (speed * 400) - 200
-		spawnManager:addSpikey(enemy)
+		spawnManager:addEnemy(enemy, self.shooters)
 	end
-
 end
 
 function SpawnManager:draw()
@@ -119,7 +111,6 @@ function SpawnManager:draw()
 end
 
 function SpawnManager:getSpawnPosition()
-
 	local position = self.world:randomSpot()
 	local center = vector(self.world.camera:pos())
 

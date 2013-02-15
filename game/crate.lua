@@ -23,6 +23,10 @@ Crate = Class({function(self, dataPath)
 	self.starboardPort = Port("GunPort", self, "starboard")
 	self.portBow = Port("Port", self, "head")
 	self.portStern = Port("Port", self, "tail")
+	
+	self:createSprites()
+	
+	self.hp = self.data.hp or 1
 
 	self.spawnTimer = 0
 end,
@@ -37,11 +41,6 @@ function Crate:destroy()
 	Entity.destroy(self)
 end
 
-function Crate:initSprite(strData, strAnimation)
-	self.sprite = LayeredSprite:new()
-	self.sprite:init(strData, strAnimation)
-end
-
 function Crate:setAnimation(strAnimation)
 	self.sprite:setAnimation(strAnimation)
 end
@@ -51,7 +50,10 @@ function Crate:getSternLinks()
 end
 
 function Crate:hit(hitter)
-	self:destroy()
+	self.hp = self.hp - 1
+	if self.hp <= 0 then
+		self:destroy()
+	end
 end
 
 function Crate:firePort(delay, additionalDelay)
@@ -85,7 +87,7 @@ function Crate:update(dt)
 	
 	local rotation = self.physics.body:getAngle()
 
-	self.sprite:setAlpha(self.spawnTimer/3)
+	self:setAlpha(self.spawnTimer/3)
 	--[[self.portStern:setLinkSpriteAlpha(self.spawnTimer/3)
 	self.portBow:setLinkSpriteAlpha(self.spawnTimer/3)
 	self.portSidePort:setLinkSpriteAlpha(self.spawnTimer/3)
@@ -98,10 +100,6 @@ function Crate:update(dt)
 	if gunsprite then
 		gunsprite:setAlpha(self.spawnTimer/3)
 	end
-	
-	self.sprite:setPosition(self.pos)
-	self.sprite:setRotation(rotation)
-	self.sprite:update(dt)
 
 	-- -- update bow and stern ports
 	local bowPos, sternPos = Vector(0, self.bounds.top), Vector(0, self.bounds.bottom)
@@ -135,5 +133,4 @@ end
 
 function Crate:draw()
 	Entity.draw(self)
-	self.sprite:draw()
 end

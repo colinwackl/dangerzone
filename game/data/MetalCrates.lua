@@ -1,0 +1,1 @@
+return { size = {175, 180} , colour = {255, 255, 255, 255}, sprite={"cell.sprite", "body_grey"}, hp = math.huge }

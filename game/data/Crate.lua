@@ -1,1 +1,1 @@
-return { pos= {500, 500}, size = {75, 155} , colour = {255, 255, 255, 255}}
+return { size = {175, 180} , colour = {255, 255, 255, 255}, sprite={"cell.sprite", "body"}, hp = 3 }

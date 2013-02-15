@@ -25,7 +25,13 @@ Port = Class({function(self, dataPath, parent, type)
 	self.arcTripleShot = self.data.arcTripleShot
 	
 	if self.gunIdle and self.gunShoot and self.arcIdle and self.arcShoot then
-		self:setGunType("arc")
+		local r = math.random()
+		if r <= 0.5 then
+			self:setGunType("arc")
+		else
+			self:setGunType("gun")
+		end
+		
 		self.world.gunPorts[self] = self
 	else
 		self.world.availablePorts[self] = self

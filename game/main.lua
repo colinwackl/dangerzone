@@ -29,7 +29,7 @@ function love.load()
 	
 	local cameraX = love.graphics.getWidth() / 2
 	local cameraY = love.graphics.getHeight() / 2
-	local cameraZoom = 0.5
+	local cameraZoom = 0.6
 	cam = Camera(cameraX, cameraY, cameraZoom, 0)
 
 	gameRight = love.graphics.getWidth() / 2

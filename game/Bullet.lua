@@ -12,6 +12,8 @@ Bullet = Class({function(self, dataPath, friendly)
 	
 	self.followGunRotation = self.data.followGunRotation
 	self.deflect = self.data.deflect or false
+	self.lifeLeft = self.data.life or math.huge
+	self.startLife = self.data.life
 	
 	self:createFixture()
 	self:createSprites()
@@ -44,9 +46,22 @@ function Bullet:beginContact(collideWith)
 		if collideWith:is_a(Locomotive) or collideWith:is_a(Crate) then
 			self:destroy()
 		end
-	end	
+	end
 
 	if collideWith:is_a(Boundary) then
+		self:destroy()
+	end
+end
+
+function Bullet:update(dt)
+	Entity.update(self, dt)
+	self.lifeLeft = self.lifeLeft - dt
+	
+	if self.startLife then
+		self:setAlpha(self.lifeLeft / self.startLife)
+	end
+	
+	if self.lifeLeft < 0 then
 		self:destroy()
 	end
 end
