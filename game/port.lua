@@ -227,7 +227,7 @@ function Port:shoot(delay)
 		end
 		
 		local gun = self:getGunSprite()
-		gun:setAnimation(self:getGunIdle())
+		gun:setAnimation(self:getGunShoot())
 		timer.add(0.2, function()
 			gun:setAnimation(self:getGunIdle())
 		end)
