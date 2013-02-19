@@ -61,14 +61,16 @@ function Entity:destroy()
 	local function call(f, args)
 		local self = args.self
 		local world = args.world
-		--if self.signals ~= nil then
-			self.signals:emit("destroyed", self)
-		--end
-		if self.onDestroyed then self:onDestroyed() end
-		world:removeObject(self)
-		-- if self.physics and self.physics.body then
-		-- 	self.physics.body:destroy()
-		-- end
+		if world then
+			--if self.signals ~= nil then
+				self.signals:emit("destroyed", self)
+			--end
+			if self.onDestroyed then self:onDestroyed() end
+			world:removeObject(self)
+			-- if self.physics and self.physics.body then
+			-- 	self.physics.body:destroy()
+			-- end
+		end
 	end
 
 	timer.add(0, call, {self = self, world = self.world})

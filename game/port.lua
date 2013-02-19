@@ -38,7 +38,7 @@ Port = Class({function(self, dataPath, parent, type)
 		self.world.availablePorts[self] = self
 	end
 	
-	self.effectiveDistance = self.data.effectiveDistance or 300
+	self.effectiveDistance = self.data.effectiveDistance or 400
 	self.maxLinkDistance = self.data.maxLinkDistance or 100
 	
 	self.shootInterval = self.data.shootInterval or 0
@@ -55,8 +55,10 @@ function Port:destroy()
 		self.attachedLink:destroy()
 	end
 
-	self.world.availablePorts[self] = nil
-	self.world.gunPorts[self] = nil
+	if self.world then
+		self.world.availablePorts[self] = nil
+		self.world.gunPorts[self] = nil
+	end
 	Entity.destroy(self)
 end
 

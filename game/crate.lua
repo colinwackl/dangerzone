@@ -5,6 +5,7 @@ require "Port"
 Vector = require "hump.vector"
 Class = require "hump.class"
 timer = require "hump.timer"
+require "Explosion"
 
 Crate = Class({function(self, dataPath)
 	Entity.construct(self, dataPath)
@@ -50,11 +51,10 @@ function Crate:destroy(explode)
 	end
 	
 	if explode then
-		self.sprites[1]:setData("cell.sprite2", "explosion")
-		timer.add(0.4, function() self:realDestroy() end)
-	else
-		self:realDestroy()
+		local e = Explosion()
+		e:setPosition(self.pos)
 	end
+	self:realDestroy()
 end
 
 function Crate:realDestroy()
@@ -88,7 +88,12 @@ function Crate:firePort(delay, additionalDelay)
 		self.portSidePort:shoot(delay)
 	end
 	
-	self.portStern:firePort(delay + additionalDelay, additionalDelay)
+	local nextDelay = delay
+	if self.portSidePort then
+		nextDelay = nextDelay + additionalDelay
+	end
+	
+	self.portStern:firePort(nextDelay, additionalDelay)
 end
 
 function Crate:fireStarboard(delay, additionalDelay)
@@ -96,7 +101,12 @@ function Crate:fireStarboard(delay, additionalDelay)
 		self.starboardPort:shoot(delay)
 	end
 	
-	self.portStern:fireStarboard(delay + additionalDelay, additionalDelay)
+	local nextDelay = delay
+	if self.starboardPort then
+		nextDelay = nextDelay + additionalDelay
+	end
+	
+	self.portStern:fireStarboard(nextDelay, additionalDelay)
 end
 
 function Crate:isAttachedToPlayer(checked)
@@ -198,6 +208,14 @@ end
 
 function Crate:draw()
 	Entity.draw(self)
+	
+	if self.hp then
+		local zoom = self.world.camera.scale
+		zoom = 2 * (1 / zoom)
+		local text = self.hp
+		local x, y = self:getBody():getWorldPoint(0, 0)
+		love.graphics.print(text, x, y, self.angle, zoom, zoom)
+	end
 	
 	--[[if self.currentEnergy > 0 then
 		love.graphics.print(self.currentEnergy, self.pos.x, self.pos.y, self.angle, 2, 2)

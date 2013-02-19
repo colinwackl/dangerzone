@@ -58,7 +58,14 @@ function Enemy:update(dt)
 			self.currentBurstCount = self.currentBurstCount + 1
 		end
 		
-		self:shoot(Bullet("Bullet", false), player)
+		local count = 0
+		for _, bullet in pairs(self.world.bullets) do
+			count = count + 1
+		end
+		
+		if count < 30 then
+			self:shoot(Bullet("Bullet", false), player)
+		end
 	end
 	
 	local diff = _G.player.pos - self.pos

@@ -20,7 +20,9 @@ end, name = "ChainLink", inherits = Entity})
 
 function ChainLink:destroy()
 	self.joint:destroy()
-	self.head:setPortActive(true)
+	if self.head:isAttachedToPlayer() then
+		self.head:setPortActive(true)
+	end
 	self.head.attachedLink = nil
 	self.world.availablePorts[self.head] = self.head
 	--self.tail:setPortActive(true)

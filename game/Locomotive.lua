@@ -22,7 +22,7 @@ Locomotive = Class({function(self, dataPath)
 	self.port = Port("Port", self, "tail")
 	self.port.portActive = true
 	
-	self.mouseLeftBounds = false
+	self.mouseLeftBounds = true
 	
 	self.boostTime = 5
 	self.timeLeftInBoost = 0
@@ -68,11 +68,11 @@ function Locomotive:keyReleased(key)
 end
 
 function Locomotive:startPath()
-	self.path:start()
 	self.mouseLeftBounds = false
 end
 
 function Locomotive:stopPath()
+	self.mouseLeftBounds = true
 	self.path:stop()
 end
 
@@ -137,6 +137,7 @@ function Locomotive:update(dt)
 	
 	if self.mouseLeftBounds == false and self:inBounds(Vector(self.world.camera:mousepos())) ~= true then
 		self.mouseLeftBounds = true
+		self.path:start()
 	end
 	
 	if destination and self.mouseLeftBounds then

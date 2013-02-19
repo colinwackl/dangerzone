@@ -18,6 +18,8 @@ Bullet = Class({function(self, dataPath, friendly)
 	self:createFixture()
 	self:createSprites()
 	
+	self.world.bullets[self] = self
+	
 	if self.deflect then
 		local body = self:getBody()
 		body:setFixedRotation(true)
@@ -51,6 +53,10 @@ function Bullet:beginContact(collideWith)
 	if collideWith:is_a(Boundary) then
 		self:destroy()
 	end
+end
+
+function Bullet:onDestroyed()
+	self.world.bullets[self] = nil
 end
 
 function Bullet:update(dt)

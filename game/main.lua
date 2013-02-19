@@ -106,7 +106,7 @@ function love.mousepressed(x, y, button)
 	
 	if button == "l" then
 	elseif  button == "r" then
-		port.parent:destroy(true)
+		--port.parent:destroy(true)
 	end
 	
 	signals.emit("mousePressed", x, y, button)

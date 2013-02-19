@@ -115,10 +115,10 @@ function SpawnManager:update(dt)
 	
 	if self:getEnemyCount(self.spikey) < self.targetSpikey then
 		local enemy = Enemy("SpikeyEnemy", player)
-		local speed = math.max(0.4, math.random())
+		local speed = math.max(0.7, math.random())
 		enemy:setPosition(self:getSpawnPosition())
 		enemy.vel.x, enemy.vel.y = (speed * 400) - 200, (speed * 400) - 200
-		spawnManager:addEnemy(enemy, self.shooters)
+		spawnManager:addEnemy(enemy, self.spikey)
 	end
 end
 

@@ -240,6 +240,7 @@ function World:init()
 	self.physworld = world
 	self.availablePorts = {}
 	self.gunPorts = {}
+	self.bullets = {}
 	world:setCallbacks( self.beginContact, self.endContact, self.preSolve, self.postSolve )
 	
 	self.boundaries = {left = Boundary(), right = Boundary(), top = Boundary(), bottom = Boundary()}
